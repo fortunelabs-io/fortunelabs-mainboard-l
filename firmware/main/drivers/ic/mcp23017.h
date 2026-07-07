@@ -38,17 +38,18 @@ extern "C" {
 #endif
 
 /* ------------------------ REGIGISTER MAP ---------------------------------*/
-#define MCP23017_REG_IODIRA 0x00 ///< I/O Direction Register for Port A (1=input, 0=output)
-#define MCP23017_REG_IODIRB 0x01 ///< I/O Direction Register for Port B (1=input, 0=output)
-#define MCP23017_REG_IPOLA 0x02  ///< Input Polarity Register for Port A (1=inverted)
-#define MCP23017_REG_IPOLB 0x03  ///< Input Polarity Register for Port B (1=inverted)
-#define MCP23017_REG_GPPUA 0x0C  ///< Pull-Up Resistor Register for Port A (1=enabled)
-#define MCP23017_REG_GPPUB 0x0D  ///< Pull-Up Resistor Register for Port B (1=enabled)
-#define MCP23017_REG_GPIOA 0x12  ///< GPIO Port Register for Port A (read reflects pin state)
-#define MCP23017_REG_GPIOB 0x13  ///< GPIO Port Register for Port B (read reflects pin state)
-#define MCP23017_REG_OLATA 0x14  ///< Output Latch Register for Port A (read reflects latch)
-#define MCP23017_REG_OLATB 0x15  ///< Output Latch Register for Port B (read reflects latch)
-#define MCP23017_REG_IOCON 0x0A  ///< I/O Expander Configuration Register
+#define MCP23017_REG_IODIRA 0x00      ///< I/O Direction Register for Port A (1=input, 0=output)
+#define MCP23017_REG_IODIRB 0x01      ///< I/O Direction Register for Port B (1=input, 0=output)
+#define MCP23017_REG_IPOLA 0x02       ///< Input Polarity Register for Port A (1=inverted)
+#define MCP23017_REG_IPOLB 0x03       ///< Input Polarity Register for Port B (1=inverted)
+#define MCP23017_REG_GPPUA 0x0C       ///< Pull-Up Resistor Register for Port A (1=enabled)
+#define MCP23017_REG_GPPUB 0x0D       ///< Pull-Up Resistor Register for Port B (1=enabled)
+#define MCP23017_REG_GPIOA 0x12       ///< GPIO Port Register for Port A (read reflects pin state)
+#define MCP23017_REG_GPIOB 0x13       ///< GPIO Port Register for Port B (read reflects pin state)
+#define MCP23017_REG_OLATA 0x14       ///< Output Latch Register for Port A (read reflects latch)
+#define MCP23017_REG_OLATB 0x15       ///< Output Latch Register for Port B (read reflects latch)
+#define MCP23017_REG_IOCON 0x0A       ///< I/O Expander Configuration Register
+#define MCP23017_REG_IOCON_BANK1 0x05 ///< IOCON address under BANK=1 addressing
 
 /* -------------------------- IOCON BANKS ---------------------------------*/
 #define MCP23017_IOCON_BANK (1 << 7)   ///< Register addressing mode (0 = BANK 0, sequential)

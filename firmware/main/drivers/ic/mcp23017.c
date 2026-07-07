@@ -99,7 +99,7 @@ static esp_err_t mcp23017_init(mcp23017_t *dev, const mcp23017_config_t *config)
 
     // [4] Hardware init sequence
     // Step A: Force IOCON.BANK = 0, regardless of prior hardware state.
-    ret = _mcp23017_write_reg(dev, 0x05, 0x00);
+    ret = _mcp23017_write_reg(dev, MCP23017_REG_IOCON_BANK1, 0x00);
     if (ret != ESP_OK)
         return ret;
     ret = _mcp23017_write_reg(dev, MCP23017_REG_IOCON, 0x00);
