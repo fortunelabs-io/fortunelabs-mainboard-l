@@ -28,6 +28,10 @@
 #include "hal/output_driver.h"
 #include "hal/sensor_driver.h"
 
+/* --- Task Contexts --- */
+#include "tasks/task_actuator.h"
+#include "tasks/task_sensor.h"
+
 /* --- Concrete Drivers --- */
 #include "drivers/ic/ads1115.h"
 #include "drivers/ic/ssd1306.h"
@@ -62,9 +66,14 @@ QueueHandle_t        g_queue_actuator;
 static i2c_bus_t     g_i2c_bus;
 static ads1115_dev_t g_ads1115;
 
+// Task context instances, passed via xTaskCreate's pvParameters. Static
+// because the task reads through this pointer for its entire lifetime.
+static task_sensor_ctx_t   g_task_sensor_ctx;
+static task_actuator_ctx_t g_task_actuator_ctx;
+
 // Task prototypes for RTOS
-extern void task_sensor(void *pvParameters);
-extern void task_actuator(void *pvParameters);
+// task_sensor and task_actuator prototypes and context structs now come
+// from their respective headers in tasks/.
 extern void task_display(void *pvParameters);
 
 /**
@@ -165,9 +174,20 @@ void app_main(void) {
     sensor_config_t sensor_cfg = {.bus = NULL};
     ESP_ERROR_CHECK(sensor_dummy_driver.init(&sensor_cfg));
 
+    // Wire the contract pointer task_sensor will consume. Swapping the
+    // dummy potentiometer for the ADS1115 (or any future sensor) means
+    // changing this one line, with zero changes inside task_sensor.c.
+    g_task_sensor_ctx.driver = &sensor_dummy_driver;
+
     // Init Onboard LED (Actuator)
     output_config_t actuator_cfg = {.bus = NULL, .num_channels = 1};
     ESP_ERROR_CHECK(actuator_dummy_driver.init(&actuator_cfg));
+
+    // Wire the contract pointer task_actuator will consume. Swapping the
+    // dummy LED for the MCP23017+ULN2803A relay bank (or any future
+    // output) means changing this one line, with zero changes inside
+    // task_actuator.c.
+    g_task_actuator_ctx.driver = &actuator_dummy_driver;
 
     // Init Physical SSD1306 OLED via I2C Bus
     display_config_t display_cfg = {.bus      = &g_i2c_bus,
@@ -231,9 +251,9 @@ void app_main(void) {
     // Spawn supervisor task first
     xTaskCreate(task_supervisor, "task_sys_sup", 3072, NULL, 6,
                 NULL); // Highest priority for system supervisor
-    xTaskCreate(task_sensor, "task_sensor", 3072, NULL, 5,
+    xTaskCreate(task_sensor, "task_sensor", 3072, &g_task_sensor_ctx, 5,
                 NULL); // Sensor task has higher priority for responsive readings
-    xTaskCreate(task_actuator, "task_actuator", 2048, NULL, 5, NULL);
+    xTaskCreate(task_actuator, "task_actuator", 2048, &g_task_actuator_ctx, 5, NULL);
     xTaskCreate(task_display, "task_display", 3072, NULL, 4, NULL);
 
     ESP_LOGI(TAG, "All tasks spawned successfully. System is running.");
