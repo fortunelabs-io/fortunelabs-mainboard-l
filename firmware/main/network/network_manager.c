@@ -3,7 +3,7 @@
  * @brief WiFi Station and MQTT Network Manager Implementation
  */
 
-#include "network_manager.h"
+#include "network/network_manager.h"
 #include "esp_event.h"
 #include "esp_log.h"
 #include "esp_netif.h"

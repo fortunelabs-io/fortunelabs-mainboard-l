@@ -3,7 +3,7 @@
  * @brief MCP23017 I2C GPIO Expander Driver Implementation
  */
 
-#include "mcp23017.h"
+#include "drivers/ic/mcp23017.h"
 #include "esp_log.h"
 #include <string.h>
 

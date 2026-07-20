@@ -36,7 +36,7 @@
 #include "drivers/ic/ads1115.h"
 #include "drivers/ic/ssd1306.h"
 #include "drivers/output/actuator_dummy.h"
-#include "drivers/sensor/sensor_dummy.h"
+#include "drivers/sensor/sensor_ads1115.h"
 
 /* --- System Services --- */
 #include "system/system_config.h"
@@ -61,10 +61,9 @@ static const char *TEST_TAG = "ota_trigger";
  * Queues are extern-accessible by tasks.
  * Bus and device instances are static — owned by main, passed by pointer.
  */
-QueueHandle_t        g_queue_display;
-QueueHandle_t        g_queue_actuator;
-static i2c_bus_t     g_i2c_bus;
-static ads1115_dev_t g_ads1115;
+QueueHandle_t    g_queue_display;
+QueueHandle_t    g_queue_actuator;
+static i2c_bus_t g_i2c_bus;
 
 // Task context instances, passed via xTaskCreate's pvParameters. Static
 // because the task reads through this pointer for its entire lifetime.
@@ -171,13 +170,31 @@ void app_main(void) {
     ESP_LOGI(TAG, "Initializing hardware drivers...");
 
     // Init Potentiometer Dummy
-    sensor_config_t sensor_cfg = {.bus = NULL};
-    ESP_ERROR_CHECK(sensor_dummy_driver.init(&sensor_cfg));
-
-    // Wire the contract pointer task_sensor will consume. Swapping the
-    // dummy potentiometer for the ADS1115 (or any future sensor) means
-    // changing this one line, with zero changes inside task_sensor.c.
-    g_task_sensor_ctx.driver = &sensor_dummy_driver;
+    static sensor_ads1115_config_t ads_sensor_cfg = {
+        .channel_config =
+            {
+                [0] = {.channel   = ADS1115_CHANNEL_0,
+                       .pga       = ADS1115_PGA_4_096V,
+                       .data_rate = ADS1115_DR_128SPS},
+                [1] = {.channel   = ADS1115_CHANNEL_1,
+                       .pga       = ADS1115_PGA_2_048V,
+                       .data_rate = ADS1115_DR_64SPS},
+                [2] = {.channel   = ADS1115_CHANNEL_2,
+                       .pga       = ADS1115_PGA_4_096V,
+                       .data_rate = ADS1115_DR_128SPS},
+                [3] = {.channel   = ADS1115_CHANNEL_3,
+                       .pga       = ADS1115_PGA_2_048V,
+                       .data_rate = ADS1115_DR_64SPS},
+            },
+    };
+    sensor_config_t sensor_cfg = {
+        .bus      = &g_i2c_bus,
+        .i2c_addr = ADS1115_ADDR_GND, // 0x48
+        .channel  = 0,                // baca AIN0
+        .extra    = &ads_sensor_cfg,
+    };
+    ESP_ERROR_CHECK(sensor_ads1115_driver.init(&sensor_cfg));
+    g_task_sensor_ctx.driver = &sensor_ads1115_driver;
 
     // Init Onboard LED (Actuator)
     output_config_t actuator_cfg = {.bus = NULL, .num_channels = 1};
@@ -195,40 +212,6 @@ void app_main(void) {
                                     .width    = 128,
                                     .height   = 64};
     ESP_ERROR_CHECK(ssd1306_driver.init(&display_cfg));
-
-    // Init ADS1115ADC
-    ads1115_config_t ads1115_config = {
-        .bus  = &g_i2c_bus,
-        .addr = ADS1115_ADDR_GND, // ADDR to GND -> 0x48
-        .channel_config =
-            {
-                [0] = {.channel   = ADS1115_CHANNEL_0,
-                       .pga       = ADS1115_PGA_4_096V,
-                       .data_rate = ADS1115_DR_128SPS},
-                [1] = {.channel   = ADS1115_CHANNEL_1,
-                       .pga       = ADS1115_PGA_2_048V,
-                       .data_rate = ADS1115_DR_64SPS},
-                [2] = {.channel   = ADS1115_CHANNEL_2,
-                       .pga       = ADS1115_PGA_4_096V,
-                       .data_rate = ADS1115_DR_128SPS},
-                [3] = {.channel   = ADS1115_CHANNEL_3,
-                       .pga       = ADS1115_PGA_2_048V,
-                       .data_rate = ADS1115_DR_64SPS},
-            },
-    };
-
-    const ads1115_driver_t *ads1115_drv = ads1115_get_driver();
-    ESP_ERROR_CHECK(ads1115_drv->init(&g_ads1115, &ads1115_config));
-
-    uint16_t  raw        = 0;
-    esp_err_t adc_return = ads1115_drv->read(&g_ads1115, ADS1115_CHANNEL_0, &raw);
-
-    if (adc_return == ESP_OK) {
-        float voltage = raw * 0.000125f;
-        ESP_LOGI(TAG, "ADS1115 AINO - RAW=%d, Voltage=%4fV", raw, voltage);
-    } else {
-        ESP_LOGE(TAG, "ADS1115 read failed: %s", esp_err_to_name(adc_return));
-    }
 
     /* [8] Network Manager ---------------------------------------------------- */
     ESP_LOGI(TAG, "Initializing Network Manager...");

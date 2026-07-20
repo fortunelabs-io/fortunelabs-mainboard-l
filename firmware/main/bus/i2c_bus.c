@@ -44,7 +44,7 @@ esp_err_t i2c_bus_init(i2c_bus_t *bus, const i2c_bus_config_t *cfg) {
         return ret;
     }
 
-    // Retained for bus self-healing only (see i2c_bus_recover_locked), never
+    // Retained for bus self-healing only (see _i2c_bus_recover_locked), never
     // used for normal transactions.
     bus->sda_pin = cfg->sda_pin;
     bus->scl_pin = cfg->scl_pin;
@@ -123,7 +123,7 @@ esp_err_t i2c_bus_add_device(i2c_bus_t *bus, uint8_t addr, uint32_t scl_hz, cons
 // the device registry. It carries no judgment about what the fault means for
 // the system; that decision stays with the caller and, beyond the retry
 // budget below, with the supervisor watching error_count.
-static esp_err_t i2c_bus_recover_locked(i2c_bus_t *bus) {
+static esp_err_t _i2c_bus_recover_locked(i2c_bus_t *bus) {
     ESP_LOGW(TAG, "Bus recovery starting (SDA=%d SCL=%d)", bus->sda_pin, bus->scl_pin);
 
     // Tear down the wedged master bus handle before touching the pins directly,
@@ -238,7 +238,7 @@ esp_err_t i2c_bus_write(i2c_bus_t *bus, i2c_master_dev_handle_t dev, const uint8
         ESP_LOGW(TAG, "Write timeout, attempting bus recovery (errors: %lu)",
                  (unsigned long)bus->error_count);
 
-        if (i2c_bus_recover_locked(bus) == ESP_OK) {
+        if (_i2c_bus_recover_locked(bus) == ESP_OK) {
             for (int attempt = 0; attempt < I2C_BUS_RECOVERY_RETRY && ret != ESP_OK; attempt++) {
                 ret = i2c_master_transmit(dev, data, len, I2C_BUS_TIMEOUT_MS);
             }
@@ -273,7 +273,7 @@ esp_err_t i2c_bus_read(i2c_bus_t *bus, i2c_master_dev_handle_t dev, uint8_t *buf
         ESP_LOGW(TAG, "Read timeout, attempting bus recovery (errors: %lu)",
                  (unsigned long)bus->error_count);
 
-        if (i2c_bus_recover_locked(bus) == ESP_OK) {
+        if (_i2c_bus_recover_locked(bus) == ESP_OK) {
             for (int attempt = 0; attempt < I2C_BUS_RECOVERY_RETRY && ret != ESP_OK; attempt++) {
                 ret = i2c_master_transmit(dev, buf, len, I2C_BUS_TIMEOUT_MS);
             }
@@ -310,7 +310,7 @@ esp_err_t i2c_bus_write_read(i2c_bus_t *bus, i2c_master_dev_handle_t dev, const 
         ESP_LOGW(TAG, "Write-read timeout, attempting bus recovery (errors: %lu)",
                  (unsigned long)bus->error_count);
 
-        if (i2c_bus_recover_locked(bus) == ESP_OK) {
+        if (_i2c_bus_recover_locked(bus) == ESP_OK) {
             for (int attempt = 0; attempt < I2C_BUS_RECOVERY_RETRY && ret != ESP_OK; attempt++) {
                 ret = i2c_master_transmit_receive(dev, wr_data, wr_len, rd_buf, rd_len,
                                                   I2C_BUS_TIMEOUT_MS);

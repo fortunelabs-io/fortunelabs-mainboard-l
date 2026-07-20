@@ -50,7 +50,7 @@ static const uint8_t font_8x8[][8] = {
 /**
  * @brief Helper untuk mengirim satu byte perintah ke SSD1306
  */
-static esp_err_t ssd1306_send_cmd(uint8_t cmd) {
+static esp_err_t _ssd1306_send_cmd(uint8_t cmd) {
     uint8_t buf[2] = {0x00, cmd}; // 0x00 = Control byte untuk single command
     return i2c_bus_write(s_i2c_bus, s_dev_handle, buf, sizeof(buf));
 }
@@ -96,7 +96,7 @@ static esp_err_t ssd1306_init_hw(const display_config_t *cfg) {
     };
 
     for (size_t i = 0; i < sizeof(init_cmds); i++) {
-        err = ssd1306_send_cmd(init_cmds[i]);
+        err = _ssd1306_send_cmd(init_cmds[i]);
         if (err != ESP_OK)
             return err;
     }
@@ -121,9 +121,9 @@ static esp_err_t ssd1306_clear_hw(void) {
 
     // Sapu bersih ke-8 page yang ada di OLED
     for (uint8_t page = 0; page < 8; page++) {
-        ssd1306_send_cmd(0xB0 + page); // Set target Page Start Address
-        ssd1306_send_cmd(0x00);        // Reset Lower Column Address
-        ssd1306_send_cmd(0x10);        // Reset Higher Column Address
+        _ssd1306_send_cmd(0xB0 + page); // Set target Page Start Address
+        _ssd1306_send_cmd(0x00);        // Reset Lower Column Address
+        _ssd1306_send_cmd(0x10);        // Reset Higher Column Address
 
         // Tembak data kosong 128 byte sekaligus per baris
         esp_err_t err = i2c_bus_write(s_i2c_bus, s_dev_handle, zero_buffer, 129);
@@ -145,9 +145,9 @@ static esp_err_t ssd1306_show_text_hw(uint8_t row, const char *text) {
         return ESP_ERR_INVALID_ARG;
 
     // 1. Arahkan pointer kursor internal OLED ke Page target
-    ssd1306_send_cmd(0xB0 + row); // Map row ke Page Address
-    ssd1306_send_cmd(0x00);       // Set Column awal di kiri (Lower Column = 0)
-    ssd1306_send_cmd(0x10);       // Higher Column = 0
+    _ssd1306_send_cmd(0xB0 + row); // Map row ke Page Address
+    _ssd1306_send_cmd(0x00);       // Set Column awal di kiri (Lower Column = 0)
+    _ssd1306_send_cmd(0x10);       // Higher Column = 0
 
     // 2. Buat buffer stream I2C. Ukuran: 1 byte control data + 128 byte data kolom
     uint8_t data_stream[129];
@@ -186,9 +186,9 @@ static esp_err_t ssd1306_set_brightness_hw(uint8_t level) {
     if (!s_is_initialized)
         return ESP_FAIL;
 
-    esp_err_t err = ssd1306_send_cmd(0x81); // Perintah ubah kontras
+    esp_err_t err = _ssd1306_send_cmd(0x81); // Perintah ubah kontras
     if (err == ESP_OK) {
-        err = ssd1306_send_cmd(level); // Kirim nilai kecerahannya
+        err = _ssd1306_send_cmd(level); // Kirim nilai kecerahannya
     }
     return err;
 }
@@ -200,7 +200,7 @@ static void ssd1306_deinit_hw(void) {
     if (!s_is_initialized)
         return;
 
-    ssd1306_send_cmd(0xAE); // Matikan layar fisik sebelum mati total demi mematikan charge pump VCC
+    _ssd1306_send_cmd(0xAE); // Matikan layar fisik sebelum mati total demi mematikan charge pump VCC
     s_is_initialized = false;
     s_i2c_bus        = NULL;
     s_dev_handle     = NULL;

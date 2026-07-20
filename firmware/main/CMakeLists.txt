@@ -20,13 +20,21 @@ idf_component_register(
         "drivers/ic/ssd1306.c"
         "drivers/ic/ads1115.c"
         "drivers/ic/mcp23017.c"
+        "drivers/sensor/sensor_ads1115.c" 
 
         # --- Network & Communication ---
         "network/network_manager.c"
 
     INCLUDE_DIRS 
         "."
-        ".."
+        "bus"
+        "system"
+        "tasks"
+        "drivers"
+        "drivers/ic"
+        "drivers/sensor"
+        "drivers/output"
+        "network"
         
     PRIV_REQUIRES 
         # --- Core ESP-IDF Network & Storage Components ---

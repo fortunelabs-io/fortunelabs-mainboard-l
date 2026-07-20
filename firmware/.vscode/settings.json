@@ -1,99 +1,121 @@
 {
-    // --- 1. TEMA & PALETTE MANUAL (ATOM ONE DARK - SEGER & PASTEL TWEAK) ---
-    "workbench.colorTheme": "One Dark Pro Darker", 
-    "workbench.colorCustomizations": {
-        // Base Background & Sidebar asli milikmu
-        "editor.background": "#21252b",
-        "sideBar.background": "#1e2227",
-        "sideBar.foreground": "#abb2bf",
-        "activityBar.background": "#1e2227",
-        "titleBar.activeBackground": "#1e2227",
-        "titleBar.activeForeground": "#abb2bf",
-        "statusBar.background": "#21252b",
-        "statusBar.foreground": "#9da5b4",
-        "editorLineNumber.foreground": "#4b5263",
-
-        // Tweak UI Pastel (Pink, Blue, Cyan)
-        "activityBar.foreground": "#e8a7cf",             // Pastel Pink untuk icon bar samping
-        "editorLineNumber.activeForeground": "#9cc2ff",    // Pastel Blue untuk nomor baris aktif
-        "tab.activeBorder": "#e8a7cf",                    // Garis bawah tab aktif (Pastel Pink)
-        "tab.activeForeground": "#e8a7cf",                // Teks tab aktif
-        "activityBarBadge.background": "#a1e5df",         // Badge notifikasi/ekstensi (Pastel Cyan/Mint)
-        "activityBarBadge.foreground": "#1e2227",
-        "list.activeSelectionForeground": "#a1e5df",       // Teks file yang dipilih di sidebar
-        "list.highlightForeground": "#a1e5df",             // Highlight pencarian file
-        "list.hoverBackground": "#2c313c",
-        "focusBorder": "#9cc2ff"                           // Border fokus (Pastel Blue)
-    },
-
-    // Mewarnai syntax kodingan (C/C++, dll) dengan tema pastel senada
-    "editor.tokenColorCustomizations": {
-        "[One Dark Pro Darker]": {
-            "textMateRules": [
-                {
-                    // Keywords (if, return, case, struct, class, dll) -> Pastel Pink
-                    "scope": ["keyword", "storage.type", "storage.modifier"],
-                    "settings": { "foreground": "#e8a7cf" }
-                },
-                {
-                    // Functions & Methods -> Pastel Blue
-                    "scope": ["entity.name.function", "support.function", "variable.function"],
-                    "settings": { "foreground": "#9cc2ff" }
-                },
-                {
-                    // Strings (Teks teks di dalam kutip) -> Pastel Green (seger tapi soft)
-                    "scope": ["string", "string.template"],
-                    "settings": { "foreground": "#b3e6b5" }
-                },
-                {
-                    // Macros, Types, & Constants (#define, int, uint8_t, dll) -> Pastel Cyan
-                    "scope": ["entity.name.type", "support.type", "constant.numeric", "constant.language", "meta.preprocessor"],
-                    "settings": { "foreground": "#a1e5df" }
-                },
-                {
-                    // Comments -> Muted Slate Green (Biar kontrasnya pas di mata)
-                    "scope": ["comment", "punctuation.definition.comment"],
-                    "settings": { "foreground": "#63757a", "fontStyle": "italic" }
-                }
-            ]
+  "workbench.colorTheme": "One Dark Pro Darker",
+  "workbench.colorCustomizations": {
+    "editor.background": "#21252b",
+    "sideBar.background": "#1e2227",
+    "sideBar.foreground": "#abb2bf",
+    "activityBar.background": "#1e2227",
+    "titleBar.activeBackground": "#1e2227",
+    "titleBar.activeForeground": "#abb2bf",
+    "statusBar.background": "#21252b",
+    "statusBar.foreground": "#9da5b4",
+    "editorLineNumber.foreground": "#4b5263",
+    "activityBar.foreground": "#e8a7cf",
+    "editorLineNumber.activeForeground": "#9cc2ff",
+    "tab.activeBorder": "#e8a7cf",
+    "tab.activeForeground": "#e8a7cf",
+    "activityBarBadge.background": "#a1e5df",
+    "activityBarBadge.foreground": "#1e2227",
+    "list.activeSelectionForeground": "#a1e5df",
+    "list.highlightForeground": "#a1e5df",
+    "list.hoverBackground": "#2c313c",
+    "focusBorder": "#9cc2ff"
+  },
+  "editor.tokenColorCustomizations": {
+    "[One Dark Pro Darker]": {
+      "textMateRules": [
+        {
+          "scope": [
+            "keyword",
+            "storage.type",
+            "storage.modifier"
+          ],
+          "settings": {
+            "foreground": "#e8a7cf"
+          }
+        },
+        {
+          "scope": [
+            "entity.name.function",
+            "support.function",
+            "variable.function"
+          ],
+          "settings": {
+            "foreground": "#9cc2ff"
+          }
+        },
+        {
+          "scope": [
+            "string",
+            "string.template"
+          ],
+          "settings": {
+            "foreground": "#b3e6b5"
+          }
+        },
+        {
+          "scope": [
+            "entity.name.type",
+            "support.type",
+            "constant.numeric",
+            "constant.language",
+            "meta.preprocessor"
+          ],
+          "settings": {
+            "foreground": "#a1e5df"
+          }
+        },
+        {
+          "scope": [
+            "comment",
+            "punctuation.definition.comment"
+          ],
+          "settings": {
+            "foreground": "#63757a",
+            "fontStyle": "italic"
+          }
         }
-    },
-
-    // --- 2. CONFIG INTELLISENSE C/C++ (JALUR FIX) ---
-    "C_Cpp.default.compileCommands": "/home/fenghuang/workspace/fortunelabs-mainboard-l/firmware/build/compile_commands.json",
-    "C_Cpp.default.compilerPath": "/home/fenghuang/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20240530/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc",
-    "C_Cpp.default.cStandard": "c11",
-    "C_Cpp.default.cppStandard": "c++17",
-    "C_Cpp.default.includePath": [
-        "${workspaceFolder}/**",                  // Berubah jadi /** karena root-nya sudah di dalam firmware
-        "/home/fenghuang/esp/esp-idf/components/**"
-    ],
-    "C_Cpp.default.browse.path": [
-        "${workspaceFolder}/**",
-        "/home/fenghuang/esp/esp-idf/components"
-    ],
-
-    // --- 3. FONTS, KURSOR & COMFORT ERGONOMICS ---
-    "editor.fontFamily": "'JetBrains Mono', 'DejaVu Sans Mono', monospace",
-    "editor.fontSize": 14,
-    "editor.lineHeight": 18,
-    "editor.fontLigatures": true,
-    "editor.cursorStyle": "line",
-    "editor.cursorBlinking": "phase",
-    "editor.cursorWidth": 3,
-    "editor.cursorSmoothCaretAnimation": "on",
-    "editor.minimap.enabled": false,
-    "editor.guides.bracketPairs": "active",
-    "editor.renderLineHighlight": "all",
-    "editor.wordWrap": "on",
-    "workbench.iconTheme": "a-file-icon-vscode",
-    "telemetry.telemetryLevel": "off",
-    "idf.currentSetup": "/home/fenghuang/esp/esp-idf",
-    "editor.formatOnSave": true,
-    "[c]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools"
-    },
-    "[cpp]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools"
+      ]
     }
+  },
+  "C_Cpp.default.compileCommands": "/home/fenghuang/workspace/fortunelabs-mainboard-l/firmware/build/compile_commands.json",
+  "C_Cpp.default.compilerPath": "/home/fenghuang/.espressif/tools/xtensa-esp-elf/esp-14.2.0_20260121/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc",
+  "C_Cpp.default.cStandard": "c11",
+  "C_Cpp.default.cppStandard": "c++17",
+  "C_Cpp.default.includePath": [
+    "${workspaceFolder}/**",
+    "/home/fenghuang/esp/esp-idf/components/**"
+  ],
+  "C_Cpp.default.browse.path": [
+    "${workspaceFolder}/**",
+    "/home/fenghuang/esp/esp-idf/components"
+  ],
+  "editor.fontFamily": "'JetBrains Mono', 'DejaVu Sans Mono', monospace",
+  "editor.fontSize": 14,
+  "editor.lineHeight": 18,
+  "editor.fontLigatures": true,
+  "editor.cursorStyle": "line",
+  "editor.cursorBlinking": "phase",
+  "editor.cursorWidth": 3,
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.minimap.enabled": false,
+  "editor.guides.bracketPairs": "active",
+  "editor.renderLineHighlight": "all",
+  "editor.wordWrap": "on",
+  "workbench.iconTheme": "a-file-icon-vscode",
+  "telemetry.telemetryLevel": "off",
+  "idf.currentSetup": "/home/fenghuang/esp/esp-idf",
+  "editor.formatOnSave": true,
+  "[c]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools"
+  },
+  "[cpp]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools"
+  },
+  "idf.openOcdConfigs": [
+    "board/esp32-wrover-kit-3.3v.cfg"
+  ],
+  "idf.customExtraVars": {
+    "IDF_TARGET": "esp32"
+  }
 }

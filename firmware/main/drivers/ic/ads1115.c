@@ -32,7 +32,7 @@ static const uint32_t s_conversion_to_ms[] = {
  * - true  : channel is one of ADS1115_CHANNEL_0..3
  * - false : channel is out of range
  */
-static inline bool ads1115_channel_valid(ads1115_channel_t channel) {
+static inline bool _ads1115_channel_valid(ads1115_channel_t channel) {
     return (channel >= ADS1115_CHANNEL_0) && (channel <= ADS1115_CHANNEL_3);
 }
 
@@ -47,7 +47,7 @@ static inline bool ads1115_channel_valid(ads1115_channel_t channel) {
  *
  * @return 16-bit config register value ready to write to ADS1115_REG_CONFIG
  */
-static uint16_t ads1115_build_config_word(const ads1115_channel_config_t *config) {
+static uint16_t _ads1115_build_config_word(const ads1115_channel_config_t *config) {
     uint16_t word = 0;
     word |= (1U << 15);
     word |= ((uint16_t)config->channel & 0x07) << 12; // MUX
@@ -73,7 +73,7 @@ static uint16_t ads1115_build_config_word(const ads1115_channel_config_t *config
  * - ESP_OK   : Register written successfully
  * - ESP_FAIL : I2C transaction error (no ACK or bus fault)
  */
-static esp_err_t ads1115_write_register(ads1115_dev_t *dev, uint8_t reg, uint16_t value) {
+static esp_err_t _ads1115_write_register(ads1115_dev_t *dev, uint8_t reg, uint16_t value) {
     uint8_t payload[3] = {
         reg,
         (uint8_t)((value >> 8) & 0xFF),
@@ -96,7 +96,7 @@ static esp_err_t ads1115_write_register(ads1115_dev_t *dev, uint8_t reg, uint16_
  * - ESP_OK   : Register read successfully, out_value populated
  * - ESP_FAIL : I2C transaction error
  */
-static esp_err_t ads1115_read_register(ads1115_dev_t *dev, uint8_t reg, uint16_t *out_value) {
+static esp_err_t _ads1115_read_register(ads1115_dev_t *dev, uint8_t reg, uint16_t *out_value) {
     uint8_t read_buf[2] = {0};
 
     esp_err_t ret = i2c_bus_write_read(dev->bus, dev->dev, &reg, 1, read_buf, sizeof(read_buf));
@@ -126,7 +126,7 @@ static esp_err_t ads1115_init(ads1115_dev_t *dev, const ads1115_config_t *config
     memcpy(dev->channel_config, config->channel_config, sizeof(dev->channel_config));
 
     // Idempotent safety: restore chip to known state on every init
-    ret = ads1115_write_register(dev, ADS1115_REG_CONFIG, ADS1115_CONFIG_RESET);
+    ret = _ads1115_write_register(dev, ADS1115_REG_CONFIG, ADS1115_CONFIG_RESET);
     if (ret != ESP_OK) {
         ESP_LOGE(TAG, "Failed to write reset config: %s", esp_err_to_name(ret));
         return ret;
@@ -144,16 +144,16 @@ static esp_err_t ads1115_read(ads1115_dev_t *dev, ads1115_channel_t channel, uin
         return ESP_ERR_INVALID_ARG;
     if (!dev->initialized)
         return ESP_ERR_INVALID_STATE;
-    if (!ads1115_channel_valid(channel))
+    if (!_ads1115_channel_valid(channel))
         return ESP_ERR_INVALID_ARG;
 
     // Map channel enum to channel_config array index
     const ads1115_channel_config_t *channel_config =
         &dev->channel_config[channel - ADS1115_CHANNEL_0];
 
-    uint16_t config_word = ads1115_build_config_word(channel_config);
+    uint16_t config_word = _ads1115_build_config_word(channel_config);
 
-    esp_err_t ret = ads1115_write_register(dev, ADS1115_REG_CONFIG, config_word);
+    esp_err_t ret = _ads1115_write_register(dev, ADS1115_REG_CONFIG, config_word);
     if (ret != ESP_OK) {
         ESP_LOGW(TAG, "Config write failed %s", esp_err_to_name(ret));
         return ret;
@@ -164,7 +164,7 @@ static esp_err_t ads1115_read(ads1115_dev_t *dev, ads1115_channel_t channel, uin
     vTaskDelay(pdMS_TO_TICKS(delay_ms));
 
     uint16_t raw_value = 0;
-    ret                = ads1115_read_register(dev, ADS1115_REG_CONVERSION, &raw_value);
+    ret                = _ads1115_read_register(dev, ADS1115_REG_CONVERSION, &raw_value);
     if (ret != ESP_OK) {
         ESP_LOGW(TAG, "Conversion read failed: %s", esp_err_to_name(ret));
         return ret;
@@ -181,7 +181,7 @@ static esp_err_t ads1115_reset(ads1115_dev_t *dev) {
     if (!dev->initialized)
         return ESP_ERR_INVALID_STATE;
 
-    esp_err_t ret = ads1115_write_register(dev, ADS1115_REG_CONFIG, ADS1115_CONFIG_RESET);
+    esp_err_t ret = _ads1115_write_register(dev, ADS1115_REG_CONFIG, ADS1115_CONFIG_RESET);
     if (ret != ESP_OK)
         ESP_LOGW(TAG, "Reset failed: %s", esp_err_to_name(ret));
 

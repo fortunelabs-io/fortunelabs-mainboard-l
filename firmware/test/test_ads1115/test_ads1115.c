@@ -83,7 +83,7 @@ void test_read_writes_correctly_packed_config_word(void) {
     uint16_t word = 0;
     mock_i2c_bus_get_reg16(ADS1115_REG_CONFIG, &word);
 
-    // Verified field-by-field against ads1115_build_config_word's own bit
+    // Verified field-by-field against _ads1115_build_config_word's own bit
     // layout, using the same field values supplied in the fixture rather
     // than one hardcoded magic word, so this test survives even if the
     // enums' underlying integer values change.
