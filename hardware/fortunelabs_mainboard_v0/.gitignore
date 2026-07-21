@@ -12,7 +12,7 @@ _autosave-*
 
 # Lock files (dibuat KiCad saat file sedang dibuka, per-mesin, jangan di-share)
 *.lck
-"#auto_saved_files#"
+\#auto_saved_files#
 
 # Cache files
 fp-info-cache
