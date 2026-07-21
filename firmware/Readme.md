@@ -19,11 +19,28 @@ idf.py build
 
 ## Flashing and Monitoring
 
+Run from the `firmware/` project root with the ESP-IDF environment activated
+(`. $IDF_PATH/export.sh`). The simplest form lets the tool auto-detect the port:
+
 ```bash
-idf.py -p /dev/ttyUSB0 flash monitor
+idf.py flash monitor
 ```
 
-Replace `/dev/ttyUSB0` with the serial port assigned to the board. Exit the monitor with `Ctrl+]`.
+To name the port explicitly, list what is connected first:
+
+```bash
+ls /dev/ttyACM* /dev/ttyUSB*
+```
+
+The port name depends on the board's USB-serial chip: a CH343/CH9102 enumerates as
+`/dev/ttyACM0`, while a CH340 or CP210x enumerates as `/dev/ttyUSB0`. Pass the
+matching node:
+
+```bash
+idf.py -p /dev/ttyACM0 flash monitor
+```
+
+Exit the monitor with `Ctrl+]`.
 
 ## Configuration
 
