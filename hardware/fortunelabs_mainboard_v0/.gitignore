@@ -10,6 +10,10 @@ _autosave-*
 *.000
 *.tmp
 
+# Lock files (dibuat KiCad saat file sedang dibuka, per-mesin, jangan di-share)
+*.lck
+"#auto_saved_files#"
+
 # Cache files
 fp-info-cache
 *-cache.lib
