@@ -8,9 +8,9 @@
  * code, the PGA-derived LSB scaling, and the active-channel resolution.
  *
  * The adapter is exercised end to end through the same mock_i2c_bus used
- * by the raw driver tests: adapter -> ads1115_get_driver()->read() ->
- * i2c_bus_* -> mock. A seeded conversion register therefore surfaces as a
- * voltage at the contract boundary.
+ * by the raw driver tests: adapter -> ads1115_read() -> i2c_bus_* -> mock.
+ * A seeded conversion register therefore surfaces as a voltage at the
+ * contract boundary.
  *
  * Voltages are asserted in integer microvolts to avoid a dependency on
  * Unity float support. Tolerances are wide enough for float rounding but

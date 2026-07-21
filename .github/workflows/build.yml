@@ -1,0 +1,42 @@
+name: firmware
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  # ESP-IDF firmware build. Runs inside Espressif's Docker image, which has the
+  # full IDF Python environment. Only `idf.py build` is invoked here: never
+  # `flash` or `monitor`, which require a physical board and a serial TTY and
+  # cannot run in CI.
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: ESP-IDF build
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          # Project's documented IDF version (firmware/Readme.md). Note: the
+          # build was verified locally on v5.5.4; pick whichever your team
+          # standardizes on and keep it here.
+          esp_idf_version: v5.3.2
+          # Actual target in sdkconfig is esp32 (not esp32-s3 as the Readme
+          # states; that discrepancy is tracked in EXIT_AUDIT_REPORT.md).
+          target: esp32
+          path: firmware
+          command: idf.py build
+
+  # Host-native SIL unit tests (Unity via PlatformIO). No hardware required.
+  native-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PlatformIO
+        run: pip install --upgrade platformio
+      - name: Run native tests
+        working-directory: firmware
+        run: pio test -e native

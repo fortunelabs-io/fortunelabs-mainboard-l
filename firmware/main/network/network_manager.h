@@ -15,8 +15,10 @@
 #pragma once
 
 #include "esp_err.h"
+#include "hal/transport_driver.h"
 #include "system/system_config.h"
 #include <stdbool.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -78,6 +80,43 @@ bool network_manager_is_connected(void);
  * - ESP_FAIL              : Underlying MQTT publish call failed
  */
 esp_err_t network_manager_publish_health(const char *json_payload, size_t length);
+
+/**
+ * @brief Publish a payload to an arbitrary topic on the broker.
+ *
+ * @param topic    Destination topic
+ * @param payload  Payload bytes
+ * @param length   Payload length in bytes
+ *
+ * @return
+ * - ESP_OK                : Publish accepted by the MQTT client
+ * - ESP_ERR_INVALID_STATE : MQTT client not initialized or not connected
+ * - ESP_FAIL              : Underlying MQTT publish call failed
+ */
+esp_err_t network_manager_publish(const char *topic, const char *payload, size_t length);
+
+/**
+ * @brief Subscribe to a topic on the broker.
+ *
+ * @param topic  Topic to subscribe to
+ *
+ * @return
+ * - ESP_OK                : Subscribe request accepted
+ * - ESP_ERR_INVALID_STATE : MQTT client not initialized or not connected
+ * - ESP_FAIL              : Underlying MQTT subscribe call failed
+ */
+esp_err_t network_manager_subscribe(const char *topic);
+
+/**
+ * @brief Register the callback invoked when an inbound broker command arrives.
+ *
+ * When set, inbound MQTT command payloads are forwarded to this callback
+ * rather than interpreted inside the network manager. Interpretation of
+ * command semantics is left to the caller (orchestration layer).
+ *
+ * @param cb  Callback to invoke, or NULL to clear
+ */
+void network_manager_set_command_cb(transport_cmd_cb_t *cb);
 
 #ifdef __cplusplus
 }

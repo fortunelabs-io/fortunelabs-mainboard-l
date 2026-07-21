@@ -45,10 +45,10 @@ typedef void(transport_cmd_cb_t)(const char *topic, const uint8_t *data, size_t 
  * @param extra       Generic pointer to a custom, driver-specific configuration (nullable)
  */
 typedef struct {
-    const char        *broker_uri;
-    const char        *device_id;
-    transport_cmd_cb_t cmd_cb;
-    void              *extra;
+    const char         *broker_uri;
+    const char         *device_id;
+    transport_cmd_cb_t *cmd_cb;
+    void               *extra;
 } transport_config_t;
 
 /**

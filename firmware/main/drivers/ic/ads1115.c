@@ -116,7 +116,7 @@ static esp_err_t ads1115_init(ads1115_dev_t *dev, const ads1115_config_t *config
     memset(dev, 0, sizeof(ads1115_dev_t));
 
     esp_err_t ret =
-        i2c_bus_add_device(config->bus, (uint8_t)config->addr, 100000, "ADS1115", &dev->dev);
+        i2c_bus_add_device(config->bus, (uint8_t)config->addr, config->scl_hz, "ADS1115", &dev->dev);
     if (ret != ESP_OK) {
         ESP_LOGE(TAG, "Failed to register device 0x%02X: %s", config->addr, esp_err_to_name(ret));
         return ret;

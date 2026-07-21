@@ -336,3 +336,4 @@ static const mcp23017_driver_t s_mcp23017_driver = {
 };
 
 const mcp23017_driver_t *mcp23017_get_driver(void) { return &s_mcp23017_driver; }
+

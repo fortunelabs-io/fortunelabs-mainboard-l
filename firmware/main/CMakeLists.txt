@@ -20,12 +20,13 @@ idf_component_register(
         "drivers/ic/ssd1306.c"
         "drivers/ic/ads1115.c"
         "drivers/ic/mcp23017.c"
-        "drivers/sensor/sensor_ads1115.c" 
+        "drivers/sensor/sensor_ads1115.c"
 
         # --- Network & Communication ---
         "network/network_manager.c"
+        "drivers/transport/transport_mqtt.c"
 
-    INCLUDE_DIRS 
+    INCLUDE_DIRS
         "."
         "bus"
         "system"
@@ -34,6 +35,7 @@ idf_component_register(
         "drivers/ic"
         "drivers/sensor"
         "drivers/output"
+        "drivers/transport"
         "network"
         
     PRIV_REQUIRES 

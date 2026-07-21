@@ -1,20 +1,27 @@
 /**
  * @file task_display.c
- * @brief Consumer task that listens for text updates and renders them to the SSD1306.
+ * @brief Consumer task that listens for text updates and renders them through
+ *        the injected display driver contract.
  */
 
+#include "tasks/task_display.h"
+#include "common/app_types.h"
+#include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "common/app_types.h"
-#include "hal/display_driver.h"
-#include "drivers/ic/ssd1306.h"
-#include "esp_log.h"
 
 static const char *TAG = "TASK_DISPLAY";
 
 void task_display(void *pvParameters)
 {
     ESP_LOGI(TAG, "Display task started.");
+
+    // pvParameters must be a task_display_ctx_t* set up by main.c. This is
+    // the one and only place task_display learns which concrete display it
+    // renders to; everything below this line speaks the contract only.
+    const task_display_ctx_t *ctx = (const task_display_ctx_t *)pvParameters;
+    const display_driver_t   *drv = ctx->driver;
+
     display_msg_t incoming_msg;
 
     while (1)
@@ -22,8 +29,8 @@ void task_display(void *pvParameters)
         // Memblokir diri sampai ada teks baru yang siap dicetak ke layar
         if (xQueueReceive(g_queue_display, &incoming_msg, portMAX_DELAY) == pdTRUE)
         {
-            // Tembak string langsung ke row target pada OLED fisik
-            ssd1306_driver.show_text(incoming_msg.row, incoming_msg.text);
+            // Render the line through the injected HAL contract, not a named driver
+            drv->show_text(incoming_msg.row, incoming_msg.text);
         }
     }
 }

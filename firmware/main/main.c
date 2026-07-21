@@ -30,6 +30,7 @@
 
 /* --- Task Contexts --- */
 #include "tasks/task_actuator.h"
+#include "tasks/task_display.h"
 #include "tasks/task_sensor.h"
 
 /* --- Concrete Drivers --- */
@@ -37,6 +38,7 @@
 #include "drivers/ic/ssd1306.h"
 #include "drivers/output/actuator_dummy.h"
 #include "drivers/sensor/sensor_ads1115.h"
+#include "drivers/transport/transport_mqtt.h"
 
 /* --- System Services --- */
 #include "system/system_config.h"
@@ -69,11 +71,10 @@ static i2c_bus_t g_i2c_bus;
 // because the task reads through this pointer for its entire lifetime.
 static task_sensor_ctx_t   g_task_sensor_ctx;
 static task_actuator_ctx_t g_task_actuator_ctx;
+static task_display_ctx_t  g_task_display_ctx;
 
-// Task prototypes for RTOS
-// task_sensor and task_actuator prototypes and context structs now come
-// from their respective headers in tasks/.
-extern void task_display(void *pvParameters);
+// Task entry points and context structs come from their respective headers
+// in tasks/ (task_sensor.h, task_actuator.h, task_display.h).
 
 /**
  * @brief Temporary R&D task: triggers OTA update 10s after boot.
@@ -102,6 +103,26 @@ void ota_test_task(void *pvParameters) {
 
     // Cleanup and delete task after OTA attempt
     vTaskDelete(NULL);
+}
+
+/**
+ * @brief Inbound transport command handler.
+ *
+ * Interprets the raw broker payload and forwards the resulting state to the
+ * actuator task queue. Command interpretation lives here, in orchestration,
+ * rather than inside the transport implementation.
+ */
+static void app_transport_command(const char *topic, const uint8_t *data, size_t data_len) {
+    (void)topic;
+    if (strncmp((const char *)data, "ON", data_len) == 0) {
+        bool state = true;
+        xQueueSend(g_queue_actuator, &state, 0);
+        ESP_LOGI(TAG, "Remote control action: turned actuator ON");
+    } else if (strncmp((const char *)data, "OFF", data_len) == 0) {
+        bool state = false;
+        xQueueSend(g_queue_actuator, &state, 0);
+        ESP_LOGI(TAG, "Remote control action: turned actuator OFF");
+    }
 }
 
 void app_main(void) {
@@ -213,10 +234,27 @@ void app_main(void) {
                                     .height   = 64};
     ESP_ERROR_CHECK(ssd1306_driver.init(&display_cfg));
 
-    /* [8] Network Manager ---------------------------------------------------- */
-    ESP_LOGI(TAG, "Initializing Network Manager...");
-    ESP_ERROR_CHECK(network_manager_init(&sys_cfg)); // Pass system config for WiFi credentials
-    ESP_ERROR_CHECK(network_manager_start());        // Start connection process and telemetry
+    // Wire the display contract pointer task_display will consume. Swapping
+    // the SSD1306 for any future display means changing this one line, with
+    // zero changes inside task_display.c.
+    g_task_display_ctx.driver = &ssd1306_driver;
+
+    /* [8] Transport (WiFi + MQTT) -------------------------------------------- */
+    ESP_LOGI(TAG, "Initializing transport (WiFi + MQTT)...");
+    // Reach outbound comms through the transport HAL contract. Swapping WiFi/
+    // MQTT for a future connectivity path (cellular, LoRaWAN) means changing
+    // the driver instance wired here, not the callers.
+    transport_mqtt_config_t transport_extra = {
+        .wifi_ssid = sys_cfg.wifi_ssid,
+        .wifi_pass = sys_cfg.wifi_pass,
+    };
+    transport_config_t transport_cfg = {
+        .broker_uri = sys_cfg.broker_uri,
+        .device_id  = sys_cfg.device_id,
+        .cmd_cb     = app_transport_command,
+        .extra      = &transport_extra,
+    };
+    ESP_ERROR_CHECK(transport_mqtt_driver.init(&transport_cfg));
 
     /* [9] System Supervisor -------------------------------------------------- */
     system_supervisor_config_t supervisor_cfg = {
@@ -237,7 +275,7 @@ void app_main(void) {
     xTaskCreate(task_sensor, "task_sensor", 3072, &g_task_sensor_ctx, 5,
                 NULL); // Sensor task has higher priority for responsive readings
     xTaskCreate(task_actuator, "task_actuator", 2048, &g_task_actuator_ctx, 5, NULL);
-    xTaskCreate(task_display, "task_display", 3072, NULL, 4, NULL);
+    xTaskCreate(task_display, "task_display", 3072, &g_task_display_ctx, 4, NULL);
 
     ESP_LOGI(TAG, "All tasks spawned successfully. System is running.");
 }

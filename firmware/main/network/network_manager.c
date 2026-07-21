@@ -17,10 +17,12 @@
 
 static const char *TAG = "network_manager";
 
-// External dependencies: actuator command queue and live sensor value,
-// both owned and defined by other modules.
-extern QueueHandle_t g_queue_actuator;
-extern float         task_sensor_get_latest_voltage(void);
+// External dependency: live sensor value, owned by the sensor task.
+extern float task_sensor_get_latest_voltage(void);
+
+// Inbound-command callback, registered by the transport adapter. When set,
+// command payloads are forwarded here rather than interpreted locally.
+static transport_cmd_cb_t *s_cmd_cb = NULL;
 
 /* --------------------------- MODULE STATE ----------------------------*/
 static system_config_t          s_network_cfg;
@@ -120,17 +122,10 @@ static void mqtt_event_handler(void *arg, esp_event_base_t base, int32_t event_i
             ESP_LOGI(TAG, "Topic: %.*s", event->topic_len, event->topic);
             ESP_LOGI(TAG, "Payload: %.*s", event->data_len, event->data);
 
-            // If payload is "ON", send true to the actuator queue
-            if (strncmp(event->data, "ON", event->data_len) == 0) {
-                bool state = true;
-                xQueueSend(g_queue_actuator, &state, 0);
-                ESP_LOGI(TAG, "Remote control action: turned actuator ON");
-            }
-            // If payload is "OFF", send false to the actuator queue
-            else if (strncmp(event->data, "OFF", event->data_len) == 0) {
-                bool state = false;
-                xQueueSend(g_queue_actuator, &state, 0);
-                ESP_LOGI(TAG, "Remote control action: turned actuator OFF");
+            // Forward the raw command to the registered handler; the
+            // orchestration layer decides what the payload means.
+            if (s_cmd_cb != NULL) {
+                s_cmd_cb(event->topic, (const uint8_t *)event->data, (size_t)event->data_len);
             }
             break;
         default:
@@ -350,3 +345,41 @@ esp_err_t network_manager_publish_health(const char *json_payload, size_t length
 
     return ESP_OK;
 }
+
+/* --------------------------- TRANSPORT DELEGATES ----------------------------*/
+/**
+ * @brief Publish a payload to an arbitrary topic. See network_manager.h.
+ */
+esp_err_t network_manager_publish(const char *topic, const char *payload, size_t length) {
+    if (s_mqtt_client == NULL || !s_mqtt_connected) {
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    int msg_id = esp_mqtt_client_publish(s_mqtt_client, topic, payload, (int)length, 1, 0);
+    if (msg_id < 0) {
+        ESP_LOGE(TAG, "Failed to publish to topic '%s'", topic);
+        return ESP_FAIL;
+    }
+    return ESP_OK;
+}
+
+/**
+ * @brief Subscribe to a topic on the broker. See network_manager.h.
+ */
+esp_err_t network_manager_subscribe(const char *topic) {
+    if (s_mqtt_client == NULL || !s_mqtt_connected) {
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    int msg_id = esp_mqtt_client_subscribe(s_mqtt_client, topic, 1);
+    if (msg_id < 0) {
+        ESP_LOGE(TAG, "Failed to subscribe to topic '%s'", topic);
+        return ESP_FAIL;
+    }
+    return ESP_OK;
+}
+
+/**
+ * @brief Register the inbound-command callback. See network_manager.h.
+ */
+void network_manager_set_command_cb(transport_cmd_cb_t *cb) { s_cmd_cb = cb; }

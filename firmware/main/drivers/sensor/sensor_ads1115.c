@@ -9,6 +9,10 @@
 
 static const char *TAG = "sensor_ads1115";
 
+/* Per-device I2C clock for the ADS1115. Supplied by this adapter (the
+ * config layer) rather than hardcoded inside the driver, per Decision #1. */
+#define SENSOR_ADS1115_SCL_HZ 100000
+
 /* Backing state for the singleton contract. One active device, one
  * active channel, resolved at init. */
 static const ads1115_driver_t *s_drv               = NULL;
@@ -75,8 +79,9 @@ static esp_err_t ads1115_sensor_init(const sensor_config_t *cfg) {
     s_drv                              = ads1115_get_driver();
 
     ads1115_config_t ads_cfg = {
-        .bus  = cfg->bus,
-        .addr = (ads1115_addr_t)cfg->i2c_addr,
+        .bus    = cfg->bus,
+        .addr   = (ads1115_addr_t)cfg->i2c_addr,
+        .scl_hz = SENSOR_ADS1115_SCL_HZ,
     };
     for (int i = 0; i < 4; i++) {
         ads_cfg.channel_config[i] = ext->channel_config[i];

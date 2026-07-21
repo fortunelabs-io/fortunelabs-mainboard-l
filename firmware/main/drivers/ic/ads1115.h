@@ -131,11 +131,13 @@ typedef struct {
  *
  * @param bus             Pointer to an already-initialized i2c_bus_t instance
  * @param addr            7-bit I2C device address (set by ADDR pin strap)
+ * @param scl_hz          Per-device I2C clock in Hz, applied when the device is registered
  * @param channel_config  Per-channel PGA/data-rate settings, copied into the runtime context
  */
 typedef struct {
     i2c_bus_t               *bus;
     ads1115_addr_t           addr;
+    uint32_t                 scl_hz;
     ads1115_channel_config_t channel_config[4];
 } ads1115_config_t;
 
