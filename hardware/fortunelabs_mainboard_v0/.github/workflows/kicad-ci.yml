@@ -1,0 +1,45 @@
+name: KiCad ERC/DRC & Export
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-and-export:
+    runs-on: ubuntu-latest
+    container:
+      image: kicad/kicad:9.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Ganti fortunelabs_mainboard_v0 sesuai nama file .kicad_pro / .kicad_sch / .kicad_pcb kamu
+      - name: Run ERC (schematic check)
+        run: |
+          kicad-cli sch erc --output erc-report.json fortunelabs_mainboard_v0.kicad_sch
+
+      - name: Run DRC (PCB check)
+        run: |
+          kicad-cli pcb drc --output drc-report.json fortunelabs_mainboard_v0.kicad_pcb
+
+      - name: Export Gerbers
+        run: |
+          mkdir -p gerbers
+          kicad-cli pcb export gerbers --output gerbers/ fortunelabs_mainboard_v0.kicad_pcb
+          kicad-cli pcb export drill --output gerbers/ fortunelabs_mainboard_v0.kicad_pcb
+
+      - name: Export BOM
+        run: |
+          kicad-cli sch export bom --output bom.csv fortunelabs_mainboard_v0.kicad_sch
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: kicad-outputs
+          path: |
+            erc-report.json
+            drc-report.json
+            gerbers/
+            bom.csv

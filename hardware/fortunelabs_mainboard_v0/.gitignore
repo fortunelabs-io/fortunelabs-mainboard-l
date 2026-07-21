@@ -1,0 +1,37 @@
+# --- KiCad project files ---
+
+# Local user preferences (jangan di-share, beda tiap komputer)
+*.kicad_prl
+
+# Auto-backup & autosave
+*-backups/
+_autosave-*
+*.bak
+*.000
+*.tmp
+
+# Cache files
+fp-info-cache
+*-cache.lib
+sym-lib-table.bak
+fp-lib-table.bak
+
+# Plot / export output (generate ulang dari source, tidak perlu di-track)
+/plots/
+/gerbers/
+/production/
+*.gbr
+*.drl
+*.pos
+*.ger
+
+# 3D model cache
+*.3dshapes/*.lock
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor junk
+.vscode/
+*.swp
