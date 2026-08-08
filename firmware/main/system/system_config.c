@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file system_config.c
  * @brief NVS-Backed Configuration Store Implementation

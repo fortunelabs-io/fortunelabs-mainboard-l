@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 /**
  * @brief Shared application types and global queue handles.
  *
@@ -15,19 +16,17 @@
 #include "hal/sensor_driver.h"
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
-    typedef struct
-    {
-        uint8_t row;
-        char text[17]; // 16 Karakter + 1 Null Terminator untuk SSD1306
-    } display_msg_t;
+typedef struct {
+    uint8_t row;
+    char    text[17]; // 16 Karakter + 1 Null Terminator untuk SSD1306
+} display_msg_t;
 
-    /* Queue handles, created in main.c */
-    extern QueueHandle_t g_queue_display;
-    extern QueueHandle_t g_queue_actuator;
-    extern QueueHandle_t g_queue_comm;
+/* Queue handles, created in main.c */
+extern QueueHandle_t g_queue_display;
+extern QueueHandle_t g_queue_actuator;
+extern QueueHandle_t g_queue_comm;
 
 #ifdef __cplusplus
 }

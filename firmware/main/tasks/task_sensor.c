@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file task_sensor.c
  * @brief Periodically samples the injected sensor driver and dispatches state updates.

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file system_ota.h
  * @brief Over-the-Air Firmware Update With Rollback Protection

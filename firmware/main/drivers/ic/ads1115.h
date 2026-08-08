@@ -16,9 +16,6 @@
  * ads1115_get_driver(). All operations are reached through the
  * function pointers in this vtable; there are no other public entry
  * points into the driver.
- *
- * @note All vtable methods except init() return ESP_ERR_INVALID_STATE if
- *       called before init() completes successfully.
  */
 
 #pragma once

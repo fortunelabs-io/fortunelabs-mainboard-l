@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 /**
  * @file main.c
  * @brief Fortune Labs Mainboard PoC — application entry point.

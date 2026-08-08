@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file output_driver.h
  * @brief Output HAL Contract

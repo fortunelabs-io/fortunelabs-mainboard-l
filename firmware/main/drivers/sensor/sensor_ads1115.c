@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 /**
  * @file sensor_ads1115.c
  * @brief ADS1115 Sensor HAL Adapter Implementation

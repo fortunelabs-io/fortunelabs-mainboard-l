@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file task_sensor.h
  * @brief Public interface for task_sensor: injected context and entry point.

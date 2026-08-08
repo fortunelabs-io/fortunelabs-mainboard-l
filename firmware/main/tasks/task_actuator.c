@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file task_actuator.c
  * @brief Consumer task that drives the physical/dummy LED based on queue commands.

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file system_log.h
  * @brief Logging Facade Over ESP-IDF esp_log With an Optional Remote Sink

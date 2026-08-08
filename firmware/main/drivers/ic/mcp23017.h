@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file mcp23017.h
  * @brief MCP23017 I2C GPIO Expander Driver

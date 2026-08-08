@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 #include "bus/i2c_bus.h"
 #include "driver/gpio.h"
 #include "esp_log.h"

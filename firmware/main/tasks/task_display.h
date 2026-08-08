@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file task_display.h
  * @brief Public interface for task_display: injected context and entry point.

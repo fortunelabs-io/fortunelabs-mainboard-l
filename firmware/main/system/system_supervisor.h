@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file system_supervisor.h
  * @brief System Health Supervisor: Task Watchdog + Heartbeat Telemetry

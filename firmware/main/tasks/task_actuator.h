@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file task_actuator.h
  * @brief Public interface for task_actuator: injected context and entry point.

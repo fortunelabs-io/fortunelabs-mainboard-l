@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file sensor_driver.h
  * @brief Sensor HAL Contract

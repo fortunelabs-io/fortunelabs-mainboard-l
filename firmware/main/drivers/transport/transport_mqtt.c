@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 /**
  * @file transport_mqtt.c
  * @brief MQTT-over-WiFi Transport HAL Adapter Implementation

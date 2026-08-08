@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 /**
  * @file mcp23017.c
  * @brief MCP23017 I2C GPIO Expander Driver Implementation
@@ -336,4 +337,3 @@ static const mcp23017_driver_t s_mcp23017_driver = {
 };
 
 const mcp23017_driver_t *mcp23017_get_driver(void) { return &s_mcp23017_driver; }
-

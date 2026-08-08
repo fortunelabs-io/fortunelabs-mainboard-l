@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file network_manager.c
  * @brief WiFi Station and MQTT Network Manager Implementation

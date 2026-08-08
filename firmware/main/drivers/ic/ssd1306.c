@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Derived from https://github.com/nopnop2002/esp-idf-ssd1306
 /**
  * @file ssd1306.c
  * @brief Hardware implementation for SSD1306 OLED matching display_driver HAL.
@@ -200,7 +202,8 @@ static void ssd1306_deinit_hw(void) {
     if (!s_is_initialized)
         return;
 
-    _ssd1306_send_cmd(0xAE); // Matikan layar fisik sebelum mati total demi mematikan charge pump VCC
+    _ssd1306_send_cmd(
+        0xAE); // Matikan layar fisik sebelum mati total demi mematikan charge pump VCC
     s_is_initialized = false;
     s_i2c_bus        = NULL;
     s_dev_handle     = NULL;

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file task_display.c
  * @brief Consumer task that listens for text updates and renders them through
@@ -12,8 +14,7 @@
 
 static const char *TAG = "TASK_DISPLAY";
 
-void task_display(void *pvParameters)
-{
+void task_display(void *pvParameters) {
     ESP_LOGI(TAG, "Display task started.");
 
     // pvParameters must be a task_display_ctx_t* set up by main.c. This is
@@ -24,11 +25,9 @@ void task_display(void *pvParameters)
 
     display_msg_t incoming_msg;
 
-    while (1)
-    {
+    while (1) {
         // Memblokir diri sampai ada teks baru yang siap dicetak ke layar
-        if (xQueueReceive(g_queue_display, &incoming_msg, portMAX_DELAY) == pdTRUE)
-        {
+        if (xQueueReceive(g_queue_display, &incoming_msg, portMAX_DELAY) == pdTRUE) {
             // Render the line through the injected HAL contract, not a named driver
             drv->show_text(incoming_msg.row, incoming_msg.text);
         }
