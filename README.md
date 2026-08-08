@@ -9,7 +9,7 @@ own top-level directory and carries its own toolchain and documentation.
 | Directory   | Contents                                                  | Toolchain          |
 | ----------- | --------------------------------------------------------- | ------------------ |
 | `hardware/` | KiCad schematic, PCB, and BOM for `fortunelabs_mainboard_v0` | KiCad 6+         |
-| `firmware/` | ESP-IDF / FreeRTOS application for the ESP32 target        | ESP-IDF, PlatformIO |
+| `firmware/` | ESP-IDF / FreeRTOS application for the ESP32-S3            | ESP-IDF, PlatformIO |
 | `software/` | Host-side tooling and services                             | —                  |
 
 `fortunelabs.code-workspace` is a multi-root VS Code workspace covering the
@@ -22,12 +22,15 @@ Requires the ESP-IDF environment on your `PATH` (`. $IDF_PATH/export.sh`).
 
 ```bash
 cd firmware
+idf.py set-target esp32s3
 idf.py build
 idf.py -p /dev/ttyACM0 flash monitor
 ```
 
-The committed `sdkconfig` targets `esp32`. Host-native unit tests run under
-Unity via PlatformIO and need no hardware:
+Note that the committed `sdkconfig` still targets `esp32` while the board carries
+an ESP32-S3-WROOM-2; see the deviations listed in
+[firmware/Readme.md](firmware/Readme.md). Host-native unit tests run under Unity
+via PlatformIO and need no hardware:
 
 ```bash
 cd firmware
