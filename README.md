@@ -1,0 +1,59 @@
+# FortuneLabs Mainboard-L
+
+Monorepo for the FortuneLabs Mainboard-L: the board itself, the firmware that
+runs on it, and the host-side software that talks to it. Each arm lives in its
+own top-level directory and carries its own toolchain and documentation.
+
+## Layout
+
+| Directory   | Contents                                                  | Toolchain          |
+| ----------- | --------------------------------------------------------- | ------------------ |
+| `hardware/` | KiCad schematic, PCB, and BOM for `fortunelabs_mainboard_v0` | KiCad 6+         |
+| `firmware/` | ESP-IDF / FreeRTOS application for the ESP32 target        | ESP-IDF, PlatformIO |
+| `software/` | Host-side tooling and services                             | —                  |
+
+`fortunelabs.code-workspace` is a multi-root VS Code workspace covering the
+firmware and software arms. Note that it hardcodes absolute paths for the
+compiler and IDF include roots, so adjust it to your machine before use.
+
+## Firmware
+
+Requires the ESP-IDF environment on your `PATH` (`. $IDF_PATH/export.sh`).
+
+```bash
+cd firmware
+idf.py build
+idf.py -p /dev/ttyACM0 flash monitor
+```
+
+The committed `sdkconfig` targets `esp32`. Host-native unit tests run under
+Unity via PlatformIO and need no hardware:
+
+```bash
+cd firmware
+pio test -e native
+```
+
+See [firmware/Readme.md](firmware/Readme.md) for the layer map, driver
+conventions, and configuration details.
+
+## Hardware
+
+Open `hardware/fortunelabs_mainboard_v0/fortunelabs_mainboard_v0.kicad_pro` in
+KiCad. See
+[README-kicad-git-workflow.md](hardware/fortunelabs_mainboard_v0/README-kicad-git-workflow.md)
+for the git conventions this project uses for KiCad files.
+
+## Continuous Integration
+
+[`.github/workflows/build.yml`](.github/workflows/build.yml) runs the ESP-IDF
+firmware build and the native Unity test suite on every push to `main` and on
+every pull request. A separate KiCad workflow lives under the hardware
+directory. CI never invokes `flash` or `monitor` — both require a physical
+board and a serial TTY.
+
+## License
+
+Apache-2.0. See [LICENSE](LICENSE). Third-party components retain their own
+licenses; `firmware/components/ssd1306/` is MIT-derived. See [NOTICE](NOTICE)
+for the full attribution.
