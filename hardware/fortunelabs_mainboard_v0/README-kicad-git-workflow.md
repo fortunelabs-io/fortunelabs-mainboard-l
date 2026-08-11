@@ -1,8 +1,8 @@
 # KiCad + Git Workflow
 
-Template minimal untuk mengelola proyek KiCad (v6+) dengan git.
+A minimal template for managing a KiCad (v6+) project with git.
 
-## Struktur folder
+## Folder structure
 
 ```
 project-root/
@@ -16,67 +16,86 @@ project-root/
 │   ├── footprints.pretty/
 │   └── 3dmodels/
 └── docs/
-    └── (datasheet, catatan desain, dsb.)
+    └── (datasheets, design notes, etc.)
 ```
 
-## Setup awal
+## Initial setup
 
 ```bash
 git init
-cp .gitignore /path/ke/project/
+cp .gitignore /path/to/project/
 mkdir -p .github/workflows
 cp kicad-ci.yml .github/workflows/
 git add .
 git commit -m "Initial commit: project skeleton"
 ```
 
-Buka KiCad, di Project Manager aktifkan menu **Tools > Git** untuk commit/push/pull langsung dari GUI (tersedia sejak KiCad 7). Ini membantu karena KiCad tahu file mana yang relevan (skip cache/backup otomatis).
+Open KiCad and enable **Tools > Git** in the Project Manager to commit/push/pull
+directly from the GUI (available since KiCad 7). This helps because KiCad knows
+which files are relevant and skips caches and backups automatically.
 
-## Kebiasaan commit
+## Commit habits
 
-Commit per perubahan logis: "tambah regulator 3.3V", "routing power plane", "ganti footprint konektor USB-C". Hindari satu commit besar untuk banyak perubahan — diff schematic/PCB (walau berbasis teks) tetap padat koordinat, jadi commit kecil memudahkan review dan revert.
+Commit one logical change at a time: "add 3.3V regulator", "route power plane",
+"swap USB-C connector footprint". Avoid a single large commit covering many
+changes — schematic and PCB diffs are text-based but dense with coordinates, so
+small commits make review and revert far easier.
 
-## Review perubahan (diff visual)
+## Reviewing changes (visual diff)
 
-Diff teks mentah `.kicad_sch`/`.kicad_pcb` sulit dibaca manusia. Gunakan salah satu:
+Raw text diffs of `.kicad_sch`/`.kicad_pcb` are hard to read. Use one of:
 
-- `kicad-cli sch export pdf` / `kicad-cli pcb export pdf` pada dua commit, lalu bandingkan PDF-nya.
-- Plugin pihak ketiga seperti `kicad-diff` (render PNG per commit, diff visual side-by-side).
-- KiCad 8's built-in "Compare" saat melihat riwayat git di GUI.
+- `kicad-cli sch export pdf` / `kicad-cli pcb export pdf` on two commits, then
+  compare the PDFs.
+- A third-party plugin such as `kicad-diff` (renders a PNG per commit for a
+  side-by-side visual diff).
+- KiCad 8's built-in "Compare" when browsing git history in the GUI.
 
-## Library
+## Libraries
 
-Kalau punya symbol/footprint kustom, taruh di `libraries/` dalam repo yang sama (untuk proyek kecil), atau jadikan repo terpisah + git submodule (untuk dipakai lintas proyek):
+For custom symbols and footprints, put them in `libraries/` inside the same repo
+(for small projects), or make them a separate repo plus a git submodule (to
+share across projects):
 
 ```bash
 git submodule add https://github.com/username/kicad-libs.git libraries/shared
 ```
 
-Daftarkan library itu di project-specific library table (Preferences > Manage Symbol/Footprint Libraries > pilih "Project" bukan "Global") supaya path relatif dan reproducible di komputer lain.
+Register the library in the project-specific library table (Preferences > Manage
+Symbol/Footprint Libraries > choose "Project", not "Global") so paths stay
+relative and reproducible on another machine.
 
 ## Branching
 
-- `main` — selalu dalam kondisi ERC/DRC bersih, siap fabrikasi.
-- `feature/nama-fitur` — perubahan sedang berjalan (misal tambah sensor, ganti regulator).
-- `rev-b`, `rev-c`, dst — kalau mau eksplisit menandai revisi board fisik.
+- `main` — always ERC/DRC clean and ready for fabrication.
+- `feature/<name>` — work in progress (e.g. adding a sensor, changing a regulator).
+- `rev-b`, `rev-c`, … — when you want to mark physical board revisions explicitly.
 
-Merge ke `main` setelah ERC/DRC lolos. Kalau branch schematic sudah divergen jauh, conflict di file S-expression susah di-resolve manual — kadang lebih cepat pilih satu versi lalu re-apply perubahan penting secara manual daripada merge otomatis.
+Merge into `main` once ERC/DRC passes. If a schematic branch has diverged far,
+conflicts in the S-expression files are painful to resolve by hand — it is often
+faster to pick one version and manually re-apply the important changes than to
+merge automatically.
 
-## Tagging rilis
+## Release tagging
 
-Tag setiap revisi yang benar-benar dikirim ke fab:
+Tag every revision actually sent to the fab:
 
 ```bash
-git tag -a v1.0-rev-a -m "Rev A dikirim ke JLCPCB 2026-07-21"
+git tag -a v1.0-rev-a -m "Rev A sent to JLCPCB 2026-07-21"
 git push origin v1.0-rev-a
 ```
 
-Ini membuat gerber yang diterima fab bisa ditelusuri balik ke commit exact.
+This makes the gerbers the fab received traceable back to an exact commit.
 
-## CI (opsional, sudah disiapkan di `.github/workflows/kicad-ci.yml`)
+## CI (optional, already set up in `.github/workflows/kicad-ci.yml`)
 
-Setiap push/PR ke `main`, workflow otomatis:
-1. Jalankan `kicad-cli sch erc` dan `kicad-cli pcb drc`.
-2. Export gerber, drill file, dan BOM sebagai artifact.
+On every push/PR to `main` that touches `hardware/`, the workflow automatically:
 
-Edit `PROJECT_NAME` di file workflow sesuai nama file proyekmu.
+1. Runs `kicad-cli sch erc` and `kicad-cli pcb drc`.
+2. Exports gerbers, drill files, and the BOM as artifacts.
+
+The workflow lives at the repository root, not in this directory — GitHub only
+reads `.github/workflows/` at the top level. Its steps run with
+`working-directory: hardware/fortunelabs_mainboard_v0`, so update both that
+setting and the `.kicad_sch`/`.kicad_pcb` filenames in the `run:` steps if you
+reuse this template for another project.

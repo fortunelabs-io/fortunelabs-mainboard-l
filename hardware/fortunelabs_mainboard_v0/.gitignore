@@ -1,6 +1,6 @@
 # --- KiCad project files ---
 
-# Local user preferences (jangan di-share, beda tiap komputer)
+# Local user preferences
 *.kicad_prl
 
 # Auto-backup & autosave
@@ -10,7 +10,7 @@ _autosave-*
 *.000
 *.tmp
 
-# Lock files (dibuat KiCad saat file sedang dibuka, per-mesin, jangan di-share)
+# Lock files
 *.lck
 \#auto_saved_files#
 
@@ -20,7 +20,7 @@ fp-info-cache
 sym-lib-table.bak
 fp-lib-table.bak
 
-# Plot / export output (generate ulang dari source, tidak perlu di-track)
+# Plot / export output
 /plots/
 /gerbers/
 /production/
