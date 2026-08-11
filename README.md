@@ -55,6 +55,17 @@ every pull request. A separate KiCad workflow lives under the hardware
 directory. CI never invokes `flash` or `monitor` — both require a physical
 board and a serial TTY.
 
+## Working conventions
+
+[`todos/prototyping_todo.md`](todos/prototyping_todo.md) is the specification:
+ten phases, each with a testable deliverable, plus the Decision Log and the Risk
+Tracker. Status is never written into it — that lives in the issue tracker.
+
+- [`docs/sop/issue_sop.md`](docs/sop/issue_sop.md) — what gets an issue, the four
+  issue types, and the rule that a gate is opened *before* the run that tests it.
+- [`docs/sop/git_sop.md`](docs/sop/git_sop.md) — branches, commit types, tags,
+  and when a decision is owed an [ADR](docs/adr/README.md).
+
 ## License
 
 Apache-2.0. See [LICENSE](LICENSE). Third-party components retain their own
