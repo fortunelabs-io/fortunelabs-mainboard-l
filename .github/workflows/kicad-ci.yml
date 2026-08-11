@@ -1,21 +1,34 @@
 name: KiCad ERC/DRC & Export
 
+# Workflows must live in .github/workflows/ at the repo root — GitHub does not
+# read .github directories nested in subdirectories. The KiCad project lives
+# under hardware/, so every `run:` step uses the working-directory set below.
 on:
   push:
     branches: [main]
+    paths:
+      - 'hardware/**'
+      - '.github/workflows/kicad-ci.yml'
   pull_request:
     branches: [main]
+    paths:
+      - 'hardware/**'
+      - '.github/workflows/kicad-ci.yml'
 
 jobs:
   check-and-export:
     runs-on: ubuntu-latest
     container:
       image: kicad/kicad:9.0
+    defaults:
+      run:
+        working-directory: hardware/fortunelabs_mainboard_v0
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Ganti fortunelabs_mainboard_v0 sesuai nama file .kicad_pro / .kicad_sch / .kicad_pcb kamu
+      # Rename fortunelabs_mainboard_v0 below to match your .kicad_pro /
+      # .kicad_sch / .kicad_pcb filenames.
       - name: Run ERC (schematic check)
         run: |
           kicad-cli sch erc --output erc-report.json fortunelabs_mainboard_v0.kicad_sch
@@ -34,12 +47,14 @@ jobs:
         run: |
           kicad-cli sch export bom --output bom.csv fortunelabs_mainboard_v0.kicad_sch
 
+      # upload-artifact paths always resolve against the workspace root, not
+      # the working-directory above, so they must be written out in full.
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: kicad-outputs
           path: |
-            erc-report.json
-            drc-report.json
-            gerbers/
-            bom.csv
+            hardware/fortunelabs_mainboard_v0/erc-report.json
+            hardware/fortunelabs_mainboard_v0/drc-report.json
+            hardware/fortunelabs_mainboard_v0/gerbers/
+            hardware/fortunelabs_mainboard_v0/bom.csv
