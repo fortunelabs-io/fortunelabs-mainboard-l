@@ -234,28 +234,57 @@ that do not gate anything.
 
 ---
 
-## The project board
+## The project boards
 
-One project per phase, named with the phase's own heading from the task list.
-Currently
-[`Phase 4: Breadboard, MCP23017 GPIO Expander`](https://github.com/orgs/fortunelabs-io/projects/4),
-linked to the repository so it appears under
+Two standing boards, split by **what closing the issue produces**:
+
+| Board | Holds | Closes with |
+|---|---|---|
+| [Code: firmware and software](https://github.com/orgs/fortunelabs-io/projects/5) | work that lands as a commit under `firmware/` or `software/` | the commit, cited in the issue |
+| [Non-code: bench, hardware and decisions](https://github.com/orgs/fortunelabs-io/projects/6) | measurements, KiCad work, and arguments that end in an ADR | the numbers recorded in the issue, or the ADR path |
+
+Both are linked to the repository, so both appear under
 [its Projects tab](https://github.com/fortunelabs-io/fortunelabs-mainboard-l/projects).
+
+The split is by output because output is what decides where the evidence comes
+from, and evidence is the only thing that closes anything here. A code issue is
+answered by a diff and a CI run. A bench issue is answered by a number that
+exists nowhere but the issue. Those are two different working sessions, two
+different rhythms, and a board that interleaves them is a board that is read as
+a list rather than as a queue.
+
+`area:` decides which board, with one exception: **a `type:decision` issue is
+always non-code**, whatever it is about, because it closes as an ADR. The
+ADS1115 data rate is `area:firmware` and sits on the non-code board for exactly
+this reason.
 
 | Column | An issue is here when |
 |---|---|
-| Todo | it is open and not `blocked` |
+| Todo | it is open |
 | In Progress | its command is running, or the bench work is under way |
 | Done | it is closed, by a commit, with its evidence cited |
 
-**An issue joins the board when it stops being `blocked`, not when it is
-opened.** A board holding every deliverable of every phase shows the same thing
-the issue list already shows, and it is the one view that could have answered
-*what is next*.
+**An issue joins its board when it is opened, and `blocked` is shown on the card
+rather than kept off it.** This is the opposite of the earlier rule, and the
+reason is that these boards outlive a phase: under one board per phase, a
+`blocked` issue had somewhere else to wait, and there is no somewhere else here.
+The cost is real and worth naming. The boards no longer answer *what is next* by
+their contents alone, and that question is now answered by filtering out
+`blocked`.
 
 The board is a view, never a source. Nothing is recorded there that is not
 already in the issue. A note dragged onto a card will not be found again from
 git history.
+
+### Superseded: one project per phase
+
+Until August 2026 the rule was one project per phase, named with the phase's own
+heading. It was dropped for two reasons. Most phases have deliverables in more
+than one arm, so a phase board pairs a multimeter reading with a driver
+refactor, and those are never done in the same sitting. And the phase question
+was already answered twice over, by the `phase:` label and by the milestone, so
+the board was spending its only real advantage, being a queue, on a fact that
+was not in doubt.
 
 ---
 
