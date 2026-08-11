@@ -12,7 +12,6 @@
 
 static const char *TAG = "ssd1306_driver";
 
-// State internal driver (Singleton Pattern)
 static i2c_bus_t              *s_i2c_bus        = NULL;
 static i2c_master_dev_handle_t s_dev_handle     = NULL;
 static uint16_t                s_scr_width      = 128;
@@ -49,17 +48,11 @@ static const uint8_t font_8x8[][8] = {
     ['Y' - 0x20] = {0x03, 0x04, 0x78, 0x04, 0x03, 0x00, 0x00, 0x00},
 };
 
-/**
- * @brief Helper untuk mengirim satu byte perintah ke SSD1306
- */
 static esp_err_t _ssd1306_send_cmd(uint8_t cmd) {
-    uint8_t buf[2] = {0x00, cmd}; // 0x00 = Control byte untuk single command
+    uint8_t buf[2] = {0x00, cmd};
     return i2c_bus_write(s_i2c_bus, s_dev_handle, buf, sizeof(buf));
 }
 
-/**
- * @brief Inisialisasi IC SSD1306 via Jalur I2C Master Bus
- */
 static esp_err_t ssd1306_init_hw(const display_config_t *cfg) {
     if (cfg == NULL || cfg->bus == NULL) {
         return ESP_ERR_INVALID_ARG;
@@ -69,7 +62,6 @@ static esp_err_t ssd1306_init_hw(const display_config_t *cfg) {
     s_scr_width  = cfg->width;
     s_scr_height = cfg->height;
 
-    // 1. Daftarkan device SSD1306 ke registry I2C bus kamu
     esp_err_t err =
         i2c_bus_add_device(s_i2c_bus, cfg->i2c_addr, 400000, "SSD1306_OLED", &s_dev_handle);
     if (err != ESP_OK) {
@@ -77,23 +69,23 @@ static esp_err_t ssd1306_init_hw(const display_config_t *cfg) {
         return err;
     }
 
-    // 2. Sequence Command Init SSD1306 (Standard 128x64 Configuration)
+    // Sequence Command Init SSD1306 (Standard 128x64 Configuration)
     uint8_t init_cmds[] = {
         0xAE,       // Display OFF (Sleep Mode)
         0xD5, 0x80, // Set Display Clock Divide Ratio
         0xA8, 0x3F, // Set Multiplex Ratio (128x64 standard)
         0xD3, 0x00, // Set Display Offset to 0
         0x40,       // Set Display Start Line to 0
-        0x8D, 0x14, // Charge Pump Enable (Wajib untuk layar OLED menyala)
-        0x20, 0x02, // Memory Addressing Mode: Set ke Page Addressing Mode
-        0xA1,       // Set Segment Re-map (Horizontal Flip biar tidak terbalik)
+        0x8D, 0x14, // Charge Pump Enable
+        0x20, 0x02, // Memory Addressing Mode: Page Addressing Mode
+        0xA1,       // Set Segment Re-map (Horizontal Flip)
         0xC8,       // Set COM Output Scan Direction (Vertical Flip)
         0xDA, 0x12, // Set COM Pins Hardware Configuration
-        0x81, 0xCF, // Set Contrast Control (Default Brightness cukup tinggi)
+        0x81, 0xCF, // Set Contrast Control (Default Brightness)
         0xD9, 0xF1, // Set Pre-charge Period
         0xDB, 0x40, // Set VCOMH Deselect Level
         0xA4,       // Entire Display ON (Resume to RAM content)
-        0xA6,       // Set Normal Display (Bukan Inverted)
+        0xA6,       // Set Normal Display
         0xAF        // Display ON (Wake up!)
     };
 
@@ -110,24 +102,19 @@ static esp_err_t ssd1306_init_hw(const display_config_t *cfg) {
     return ssd1306_driver.clear();
 }
 
-/**
- * @brief Bersihkan seluruh layar (8 Page / Row)
- */
 static esp_err_t ssd1306_clear_hw(void) {
     if (!s_is_initialized)
         return ESP_FAIL;
 
     uint8_t zero_buffer[129];
-    zero_buffer[0] = 0x40; // Control byte untuk sekuensial data stream (RAM data write)
+    zero_buffer[0] = 0x40;
     memset(&zero_buffer[1], 0x00, 128);
 
-    // Sapu bersih ke-8 page yang ada di OLED
     for (uint8_t page = 0; page < 8; page++) {
         _ssd1306_send_cmd(0xB0 + page); // Set target Page Start Address
         _ssd1306_send_cmd(0x00);        // Reset Lower Column Address
         _ssd1306_send_cmd(0x10);        // Reset Higher Column Address
 
-        // Tembak data kosong 128 byte sekaligus per baris
         esp_err_t err = i2c_bus_write(s_i2c_bus, s_dev_handle, zero_buffer, 129);
         if (err != ESP_OK)
             return err;
@@ -135,75 +122,58 @@ static esp_err_t ssd1306_clear_hw(void) {
     return ESP_OK;
 }
 
-/**
- * @brief Cetak teks pada baris tertentu menggunakan translasi baris-ke-page
- */
 static esp_err_t ssd1306_show_text_hw(uint8_t row, const char *text) {
     if (!s_is_initialized || text == NULL)
         return ESP_FAIL;
 
-    // Karena tinggi font 8px dan tinggi layar 64px, maksimal ada 8 baris (0 - 7)
     if (row >= 8)
         return ESP_ERR_INVALID_ARG;
 
-    // 1. Arahkan pointer kursor internal OLED ke Page target
-    _ssd1306_send_cmd(0xB0 + row); // Map row ke Page Address
-    _ssd1306_send_cmd(0x00);       // Set Column awal di kiri (Lower Column = 0)
+    _ssd1306_send_cmd(0xB0 + row); // Map row to Page Address
+    _ssd1306_send_cmd(0x00);       // Lower Column = 0
     _ssd1306_send_cmd(0x10);       // Higher Column = 0
 
-    // 2. Buat buffer stream I2C. Ukuran: 1 byte control data + 128 byte data kolom
     uint8_t data_stream[129];
-    data_stream[0]    = 0x40; // 0x40 = Tanda data continuous stream ke GDDRAM
+    data_stream[0]    = 0x40;
     size_t stream_idx = 1;
 
     size_t text_len  = strlen(text);
-    size_t max_chars = s_scr_width / 8; // 128 / 8 = Maksimal 16 karakter font per baris
+    size_t max_chars = s_scr_width / 8;
 
-    // 3. Terjemahkan string teks menjadi visual bitmap kolom demi kolom
     for (size_t c = 0; c < max_chars; c++) {
-        uint8_t font_idx = 0; // Default space jika string lebih pendek dari 16 karakter
+        uint8_t font_idx = 0;
 
         if (c < text_len) {
             char ch = text[c];
-            // Proteksi range font yang kita punya (ASCII 0x20 s.d 0x5F)
             if (ch >= 0x20 && ch <= 0x5F) {
                 font_idx = ch - 0x20;
             }
         }
 
-        // Copy 8 byte pola horizontal font ke stream buffer
         for (int col = 0; col < 8; col++) {
             data_stream[stream_idx++] = font_8x8[font_idx][col];
         }
     }
 
-    // 4. Flush seluruh baris ke layar fisik via I2C Bus dalam satu transaksi tunggal
     return i2c_bus_write(s_i2c_bus, s_dev_handle, data_stream, stream_idx);
 }
 
-/**
- * @brief Atur kontras/kecerahan layar (0-255)
- */
 static esp_err_t ssd1306_set_brightness_hw(uint8_t level) {
     if (!s_is_initialized)
         return ESP_FAIL;
 
-    esp_err_t err = _ssd1306_send_cmd(0x81); // Perintah ubah kontras
+    esp_err_t err = _ssd1306_send_cmd(0x81);
     if (err == ESP_OK) {
-        err = _ssd1306_send_cmd(level); // Kirim nilai kecerahannya
+        err = _ssd1306_send_cmd(level);
     }
     return err;
 }
 
-/**
- * @brief De-inisialisasi display
- */
 static void ssd1306_deinit_hw(void) {
     if (!s_is_initialized)
         return;
 
-    _ssd1306_send_cmd(
-        0xAE); // Matikan layar fisik sebelum mati total demi mematikan charge pump VCC
+    _ssd1306_send_cmd(0xAE);
     s_is_initialized = false;
     s_i2c_bus        = NULL;
     s_dev_handle     = NULL;

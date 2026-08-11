@@ -8,14 +8,13 @@
 #include "esp_log.h"
 #include "hal/output_driver.h"
 
-// Mapping internal: Channel 0 dialokasikan ke Onboard LED (GPIO 2)
 #define DUMMY_LED_GPIO 2
 #define DUMMY_NUM_CHANNELS 1
 
 static const char *TAG = "ACTUATOR_DUMMY";
 
 static bool s_is_initialized = false;
-static bool s_channel_state  = false; // Menyimpan status latch internal channel 0
+static bool s_channel_state  = false;
 
 /**
  * @brief Initialize native GPIO for the onboard LED
@@ -26,7 +25,6 @@ static esp_err_t dummy_output_init(const output_config_t *cfg) {
         return ESP_OK;
     }
 
-    // Konfigurasi pin GPIO menggunakan struct standard ESP-IDF
     gpio_config_t io_conf = {.pin_bit_mask = (1ULL << DUMMY_LED_GPIO),
                              .mode         = GPIO_MODE_OUTPUT,
                              .pull_up_en   = GPIO_PULLUP_DISABLE,
@@ -39,7 +37,6 @@ static esp_err_t dummy_output_init(const output_config_t *cfg) {
         return err;
     }
 
-    // Set keadaan awal ke MATI (low/false) sesuai kontrak HAL
     gpio_set_level(DUMMY_LED_GPIO, 0);
     s_channel_state  = false;
     s_is_initialized = true;
@@ -55,7 +52,6 @@ static esp_err_t dummy_output_set(uint8_t channel, bool state) {
     if (!s_is_initialized)
         return ESP_FAIL;
 
-    // Proteksi indeks channel sesuai jumlah channel yang ditangani driver ini
     if (channel >= DUMMY_NUM_CHANNELS) {
         ESP_LOGE(TAG, "Invalid channel index: %d", channel);
         return ESP_ERR_INVALID_ARG;
@@ -63,7 +59,7 @@ static esp_err_t dummy_output_set(uint8_t channel, bool state) {
 
     esp_err_t err = gpio_set_level(DUMMY_LED_GPIO, state ? 1 : 0);
     if (err == ESP_OK) {
-        s_channel_state = state; // Update latch status internal
+        s_channel_state = state;
         ESP_LOGD(TAG, "Channel %d set to %s", channel, state ? "ON" : "OFF");
     }
 
@@ -81,7 +77,6 @@ static esp_err_t dummy_output_get(uint8_t channel, bool *state) {
         return ESP_ERR_INVALID_ARG;
     }
 
-    // Mengembalikan status latch internal ter-update
     *state = s_channel_state;
     return ESP_OK;
 }
@@ -94,7 +89,6 @@ static esp_err_t dummy_output_set_all(uint8_t bitmask) {
     if (!s_is_initialized)
         return ESP_FAIL;
 
-    // Ekstrak Bit 0 untuk dialokasikan ke channel 0 (LED)
     bool led_target_state = (bitmask & (1 << 0)) ? true : false;
 
     return dummy_output_set(0, led_target_state);
@@ -107,7 +101,6 @@ static void dummy_output_deinit(void) {
     if (!s_is_initialized)
         return;
 
-    // Kembalikan pin ke mode default (Isolasi/Input) demi keamanan hardware
     gpio_reset_pin(DUMMY_LED_GPIO);
     s_is_initialized = false;
     s_channel_state  = false;
