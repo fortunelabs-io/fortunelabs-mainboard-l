@@ -1,0 +1,55 @@
+name: Anomaly
+description: Something the task list did not predict.
+title: "<what was observed>"
+labels: ["type:anomaly"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        An anomaly is never closed silently. It closes by a commit that folds it
+        into the task list, an ADR that decides it, or a written statement that it
+        is out of scope with the reason.
+
+  - type: input
+    id: under
+    attributes:
+      label: Seen under
+      description: The gate issue this appeared during, and the run or file it appeared in.
+      placeholder: "#8, CI run <url>"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - hardware
+        - firmware
+        - software
+    validations:
+      required: true
+
+  - type: textarea
+    id: observed
+    attributes:
+      label: What was observed
+      description: The observation, and where it was read from. Nothing recalled, nothing retyped.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What the task list predicted instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproducible
+    attributes:
+      label: Reproducible?
+      description: Whether it survives a re-run, and whether it moves with any condition.
+      placeholder: |
+        Seen on 3 of 3 boots. Does not move with bus speed. Moves with which
+        driver main.c wires in.

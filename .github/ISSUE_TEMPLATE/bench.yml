@@ -1,0 +1,52 @@
+name: Bench action
+description: Physical work with no command and no criterion of its own.
+title: "P<phase> <handle> — <what is being done at the bench>"
+labels: ["type:bench", "area:hardware"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A bench action has no pass criterion. It is closed by naming the gate that
+        proved it — a solder joint is proved by the board working, not by
+        inspecting the joint.
+
+  - type: input
+    id: handle
+    attributes:
+      label: Handle
+      placeholder: fabricate
+    validations:
+      required: true
+
+  - type: input
+    id: phase
+    attributes:
+      label: Phase
+      description: The phase in `todos/prototyping_todo.md`. Label `phase:N` to match.
+      placeholder: "5"
+    validations:
+      required: true
+
+  - type: textarea
+    id: work
+    attributes:
+      label: What is done
+      description: >
+        Steps, and any requirement that must be checked before a point of no
+        return. Name the point of no return explicitly — after it, the next check
+        costs a board spin.
+      placeholder: |
+        ERC and DRC clean, footprints confirmed against the BOM, then export
+        Gerbers and order. Checked at review before export, because after export
+        the next check costs a board spin.
+    validations:
+      required: true
+
+  - type: input
+    id: proved_by
+    attributes:
+      label: Proved by
+      description: The gate issue that will demonstrate this was done correctly. Required.
+      placeholder: "#12"
+    validations:
+      required: true

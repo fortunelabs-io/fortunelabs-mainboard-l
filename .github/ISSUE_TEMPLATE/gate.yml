@@ -1,0 +1,122 @@
+name: Gate
+description: A claim with a command or a measurement, and a criterion that can fail. Open this BEFORE the run.
+title: "P<phase> <handle> — <the claim, in the task list's own words>"
+labels: ["type:gate"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Open this **before** running the command or taking the measurement. The
+        prediction field is the reason this issue exists; a prediction added after
+        the run is worth nothing and is not backdated. See `docs/sop/issue_sop.md`.
+
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Phase
+      description: The phase in `todos/prototyping_todo.md`. Label `phase:N` to match.
+      options:
+        - "0 — Setup & toolchain"
+        - "1 — Firmware skeleton"
+        - "2 — I2C bus validation"
+        - "3 — ADS1115 analog input"
+        - "4 — MCP23017 GPIO expander"
+        - "5 — ULN2803A + relay"
+        - "6 — Full breadboard integration"
+        - "7 — Schematic capture"
+        - "8 — PCB layout & fabrication"
+        - "9 — Ecosystem integration"
+    validations:
+      required: true
+
+  - type: input
+    id: handle
+    attributes:
+      label: Handle
+      description: >
+        The name the thing already has — the CI job name where CI runs it, the
+        task list's own numbering where it numbers it, otherwise the command.
+      placeholder: 4.2 input
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - hardware
+        - firmware
+        - software
+    validations:
+      required: true
+
+  - type: input
+    id: criterion
+    attributes:
+      label: Deliverable
+      description: >
+        The task list heading whose Deliverable this satisfies. It is not restated
+        here.
+      placeholder: 'todos/prototyping_todo.md — Phase 4.2 Input Test'
+    validations:
+      required: true
+
+  - type: input
+    id: command
+    attributes:
+      label: Command or measurement
+      description: For a bench deliverable, the instrument and what is probed.
+      placeholder: pio test -e native / multimeter across the ULN2803A output at load
+    validations:
+      required: true
+
+  - type: input
+    id: produces
+    attributes:
+      label: Evidence it produces
+      description: >
+        The CI run, the committed artifact, or the numbers that will be recorded
+        here. Phases 2–6 leave no trace in git — this issue is the only record.
+      placeholder: CI run on the merge commit / 5-point multimeter table, recorded below
+    validations:
+      required: true
+
+  - type: textarea
+    id: prediction
+    attributes:
+      label: Prediction, recorded before the run
+      description: >
+        What the result will be, and what the recognisable failure signature is.
+        A prediction with a direction but no value is weaker than one with both.
+        If this gate came from a Risk Tracker row, the fallback is the failure
+        signature — write it here.
+      placeholder: |
+        Peak 3.3V rail current under 800 mA.
+        Failure signature: above 800 mA means MP2388 has no margin for a WiFi Tx
+        burst, and the fallback is MP2315 — which is a schematic change.
+    validations:
+      required: true
+
+  - type: input
+    id: blocked_by
+    attributes:
+      label: Blocked by
+      description: >
+        The issue above this one, if any. If this runs ahead of an unclosed phase,
+        say which phase and what would have to be redone if it later fails.
+      placeholder: "#4"
+
+  - type: textarea
+    id: closing
+    attributes:
+      label: Closing evidence
+      description: Filled in at close. The issue is closed by `Closes #N` in the commit, not by the button.
+      value: |
+        - [ ] Command exited 0, or the measurement was taken
+        - [ ] Run cited (CI URL), or the numbers recorded here
+        - [ ] The phase Deliverable is satisfied as written
+        - [ ] Prediction held / did not hold:
+        - [ ] Closing commit:
+    validations:
+      required: false

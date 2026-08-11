@@ -1,0 +1,17 @@
+blank_issues_enabled: false
+contact_links:
+  - name: The task list
+    url: https://github.com/fortunelabs-io/fortunelabs-mainboard-l/blob/main/todos/prototyping_todo.md
+    about: Phases, deliverables, the Decision Log and the Risk Tracker. Do not restate them in an issue.
+  - name: Issue SOP
+    url: https://github.com/fortunelabs-io/fortunelabs-mainboard-l/blob/main/docs/sop/issue_sop.md
+    about: What gets an issue, what does not, and how one is closed.
+  - name: Git SOP
+    url: https://github.com/fortunelabs-io/fortunelabs-mainboard-l/blob/main/docs/sop/git_sop.md
+    about: Branches, commit types, tags, and when an ADR is owed.
+  - name: The board — v0.2, is it brought up
+    url: https://github.com/fortunelabs-io/fortunelabs-mainboard-l/projects
+    about: What is already tracked, and what is next. Check here before opening anything.
+  - name: Firmware architecture reference
+    url: https://github.com/fortunelabs-io/fortunelabs-mainboard-l/blob/main/firmware/Readme.md
+    about: The layer map and the dependency rules. Criteria live here — do not restate them in an issue.

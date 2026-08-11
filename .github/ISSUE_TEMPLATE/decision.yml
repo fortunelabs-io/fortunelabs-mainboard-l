@@ -1,0 +1,49 @@
+name: Decision
+description: An open argument that will produce an ADR.
+title: "<the question being decided>"
+labels: ["type:decision"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The argument happens here while the alternatives are still live. The ADR is
+        written and committed **before** this issue closes — alternatives written
+        afterwards are reconstructed, and reconstructed alternatives are always the
+        ones that were easy to reject.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What forces a decision now, and what is already fixed by an earlier ADR or by the board.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: Each with the reason it would be taken and the reason it would not. This is the payload.
+      value: |
+        - **Option A.** For: … Against: …
+        - **Option B.** For: … Against: …
+    validations:
+      required: true
+
+  - type: textarea
+    id: reversibility
+    attributes:
+      label: Cost of being wrong
+      description: >
+        What has to be redone if this is reversed later, and when it would be
+        discovered. A decision that costs a board spin to reverse is a different
+        decision from one that costs a rebuild.
+    validations:
+      required: true
+
+  - type: input
+    id: adr
+    attributes:
+      label: ADR
+      description: Filled in at close. Path to the committed record.
+      placeholder: docs/adr/YYYY-MM-DD-<slug>.md
