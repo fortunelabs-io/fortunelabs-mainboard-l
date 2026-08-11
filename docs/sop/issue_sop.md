@@ -17,7 +17,7 @@ Four places, no overlap:
 
 | Question | Answered by |
 |---|---|
-| What must be true, and how is it tested? | `todos/prototyping_todo.md` — the phase and its **Deliverable** |
+| What must be true, and how is it tested? | `todos/prototyping_todo.md`, the phase and its **Deliverable** |
 | Has it been tested yet, and what was predicted? | the issue |
 | What did it measure? | the CI run, or the measurement log named in the issue |
 | Why was it built this way? | `docs/adr/` |
@@ -26,9 +26,9 @@ An issue never restates a deliverable. It links to the phase and holds what the
 task list cannot: when it was run, what was predicted beforehand, and which
 commit closed it.
 
-The prototyping principle — *jangan lanjut ke phase berikutnya sebelum phase
-sekarang punya known-good baseline* — is not enforceable by a checkbox, because a
-checkbox cannot say whether the baseline was measured or assumed. That is what
+The prototyping principle, *do not move to the next phase before the current one
+has a known-good baseline*, is not enforceable by a checkbox, because a checkbox
+cannot say whether the baseline was measured or assumed. That is what
 `blocked` and the closing evidence below are for.
 
 ---
@@ -40,13 +40,13 @@ and CI hold them directly:
 
 | Area | The criterion lives in | Enforced by |
 |---|---|---|
-| Firmware architecture | [`firmware/Readme.md`](../../firmware/Readme.md) — layer map, dependency rules | review |
+| Firmware architecture | [`firmware/Readme.md`](../../firmware/Readme.md): layer map, dependency rules | review |
 | Firmware behaviour | the Unity suite under `firmware/test/` | `pio test -e native` |
 | Firmware build | [`.github/workflows/build.yml`](../../.github/workflows/build.yml) | CI |
-| Schematic and PCB | [`.github/workflows/kicad-ci.yml`](../../.github/workflows/kicad-ci.yml) — ERC, DRC | CI |
+| Schematic and PCB | [`.github/workflows/kicad-ci.yml`](../../.github/workflows/kicad-ci.yml): ERC, DRC | CI |
 | KiCad in git | [`README-kicad-git-workflow.md`](../../hardware/fortunelabs_mainboard_v0/README-kicad-git-workflow.md) | review |
 
-Everything in Phases 2 through 6 is a bench deliverable — a multimeter reading, a
+Everything in Phases 2 through 6 is a bench deliverable: a multimeter reading, a
 24-hour run, a photograph. **None of it leaves a trace in git.** An issue is the
 only record that a bench deliverable happened at all, which is why a phase is
 never closed by the code that implements it.
@@ -65,15 +65,15 @@ erc             kicad-cli sch erc
 4.2 input       the sub-section of the task list
 ```
 
-**Title format:** `P<phase> <handle> — <the claim, in the task list's own words>`
+**Title format:** `P<phase> <handle>: <the claim, in the task list's own words>`
 
 ```
-P4 4.2 input — interrupt-on-change fires an ISR on the ESP32
-P6 power — the 3.3V rail peak stays inside what MP2388 can supply
+P4 4.2 input: interrupt-on-change fires an ISR on the ESP32
+P6 power: the 3.3V rail peak stays inside what MP2388 can supply
 ```
 
 The phase prefix keeps the search box useful once four phases are open at once.
-The area — hardware, firmware, software — is a label rather than part of the
+The area (hardware, firmware, software) is a label rather than part of the
 title, because several phases have deliverables in more than one.
 
 ---
@@ -145,7 +145,7 @@ and carries `prediction-missing`; the prediction is not backdated, because a
 backdated prediction is indistinguishable from a correct one and devalues every
 other prediction in the tracker by association.
 
-Phase 6 is the clearest case. *"Peak > 800mA → flag risiko"* is a prediction with
+Phase 6 is the clearest case. *"Peak > 800 mA raises a risk flag"* is a prediction with
 a number and a failure signature, already written, before the meter is connected.
 Recording it in the issue costs nothing and is the difference between a
 measurement and a confirmation.
@@ -168,14 +168,14 @@ when the predecessor closes.
 it happens, the issue says which phase it jumped and what would have to be redone
 if that phase later fails. Schematic capture beginning before Phase 6 closes is
 exactly this: Phase 6 is where the MP2388 power budget is measured, and the
-mitigation for that risk is a different part — which is a schematic change.
+mitigation for that risk is a different part, which is a schematic change.
 
 ### 4. Closed by evidence
 
 A gate issue closes when all three are true, and all three are named in the
 issue:
 
-1. The command exited 0, or the measurement was taken — with the CI run cited, or
+1. The command exited 0, or the measurement was taken, with the CI run cited, or
    the numbers recorded in the issue.
 2. Whether the prediction held is written down. **Especially when it did not.**
 3. The task list's Deliverable for that phase is satisfied as written, not as
@@ -185,13 +185,13 @@ Close it with `Closes #N` in the commit, not by clicking the button. The link
 then lives in git history, which survives the repository moving hosts.
 
 A bench issue closes by naming the gate issue that proved it. It never closes on
-its own authority — a solder joint is proved by the chain working, not by
+its own authority. A solder joint is proved by the chain working, not by
 inspecting the joint.
 
 ### 5. Invalidation reopens; it does not duplicate
 
-When a closed phase's premise changes — a driver rewrite, a part substitution, a
-deliverable corrected — **reopen the original issue**, label it `invalidated`,
+When a closed phase's premise changes, whether a driver rewrite, a part
+substitution, or a deliverable corrected, **reopen the original issue**, label it `invalidated`,
 and write what changed. Do not open a fresh one. A gate that passed, stopped
 passing, and passed again is the most informative object in the tracker, and
 splitting it across three issue numbers throws that away.
@@ -217,7 +217,7 @@ in a table is a decision nobody is arguing about; an issue is one somebody is.
 ### 8. Risks are gates with the prediction already written
 
 Every row of the Risk Tracker names the phase that resolves it and the fallback
-if it fails. That is a claim, a criterion, and a failure signature — the three
+if it fails. That is a claim, a criterion, and a failure signature: the three
 things the `gate` template asks for. A risk row becomes a gate issue when its
 phase opens, and the row's Status column is then maintained by closing the issue,
 not by editing the table.
@@ -236,9 +236,9 @@ that do not gate anything.
 
 ## The project board
 
-One project per phase, named with the phase's own heading from the task list —
-currently
-[`Phase 4 — Breadboard: MCP23017 GPIO Expander`](https://github.com/orgs/fortunelabs-io/projects/4),
+One project per phase, named with the phase's own heading from the task list.
+Currently
+[`Phase 4: Breadboard, MCP23017 GPIO Expander`](https://github.com/orgs/fortunelabs-io/projects/4),
 linked to the repository so it appears under
 [its Projects tab](https://github.com/fortunelabs-io/fortunelabs-mainboard-l/projects).
 
@@ -254,7 +254,7 @@ the issue list already shows, and it is the one view that could have answered
 *what is next*.
 
 The board is a view, never a source. Nothing is recorded there that is not
-already in the issue — a note dragged onto a card will not be found again from
+already in the issue. A note dragged onto a card will not be found again from
 git history.
 
 ---
@@ -262,7 +262,7 @@ git history.
 ## What does not get an issue
 
 Anything that will be done within the hour. Anything already fully stated in the
-task list and not yet reached — that is what the task list is for. Anything whose
+task list and not yet reached; that is what the task list is for. Anything whose
 only content is "remember to". A tracker holding today's shell commands is a
 tracker nobody opens, and once it is not opened, the gate issues in it stop being
 a record of anything.

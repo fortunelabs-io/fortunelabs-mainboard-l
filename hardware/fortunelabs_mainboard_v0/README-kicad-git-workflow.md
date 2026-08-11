@@ -38,7 +38,7 @@ which files are relevant and skips caches and backups automatically.
 
 Commit one logical change at a time: "add 3.3V regulator", "route power plane",
 "swap USB-C connector footprint". Avoid a single large commit covering many
-changes — schematic and PCB diffs are text-based but dense with coordinates, so
+changes. Schematic and PCB diffs are text-based but dense with coordinates, so
 small commits make review and revert far easier.
 
 ## Reviewing changes (visual diff)
@@ -67,12 +67,12 @@ relative and reproducible on another machine.
 
 ## Branching
 
-- `main` — always ERC/DRC clean and ready for fabrication.
-- `feature/<name>` — work in progress (e.g. adding a sensor, changing a regulator).
-- `rev-b`, `rev-c`, … — when you want to mark physical board revisions explicitly.
+- `main`: always ERC/DRC clean and ready for fabrication.
+- `feature/<name>`: work in progress (e.g. adding a sensor, changing a regulator).
+- `rev-b`, `rev-c`, …: when you want to mark physical board revisions explicitly.
 
 Merge into `main` once ERC/DRC passes. If a schematic branch has diverged far,
-conflicts in the S-expression files are painful to resolve by hand — it is often
+conflicts in the S-expression files are painful to resolve by hand, and it is often
 faster to pick one version and manually re-apply the important changes than to
 merge automatically.
 
@@ -94,7 +94,7 @@ On every push/PR to `main` that touches `hardware/`, the workflow automatically:
 1. Runs `kicad-cli sch erc` and `kicad-cli pcb drc`.
 2. Exports gerbers, drill files, and the BOM as artifacts.
 
-The workflow lives at the repository root, not in this directory — GitHub only
+The workflow lives at the repository root, not in this directory, because GitHub only
 reads `.github/workflows/` at the top level. Its steps run with
 `working-directory: hardware/fortunelabs_mainboard_v0`, so update both that
 setting and the `.kicad_sch`/`.kicad_pcb` filenames in the `run:` steps if you

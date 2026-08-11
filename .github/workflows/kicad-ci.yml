@@ -1,6 +1,6 @@
 name: KiCad ERC/DRC & Export
 
-# Workflows must live in .github/workflows/ at the repo root — GitHub does not
+# Workflows must live in .github/workflows/ at the repo root, because GitHub does not
 # read .github directories nested in subdirectories. The KiCad project lives
 # under hardware/, so every `run:` step uses the working-directory set below.
 on:

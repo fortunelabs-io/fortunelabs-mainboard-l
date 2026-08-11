@@ -1,14 +1,14 @@
-# Fortune Labs — Prototyping Task List
+# Fortune Labs Prototyping Task List
 
-**Pendekatan:** Firmware skeleton first → breadboard per subsistem → integrasi
-**Prinsip:** Setiap phase punya deliverable testable. Jangan lanjut ke phase
-berikutnya sebelum phase sekarang punya known-good baseline.
+**Approach:** firmware skeleton first, then breadboard each subsystem, then integrate.
+**Principle:** every phase has a testable deliverable. Do not move to the next
+phase before the current one has a known-good baseline.
 
-*Last updated: Mei 2026*
+*Last updated: May 2026*
 
 > **This file is the specification and stays that way.** Status is not repeated
 > here. A phase that is open, blocked, or closed is open, blocked, or closed in
-> the issue tracker — see [`docs/sop/issue_sop.md`](../docs/sop/issue_sop.md).
+> the issue tracker: see [`docs/sop/issue_sop.md`](../docs/sop/issue_sop.md).
 > A number appearing in both places is a number that will disagree with itself.
 >
 > The checkboxes below predate the tracker. Where a checkbox and an issue
@@ -16,276 +16,277 @@ berikutnya sebelum phase sekarang punya known-good baseline.
 
 ---
 
-## Phase 0 — Setup & Toolchain
+## Phase 0: Setup & Toolchain
 
-- [ ] Install ESP-IDF v5.x (bukan Arduino framework — kita butuh kontrol penuh FreeRTOS)
-- [ ] Konfigurasi VS Code + ESP-IDF extension
-- [ ] Flash "hello_world" example → serial monitor konfirmasi boot OK
-- [ ] Buat Git repo: `fortunelabs-mainboard-fw` — commit setiap milestone
+- [ ] Install ESP-IDF v5.x (not the Arduino framework; we need full FreeRTOS control)
+- [ ] Configure VS Code + the ESP-IDF extension
+- [ ] Flash the `hello_world` example, confirm boot on the serial monitor
+- [ ] Create the Git repo `fortunelabs-mainboard-fw`, commit at every milestone
 
-**Deliverable:** ESP32-S3 boots, serial output terlihat, toolchain verified.
+**Deliverable:** ESP32-S3 boots, serial output is visible, toolchain verified.
 
 ---
 
-## Phase 1 — Firmware Skeleton (ESP32 Naked, Tanpa Peripheral)
+## Phase 1: Firmware Skeleton (bare ESP32, no peripherals)
 
-*Tujuan: arsitektur firmware yang benar sebelum menyentuh hardware apapun.*
+*Goal: get the firmware architecture right before touching any hardware.*
 
 ### 1.1 FreeRTOS Task Architecture
 
-- [ ] Desain task structure di kertas/whiteboard dulu:
-  - `task_sensor_read` — baca ADC periodik (nanti, sekarang dummy data)
-  - `task_comm` — WiFi connect + MQTT publish
-  - `task_output_ctrl` — kontrol relay/aktuator via queue command
-  - `task_supervisor` — watchdog, health check, error handling
-- [ ] Implementasi skeleton semua task dengan dummy data (`xTaskCreate`, `vTaskDelay`)
-- [ ] Tentukan prioritas task: supervisor > comm > sensor > output
-- [ ] Implementasi inter-task communication: queue antara sensor→comm, queue command→output
+- [ ] Design the task structure on paper or a whiteboard first:
+  - `task_sensor_read`: periodic ADC read (dummy data for now)
+  - `task_comm`: WiFi connect + MQTT publish
+  - `task_output_ctrl`: relay/actuator control via a command queue
+  - `task_supervisor`: watchdog, health check, error handling
+- [ ] Implement every task as a skeleton with dummy data (`xTaskCreate`, `vTaskDelay`)
+- [ ] Set task priorities: supervisor > comm > sensor > output
+- [ ] Implement inter-task communication: sensor→comm queue, command→output queue
 
 ### 1.2 WiFi + MQTT
 
-- [ ] WiFi STA mode — connect ke router, handle reconnect otomatis
-- [ ] MQTT client — connect ke broker (HiveMQ public atau Mosquitto lokal)
-- [ ] Publish dummy sensor data ke topic `fortunelabs/{device_id}/telemetry`
-- [ ] Subscribe ke topic `fortunelabs/{device_id}/command` untuk remote control
-- [ ] Test: matikan WiFi router, nyalakan lagi — firmware harus reconnect tanpa reboot
+- [ ] WiFi STA mode: connect to the router, handle reconnect automatically
+- [ ] MQTT client: connect to a broker (public HiveMQ or local Mosquitto)
+- [ ] Publish dummy sensor data to `fortunelabs/{device_id}/telemetry`
+- [ ] Subscribe to `fortunelabs/{device_id}/command` for remote control
+- [ ] Test: power the router off and back on, firmware must reconnect without rebooting
 
 ### 1.3 System Infrastructure
 
-- [ ] NVS (Non-Volatile Storage) — simpan WiFi SSID/password, device config
-- [ ] OTA update mechanism — minimal: download firmware via HTTP, flash, reboot
-- [ ] Watchdog timer — task watchdog pada setiap task, panic handler
-- [ ] Logging framework — level-based (ERROR/WARN/INFO/DEBUG), output ke serial + optional MQTT
-- [ ] Uptime counter + free heap monitoring → publish ke MQTT sebagai heartbeat
+- [ ] NVS (Non-Volatile Storage): store WiFi SSID/password and device config
+- [ ] OTA update mechanism, minimally: download firmware over HTTP, flash, reboot
+- [ ] Watchdog timer: task watchdog on every task, panic handler
+- [ ] Logging framework: level-based (ERROR/WARN/INFO/DEBUG), output to serial and optionally MQTT
+- [ ] Uptime counter + free heap monitoring, published to MQTT as a heartbeat
 
-**Deliverable:** ESP32 connect WiFi, publish dummy telemetry ke MQTT setiap 5
-detik, terima command, survive WiFi dropout. Semua task jalan di FreeRTOS tanpa
-crash 24 jam.
+**Deliverable:** ESP32 connects to WiFi, publishes dummy telemetry to MQTT every
+5 seconds, receives commands, survives a WiFi dropout. Every task runs under
+FreeRTOS without crashing for 24 hours.
 
 ---
 
-## Phase 2 — Breadboard: I²C Bus Validation
+## Phase 2: Breadboard, I²C Bus Validation
 
-*Tujuan: pastikan I²C bus berfungsi sebelum menambahkan device.*
+*Goal: prove the I²C bus works before adding devices to it.*
 
 ### 2.1 Wiring
 
-- [ ] I²C pull-up resistor 2.2kΩ ke 3.3V pada SDA dan SCL
-- [ ] Hubungkan ADS1115 ke I²C bus (alamat default 0x48, ADDR→GND)
-- [ ] Hubungkan MCP23017 ke I²C bus (alamat default 0x20, A0/A1/A2→GND)
-- [ ] Decoupling cap 0.1µF di VDD setiap IC
+- [ ] 2.2 kΩ I²C pull-up resistors to 3.3V on SDA and SCL
+- [ ] Connect the ADS1115 to the I²C bus (default address 0x48, ADDR→GND)
+- [ ] Connect the MCP23017 to the I²C bus (default address 0x20, A0/A1/A2→GND)
+- [ ] 0.1 µF decoupling cap at the VDD of every IC
 
 ### 2.2 Firmware
 
-- [ ] I²C master init — GPIO assignment, clock 400kHz
-- [ ] I²C bus scan — detect semua device, print address yang ditemukan
-- [ ] Verify: ADS1115 muncul di 0x48, MCP23017 di 0x20
+- [ ] I²C master init: GPIO assignment, 400 kHz clock
+- [ ] I²C bus scan: detect every device, print the addresses found
+- [ ] Verify the ADS1115 appears at 0x48 and the MCP23017 at 0x20
 
-**Deliverable:** Serial log menunjukkan kedua device terdeteksi di alamat yang
-benar. Screenshot/foto sebagai dokumentasi.
+**Deliverable:** the serial log shows both devices detected at the correct
+addresses. Screenshot or photo as documentation.
 
 ---
 
-## Phase 3 — Breadboard: ADS1115 Analog Input
+## Phase 3: Breadboard, ADS1115 Analog Input
 
-*Tujuan: baca sensor analog, validasi akurasi dan noise.*
+*Goal: read an analog sensor, validate accuracy and noise.*
 
 ### 3.1 Hardware
 
-- [ ] Hubungkan potentiometer (atau voltage divider) ke AIN0 sebagai test signal
-- [ ] Pasang decoupling cap 0.1µF dekat VDD ADS1115
-- [ ] (Optional) RC anti-alias filter di input — hitung nilai berdasarkan data rate yang dipilih
+- [ ] Connect a potentiometer (or voltage divider) to AIN0 as the test signal
+- [ ] Fit a 0.1 µF decoupling cap close to the ADS1115 VDD
+- [ ] (Optional) RC anti-alias filter on the input, sized for the chosen data rate
 
 ### 3.2 Firmware
 
-- [ ] ADS1115 driver — konfigurasi via I²C: PGA gain, data rate, single-shot mode
-- [ ] Baca single channel (AIN0) dalam loop, print raw value + voltage conversion
-- [ ] Test semua PGA range yang relevan (±4.096V untuk 0-3.3V input)
-- [ ] Ukur noise floor: baca 100 sampel dengan input di-short ke GND, hitung std deviation
-- [ ] Integrasikan ke `task_sensor_read` — gantikan dummy data dengan real ADC reading
-- [ ] Publish ADC reading ke MQTT
+- [ ] ADS1115 driver, configured over I²C: PGA gain, data rate, single-shot mode
+- [ ] Read a single channel (AIN0) in a loop, print the raw value + voltage conversion
+- [ ] Test every relevant PGA range (±4.096V for a 0-3.3V input)
+- [ ] Measure the noise floor: 100 samples with the input shorted to GND, compute the standard deviation
+- [ ] Integrate into `task_sensor_read`, replacing dummy data with real ADC readings
+- [ ] Publish ADC readings to MQTT
 
-### 3.3 Validasi
+### 3.3 Validation
 
-- [ ] Bandingkan ADC reading dengan multimeter pada 5 titik (0V, 0.8V, 1.65V, 2.5V, 3.3V)
-- [ ] Noise level acceptable? (target: <2 LSB di 16-bit untuk DC signal)
-- [ ] Data rate yang dipilih sesuai kebutuhan aplikasi?
+- [ ] Compare ADC readings against a multimeter at 5 points (0V, 0.8V, 1.65V, 2.5V, 3.3V)
+- [ ] Is the noise level acceptable? (target: <2 LSB at 16-bit for a DC signal)
+- [ ] Does the chosen data rate match what the application needs?
 
-**Deliverable:** Real analog data mengalir dari ADS1115 → ESP32 → MQTT. Noise
+**Deliverable:** real analog data flows ADS1115 → ESP32 → MQTT. Noise
 characterization documented.
 
 ---
 
-## Phase 4 — Breadboard: MCP23017 GPIO Expander
+## Phase 4: Breadboard, MCP23017 GPIO Expander
 
-*Tujuan: kontrol digital I/O tambahan, test interrupt.*
+*Goal: extra digital I/O under control, interrupts tested.*
 
 ### 4.1 Output Test
 
-- [ ] Konfigurasi Port A (GPA0-GPA7) sebagai output
-- [ ] Toggle LED pada 2-3 pin — verify on/off via firmware command
-- [ ] Test semua 8 pin Port A
+- [ ] Configure Port A (GPA0-GPA7) as outputs
+- [ ] Toggle an LED on 2-3 pins, verify on/off via a firmware command
+- [ ] Test all 8 Port A pins
 
 ### 4.2 Input Test
 
-- [ ] Konfigurasi Port B (GPB0-GPB7) sebagai input dengan internal pull-up
-- [ ] Hubungkan push button ke 1-2 pin
-- [ ] Baca status input, print ke serial
-- [ ] Konfigurasi interrupt (INTA/INTB) — Wire-OR open-drain ke ESP32 GPIO
-- [ ] Test interrupt-on-change: tekan button → ISR di ESP32 fire → baca MCP23017 register
+- [ ] Configure Port B (GPB0-GPB7) as inputs with internal pull-ups
+- [ ] Connect a push button to 1-2 pins
+- [ ] Read the input state, print it to serial
+- [ ] Configure the interrupts (INTA/INTB): wire-OR open-drain into an ESP32 GPIO
+- [ ] Test interrupt-on-change: press the button → ISR fires on the ESP32 → read the MCP23017 register
 
-### 4.3 Integrasi
+### 4.3 Integration
 
 - [ ] MCP23017 output control via MQTT command (subscribe topic → parse → set pin)
-- [ ] MCP23017 input status publish ke MQTT saat berubah (interrupt-driven)
+- [ ] MCP23017 input state published to MQTT on change (interrupt-driven)
 
-**Deliverable:** Remote toggle LED via MQTT. Button press muncul sebagai MQTT
-message. Interrupt berfungsi.
+**Deliverable:** remote LED toggle over MQTT. A button press shows up as an MQTT
+message. Interrupts work.
 
 ---
 
-## Phase 5 — Breadboard: ULN2803A + Relay
+## Phase 5: Breadboard, ULN2803A + Relay
 
-*Tujuan: drive relay dari MCP23017 output via Darlington driver.*
+*Goal: drive a relay from an MCP23017 output through a Darlington driver.*
 
 ### 5.1 Hardware
 
-- [ ] Hubungkan MCP23017 GPA output → ULN2803A input
-- [ ] ULN2803A output → relay coil (5V relay, common pin ke 5V)
-- [ ] Clamp diode sudah built-in di ULN2803A — verify relay switching bersih (no bounce issue)
-- [ ] Power relay coil dari 5V rail terpisah (bukan dari 3.3V ESP32)
+- [ ] Connect MCP23017 GPA outputs to the ULN2803A inputs
+- [ ] ULN2803A output to the relay coil (5V relay, common pin to 5V)
+- [ ] Clamp diodes are built into the ULN2803A: verify clean relay switching (no bounce issue)
+- [ ] Power the relay coil from a separate 5V rail, not from the ESP32 3.3V
 
 ### 5.2 Firmware
 
 - [ ] Full chain test: MQTT command → ESP32 → I²C → MCP23017 → ULN2803A → relay click
-- [ ] Verify V_CE(sat) di beban aktual — ukur tegangan drop dengan multimeter
-- [ ] Verify 3.3V drive dari MCP23017 cukup untuk V_I(on) ULN2803A (margin ≥0.3V)
+- [ ] Verify V_CE(sat) under the actual load: measure the voltage drop with a multimeter
+- [ ] Verify the 3.3V drive from the MCP23017 clears V_I(on) of the ULN2803A (margin ≥0.3V)
 
-### 5.3 Validasi
+### 5.3 Validation
 
-- [ ] Relay switching 1000× tanpa miss — reliability test
-- [ ] Ukur arus per channel ULN2803A — verify di bawah 200mA (safe zone untuk 3.3V drive)
-- [ ] Thermal check: ULN2803A tidak panas berlebihan setelah continuous operation 1 jam
+- [ ] 1000× relay switching with no misses, as a reliability test
+- [ ] Measure the per-channel ULN2803A current, verify it stays under 200 mA (safe zone for a 3.3V drive)
+- [ ] Thermal check: the ULN2803A does not overheat after an hour of continuous operation
 
-**Deliverable:** End-to-end relay control via cloud. Measured V_I(on),
+**Deliverable:** end-to-end relay control from the cloud. Measured V_I(on),
 V_CE(sat), I_C documented.
 
 ---
 
-## Phase 6 — Full Breadboard Integration
+## Phase 6: Full Breadboard Integration
 
-*Tujuan: semua subsistem jalan bersamaan dalam satu RTOS environment.*
+*Goal: every subsystem running together in one RTOS environment.*
 
 ### 6.1 Integration Test
 
-- [ ] Semua device di I²C bus berjalan simultan tanpa bus contention
-- [ ] Sensor read + relay control + MQTT publish/subscribe — concurrent operation
-- [ ] Stress test: publish rate tinggi (setiap 1 detik) + relay toggling + ADC reading — 24 jam
-- [ ] Memory leak check: free heap stabil setelah 24 jam operasi
-- [ ] WiFi disconnect/reconnect tidak mengganggu I²C operation
+- [ ] Every device on the I²C bus runs simultaneously without bus contention
+- [ ] Sensor read + relay control + MQTT publish/subscribe run concurrently
+- [ ] Stress test for 24 hours: high publish rate (every 1 second) + relay toggling + ADC reads
+- [ ] Memory leak check: free heap stable after 24 hours of operation
+- [ ] A WiFi disconnect/reconnect does not disturb I²C operation
 
 ### 6.2 Power Measurement
 
-- [ ] Ukur total current draw di 3.3V rail: idle, WiFi Tx, relay active, semua aktif
-- [ ] Catat peak current saat WiFi Tx burst
-- [ ] Hitung: apakah MP2388 (1A max) cukup untuk 3.3V rail? Peak > 800mA → flag risiko
-- [ ] Ukur total current draw di 5V rail (relay coil + MP2388 input)
-- [ ] Hitung: MP2393 (3A max) untuk total 5V load — should be fine, verify anyway
+- [ ] Measure total current draw on the 3.3V rail: idle, WiFi Tx, relay active, everything active
+- [ ] Record the peak current during a WiFi Tx burst
+- [ ] Compute whether the MP2388 (1A max) is enough for the 3.3V rail. Peak > 800 mA raises a risk flag
+- [ ] Measure total current draw on the 5V rail (relay coil + MP2388 input)
+- [ ] Compute the MP2393 (3A max) headroom for the total 5V load. Should be fine, verify anyway
 
-### 6.3 Dokumentasi
+### 6.3 Documentation
 
-- [ ] Foto breadboard setup final
-- [ ] Wiring diagram (bisa hand-drawn atau Fritzing)
-- [ ] Tabel pin assignment ESP32-S3 → semua peripheral
-- [ ] Log hasil pengukuran: ADC accuracy, noise floor, power draw, V_CE(sat)
+- [ ] Photo of the final breadboard setup
+- [ ] Wiring diagram (hand-drawn or Fritzing is fine)
+- [ ] Pin assignment table, ESP32-S3 to every peripheral
+- [ ] Log the measurements: ADC accuracy, noise floor, power draw, V_CE(sat)
 
-**Deliverable:** Full system berjalan 24+ jam tanpa crash. Power budget
-validated. Semua measurement documented. Go/no-go decision untuk PCB design.
-
----
-
-## Phase 7 — Schematic Capture
-
-*Dimulai SETELAH Phase 6 selesai. Breadboard insights langsung masuk ke skematik.*
-
-- [ ] Pilih EDA tool (KiCad 8 recommended — gratis, open source, 4-layer capable)
-- [ ] Skematik: input protection block (AO3401A + Zener + TVS + Polyfuse)
-- [ ] Skematik: MP2393 12V→5V/3A (R1=40.2kΩ, R2=7.68kΩ, RT=15kΩ, L=4.9µH, C_BST=1µF/R_BST=20Ω, C_SS=6.8nF, EN=604kΩ to VIN, PG→ESP32 GPIO for power sequencing)
-- [ ] Skematik: MP2388 #2 5V→3.3V (R1=75kΩ, R2=24kΩ, AAM R3=80.6kΩ, layout per datasheet typical app)
-- [ ] Skematik: ESP32-S3 — semua power pin, strapping pins, crystal, RF matching network
-- [ ] Skematik: I²C bus — ADS1115 + MCP23017 + pull-ups 2.2kΩ
-- [ ] Skematik: ULN2803A output driver
-- [ ] Skematik: daughter board connector (definisikan pinout standar)
-- [ ] Skematik: decoupling caps placement per IC
-- [ ] ERC (Electrical Rule Check) — zero errors
-- [ ] Peer review skematik (atau self-review setelah 48 jam jeda)
-
-**Deliverable:** Skematik lengkap, ERC clean, siap untuk PCB layout.
+**Deliverable:** the full system runs 24+ hours without crashing. Power budget
+validated. Every measurement documented. Go/no-go decision for the PCB design.
 
 ---
 
-## Phase 8 — PCB Layout & Fabrication
+## Phase 7: Schematic Capture
 
-- [ ] PCB layout 4-layer stackup: Top / GND (L2) / Power (L3) / Bottom
-- [ ] RF trace 50Ω impedance — kalkulator, verify dengan stackup vendor
-- [ ] Power trace width: ≥25mil main, ≥20mil VDD3P3, ≥10mil lainnya
-- [ ] Ground pad ESP32-S3 → min 9 thermal vias
-- [ ] CLC/LC filter di VDD3P3 pin 2/3 (RF supply)
+*Starts AFTER Phase 6 closes. Breadboard insights go straight into the schematic.*
+
+- [ ] Pick an EDA tool (KiCad 8 recommended: free, open source, 4-layer capable)
+- [ ] Schematic: input protection block (AO3401A + Zener + TVS + Polyfuse)
+- [ ] Schematic: MP2393 12V→5V/3A (R1=40.2kΩ, R2=7.68kΩ, RT=15kΩ, L=4.9µH, C_BST=1µF/R_BST=20Ω, C_SS=6.8nF, EN=604kΩ to VIN, PG→ESP32 GPIO for power sequencing)
+- [ ] Schematic: MP2388 #2 5V→3.3V (R1=75kΩ, R2=24kΩ, AAM R3=80.6kΩ, layout per the datasheet typical application)
+- [ ] Schematic: ESP32-S3, every power pin, strapping pins, crystal, RF matching network
+- [ ] Schematic: I²C bus, ADS1115 + MCP23017 + 2.2 kΩ pull-ups
+- [ ] Schematic: ULN2803A output driver
+- [ ] Schematic: daughter board connector (define the standard pinout)
+- [ ] Schematic: decoupling cap placement per IC
+- [ ] ERC (Electrical Rule Check): zero errors
+- [ ] Peer review of the schematic (or self-review after a 48-hour gap)
+
+**Deliverable:** complete schematic, clean ERC, ready for PCB layout.
+
+---
+
+## Phase 8: PCB Layout & Fabrication
+
+- [ ] 4-layer stackup: Top / GND (L2) / Power (L3) / Bottom
+- [ ] 50Ω RF trace impedance: calculator, verified against the vendor stackup
+- [ ] Power trace width: ≥25 mil main, ≥20 mil VDD3P3, ≥10 mil elsewhere
+- [ ] ESP32-S3 ground pad: minimum 9 thermal vias
+- [ ] CLC/LC filter on VDD3P3 pins 2/3 (RF supply)
 - [ ] Star-shaped power distribution
-- [ ] DRC clean — zero errors
-- [ ] Gerber export + review di gerber viewer
-- [ ] Order PCB (JLCPCB/PCBWay) — mulai dari 5 pcs
-- [ ] BOM finalisasi + order komponen (LCSC/Mouser/Digikey)
-- [ ] Assembly: evaluasi self-solder vs assembly service untuk QFN packages
-- [ ] Bench test: power block → MCU boot → I²C → ADC → output — same sequence as breadboard
+- [ ] Clean DRC: zero errors
+- [ ] Gerber export + review in a Gerber viewer
+- [ ] Order the PCB (JLCPCB/PCBWay), starting at 5 pcs
+- [ ] Finalize the BOM + order components (LCSC/Mouser/Digikey)
+- [ ] Assembly: evaluate self-soldering against an assembly service for the QFN packages
+- [ ] Bench test in the same sequence as the breadboard: power block → MCU boot → I²C → ADC → output
 
-**Deliverable:** Working PCB prototype. All bench tests pass.
+**Deliverable:** working PCB prototype. All bench tests pass.
 
 ---
 
-## Phase 9 — Ecosystem Integration
+## Phase 9: Ecosystem Integration
 
-- [ ] Daughter board template: konektor standar, pinout definition, contoh daughter board sederhana
-- [ ] Monitoring dashboard: React + MQTT (Grafana juga opsi untuk MVP cepat)
+- [ ] Daughter board template: standard connector, pinout definition, one simple example board
+- [ ] Monitoring dashboard: React + MQTT (Grafana is also an option for a fast MVP)
 - [ ] WhatsApp notification: via API (Twilio/Fonnte/direct WhatsApp Business API)
-- [ ] Deployment documentation: setup guide untuk teknisi lapangan
-- [ ] Packaging: mainboard + daughter board + firmware + dashboard = satu paket klien
+- [ ] Deployment documentation: a setup guide for field technicians
+- [ ] Packaging: mainboard + daughter board + firmware + dashboard as one client bundle
 
-**Deliverable:** Full ecosystem demo-ready. Satu paket yang bisa di-deploy ke
-klien pertama.
+**Deliverable:** the full ecosystem is demo-ready. One bundle that can be
+deployed to the first client.
 
 ---
 
 ## Decision Log
 
-*Keputusan yang sudah diambil. Setiap baris di sini yang masih hidup argumennya
-milik sebuah issue `type:decision`, dan ditutup oleh sebuah ADR di
-[`docs/adr/`](../docs/adr/) — lihat [`docs/sop/git_sop.md`](../docs/sop/git_sop.md).*
+*Decisions already taken. Every line here whose argument is still live belongs to
+a `type:decision` issue and is closed by an ADR in [`docs/adr/`](../docs/adr/).
+See [`docs/sop/git_sop.md`](../docs/sop/git_sop.md).*
 
-| Tanggal | Keputusan | Alasan |
+| Date | Decision | Reason |
 |---|---|---|
-| Mei 2026 | ESP-IDF, bukan Arduino | Kontrol penuh FreeRTOS, OTA, NVS. Production-grade. |
-| Mei 2026 | Firmware skeleton dulu | Avoid refactoring; task architecture determines hardware interface |
-| TBD | Data rate ADS1115 | Pilih setelah tahu sampling requirement dari use case pertama |
-| Mei 2026 | 12V→5V: MP2393 (3A) | MPS family, 3A headroom untuk relay+stage2, PG output untuk power sequencing, COT control |
-| TBD | 2-layer vs 4-layer PCB | Evaluate setelah breadboard — 2-layer lebih murah untuk iterasi awal |
+| May 2026 | ESP-IDF, not Arduino | Full FreeRTOS control, OTA, NVS. Production-grade. |
+| May 2026 | Firmware skeleton first | Avoid refactoring; task architecture determines the hardware interface |
+| TBD | ADS1115 data rate | Pick once the sampling requirement of the first use case is known |
+| May 2026 | 12V→5V: MP2393 (3A) | MPS family, 3A headroom for relay + stage 2, PG output for power sequencing, COT control |
+| TBD | 2-layer vs 4-layer PCB | Evaluate after the breadboard. 2-layer is cheaper for early iterations |
 
 ---
 
-## Risiko Tracker
+## Risk Tracker
 
-*Setiap baris menyebut phase yang menyelesaikannya. Baris `Open` adalah gate
-yang prediksinya sudah tertulis — kolom Mitigasi berisi nilai dan failure
-signature-nya, yang persis diminta oleh template `gate`.*
+*Every line names the phase that settles it. An `Open` line is a gate whose
+prediction is already written down, and the Mitigation column carries the value
+and its failure signature, which is exactly what the `gate` template asks for.*
 
-| Risiko | Severity | Status | Mitigasi |
+| Risk | Severity | Status | Mitigation |
 |---|---|---|---|
-| MP2388 1A kurang untuk peak WiFi Tx + peripherals | Medium | Open — verify Phase 6 | Power budget measurement. Fallback: MP2315 (3A) |
-| ULN2803A 3.3V drive di batas bawah V_I(on) | Low | Open — verify Phase 5 | Bench measure. Fallback: TPIC6B595 shift register driver |
-| I²C bus capacitance >200pF | Low | Open — verify Phase 2 | Hitung trace length. Fallback: turunkan ke 100kHz |
-| MP2393 3A cukup untuk 5V rail (relay + MP2388 input) | Low | Open — verify Phase 6 | 3A headroom besar vs ~1.1A estimated load |
-| First HW project — learning curve tinggi | High | Active | Fail cheap: breadboard dulu, PCB belakangan |
+| MP2388 1A too little for peak WiFi Tx + peripherals | Medium | Open, verify Phase 6 | Power budget measurement. Fallback: MP2315 (3A) |
+| ULN2803A 3.3V drive sits at the lower bound of V_I(on) | Low | Open, verify Phase 5 | Bench measure. Fallback: TPIC6B595 shift register driver |
+| I²C bus capacitance >200pF | Low | Open, verify Phase 2 | Compute trace length. Fallback: drop to 100 kHz |
+| MP2393 3A enough for the 5V rail (relay + MP2388 input) | Low | Open, verify Phase 6 | Large 3A headroom against ~1.1A estimated load |
+| First hardware project, steep learning curve | High | Active | Fail cheap: breadboard first, PCB later |
 
 ---
 
-Setiap phase selesai → update status di tracker, catat findings, commit ke repo.
+Each time a phase closes: update the status in the tracker, record the findings,
+commit to the repo.

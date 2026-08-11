@@ -1,6 +1,6 @@
 name: Gate
 description: A claim with a command or a measurement, and a criterion that can fail. Open this BEFORE the run.
-title: "P<phase> <handle> — <the claim, in the task list's own words>"
+title: "P<phase> <handle>: <the claim, in the task list's own words>"
 labels: ["type:gate"]
 body:
   - type: markdown
@@ -16,16 +16,16 @@ body:
       label: Phase
       description: The phase in `todos/prototyping_todo.md`. Label `phase:N` to match.
       options:
-        - "0 — Setup & toolchain"
-        - "1 — Firmware skeleton"
-        - "2 — I2C bus validation"
-        - "3 — ADS1115 analog input"
-        - "4 — MCP23017 GPIO expander"
-        - "5 — ULN2803A + relay"
-        - "6 — Full breadboard integration"
-        - "7 — Schematic capture"
-        - "8 — PCB layout & fabrication"
-        - "9 — Ecosystem integration"
+        - "0: Setup & toolchain"
+        - "1: Firmware skeleton"
+        - "2: I2C bus validation"
+        - "3: ADS1115 analog input"
+        - "4: MCP23017 GPIO expander"
+        - "5: ULN2803A + relay"
+        - "6: Full breadboard integration"
+        - "7: Schematic capture"
+        - "8: PCB layout & fabrication"
+        - "9: Ecosystem integration"
     validations:
       required: true
 
@@ -34,7 +34,7 @@ body:
     attributes:
       label: Handle
       description: >
-        The name the thing already has — the CI job name where CI runs it, the
+        The name the thing already has: the CI job name where CI runs it, the
         task list's own numbering where it numbers it, otherwise the command.
       placeholder: 4.2 input
     validations:
@@ -58,7 +58,7 @@ body:
       description: >
         The task list heading whose Deliverable this satisfies. It is not restated
         here.
-      placeholder: 'todos/prototyping_todo.md — Phase 4.2 Input Test'
+      placeholder: 'todos/prototyping_todo.md, Phase 4.2 Input Test'
     validations:
       required: true
 
@@ -77,7 +77,7 @@ body:
       label: Evidence it produces
       description: >
         The CI run, the committed artifact, or the numbers that will be recorded
-        here. Phases 2–6 leave no trace in git — this issue is the only record.
+        here. Phases 2-6 leave no trace in git, so this issue is the only record.
       placeholder: CI run on the merge commit / 5-point multimeter table, recorded below
     validations:
       required: true
@@ -90,11 +90,11 @@ body:
         What the result will be, and what the recognisable failure signature is.
         A prediction with a direction but no value is weaker than one with both.
         If this gate came from a Risk Tracker row, the fallback is the failure
-        signature — write it here.
+        signature. Write it here.
       placeholder: |
         Peak 3.3V rail current under 800 mA.
         Failure signature: above 800 mA means MP2388 has no margin for a WiFi Tx
-        burst, and the fallback is MP2315 — which is a schematic change.
+        burst, and the fallback is MP2315, which is a schematic change.
     validations:
       required: true
 

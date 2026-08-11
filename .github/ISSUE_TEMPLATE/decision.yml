@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         The argument happens here while the alternatives are still live. The ADR is
-        written and committed **before** this issue closes — alternatives written
+        written and committed **before** this issue closes, with alternatives written
         afterwards are reconstructed, and reconstructed alternatives are always the
         ones that were easy to reject.
 

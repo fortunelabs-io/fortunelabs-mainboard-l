@@ -10,7 +10,7 @@ own top-level directory and carries its own toolchain and documentation.
 | ----------- | --------------------------------------------------------- | ------------------ |
 | `hardware/` | KiCad schematic, PCB, and BOM for `fortunelabs_mainboard_v0` | KiCad 6+         |
 | `firmware/` | ESP-IDF / FreeRTOS application for the ESP32-S3            | ESP-IDF, PlatformIO |
-| `software/` | Host-side tooling and services                             | —                  |
+| `software/` | Host-side tooling and services                             | n/a                |
 
 `fortunelabs.code-workspace` is a multi-root VS Code workspace covering the
 firmware and software arms. Note that it hardcodes absolute paths for the
@@ -52,18 +52,18 @@ for the git conventions this project uses for KiCad files.
 [`.github/workflows/build.yml`](.github/workflows/build.yml) runs the ESP-IDF
 firmware build and the native Unity test suite on every push to `main` and on
 every pull request. A separate KiCad workflow lives under the hardware
-directory. CI never invokes `flash` or `monitor` — both require a physical
+directory. CI never invokes `flash` or `monitor`, because both require a physical
 board and a serial TTY.
 
 ## Working conventions
 
 [`todos/prototyping_todo.md`](todos/prototyping_todo.md) is the specification:
 ten phases, each with a testable deliverable, plus the Decision Log and the Risk
-Tracker. Status is never written into it — that lives in the issue tracker.
+Tracker. Status is never written into it; that lives in the issue tracker.
 
-- [`docs/sop/issue_sop.md`](docs/sop/issue_sop.md) — what gets an issue, the four
+- [`docs/sop/issue_sop.md`](docs/sop/issue_sop.md): what gets an issue, the four
   issue types, and the rule that a gate is opened *before* the run that tests it.
-- [`docs/sop/git_sop.md`](docs/sop/git_sop.md) — branches, commit types, tags,
+- [`docs/sop/git_sop.md`](docs/sop/git_sop.md): branches, commit types, tags,
   and when a decision is owed an [ADR](docs/adr/README.md).
 
 ## License

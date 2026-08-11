@@ -18,7 +18,7 @@ record.
 ## Alternatives
 
 Each with the reason it would be taken and the reason it would not. This is the
-payload — a record listing only what was chosen has recorded nothing.
+payload; a record listing only what was chosen has recorded nothing.
 
 ## Decision
 
@@ -34,7 +34,7 @@ new file naming what survives and what changes. See
 ## Records
 
 - [`2026-07-21-ic-driver-inner-vtable.md`](./2026-07-21-ic-driver-inner-vtable.md)
-  — IC drivers keep an internal vtable. Supersedes the removed
+  keeps IC drivers on an internal vtable. Supersedes the removed
   `firmware/gold_standard.md` Decision #1, which mandated the opposite.
 
 ## Owed
@@ -42,8 +42,8 @@ new file naming what survives and what changes. See
 One decision this repository has taken and not recorded: **the I²C clock.** The
 task list specifies 400 kHz, the bus config in `main.c` sets 100 kHz, SSD1306
 registers at 400 kHz, and the Risk Tracker names the drop to 100 kHz as the
-fallback for bus capacitance. The bus-level figure is inert — clock is applied
-per device — so the code cannot say what the clock is, or whether the fallback
+fallback for bus capacitance. The bus-level figure is inert, since the clock
+is applied per device, so the code cannot say what the clock is, or whether the fallback
 was deliberate.
 
 The `esp32` `sdkconfig` on an ESP32-S3 board is not an owed record. Nobody chose

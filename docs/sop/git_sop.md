@@ -54,7 +54,7 @@ refactor/drivers-and-hal
 chore/…  docs/…  adr/…  spike/…
 ```
 
-> The branches already on `origin` use this shape but not one type vocabulary —
+> The branches already on `origin` use this shape but not one type vocabulary.
 > `features/ads1115` and `feature/dummy-measurement` differ by one letter,
 > `driver/mcp23017` and `arch/firmware-layering` name a subsystem where the
 > others name a kind of work, and `test/i2c-functional-test` says the word twice.
@@ -75,8 +75,8 @@ left standing is indistinguishable at a glance from work in progress.
 
 ## Commits
 
-Conventional Commits, already in use here. Subjects are imperative — *correct*,
-not *correcting* — because git's own generated subjects are imperative and a
+Conventional Commits, already in use here. Subjects are imperative, *correct*
+rather than *correcting*, because git's own generated subjects are imperative and a
 mixed log reads as two authors.
 
 **Scope is the arm: `<type>(hardware|firmware|software)`.** In a monorepo a `fix`
@@ -116,7 +116,7 @@ out to be wrong, the `test` commit lands first, on its own, carrying its reason.
 **One hardware change per commit.** Two schematic edits in one commit cannot be
 reverted separately, and the first thing wanted from a change that later looks
 wrong is to remove it without removing its neighbour. KiCad files make this
-harder than it sounds — see
+harder than it sounds; see
 [`README-kicad-git-workflow.md`](../../hardware/fortunelabs_mainboard_v0/README-kicad-git-workflow.md).
 
 ### The body of a gate-closing commit
@@ -153,7 +153,7 @@ Closes #7
 
 ### History
 
-Amend and rebase freely while a commit is unpushed. Once pushed, never — even
+Amend and rebase freely while a commit is unpushed. Once pushed, never, not even
 alone. The reason is not collaboration; it is that a pushed commit is the only
 copy that survives this machine, and the SHA may already be cited from an issue.
 
@@ -163,10 +163,10 @@ copy that survives this machine, and the SHA may already be cited from an issue.
 
 Annotated tags, marking points the physical world can be compared against:
 
-- **`v<N>-fab`** — on the commit carrying the exact Gerbers sent for fabrication.
+- **`v<N>-fab`**: on the commit carrying the exact Gerbers sent for fabrication.
   Boards will exist matching one commit, and when board seven behaves differently
   from board two, this tag is what says they should not have.
-- **`phase<N>-closed`** — every issue for the phase is closed and its Deliverable
+- **`phase<N>-closed`**: every issue for the phase is closed and its Deliverable
   is satisfied. Phase 6 carries the go/no-go for PCB design, so its tag is the
   one that licences Phase 7.
 
@@ -211,7 +211,7 @@ See [`issue_sop.md`](./issue_sop.md).
 One ADR is owed now: **the I²C clock.** The task list specifies 400 kHz, the bus
 config in `main.c` sets 100 kHz, SSD1306 registers itself at 400 kHz, and the
 Risk Tracker names exactly that drop to 100 kHz as the fallback for bus
-capacitance. The bus-level figure is inert — clock is applied per device — so the
+capacitance. The bus-level figure is inert, since the clock is applied per device, so the
 code cannot say what the project's clock actually is, let alone whether the
 fallback was taken deliberately. That is a choice a future reader will read as an
 accident, which is the test for writing a record.
@@ -220,10 +220,10 @@ The `esp32` `sdkconfig` on an ESP32-S3 board is **not** an owed ADR. Nobody chos
 it; it is stale from the `hello_world` template and `idf.py set-target esp32s3`
 rewrites it. It is a deviation, listed as one in
 [`firmware/Readme.md`](../../firmware/Readme.md), and it closes as a
-`type:anomaly` issue. An ADR records a decision that was taken — writing one for
+`type:anomaly` issue. An ADR records a decision that was taken; writing one for
 a state nobody decided would dignify a defect as a choice.
 
-The inner-vtable decision — implemented flat, then reverted — is recorded in
+The inner-vtable decision, implemented flat and then reverted, is recorded in
 [`2026-07-21-ic-driver-inner-vtable.md`](../adr/2026-07-21-ic-driver-inner-vtable.md).
 It was written after the fact, from a changelog that has since been deleted from
 the repository root, which is the argument for holding the next one in a

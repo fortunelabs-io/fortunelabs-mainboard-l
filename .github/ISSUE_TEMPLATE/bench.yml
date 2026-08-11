@@ -1,13 +1,13 @@
 name: Bench action
 description: Physical work with no command and no criterion of its own.
-title: "P<phase> <handle> — <what is being done at the bench>"
+title: "P<phase> <handle>: <what is being done at the bench>"
 labels: ["type:bench", "area:hardware"]
 body:
   - type: markdown
     attributes:
       value: |
         A bench action has no pass criterion. It is closed by naming the gate that
-        proved it — a solder joint is proved by the board working, not by
+        proved it. A solder joint is proved by the board working, not by
         inspecting the joint.
 
   - type: input
@@ -33,7 +33,7 @@ body:
       label: What is done
       description: >
         Steps, and any requirement that must be checked before a point of no
-        return. Name the point of no return explicitly — after it, the next check
+        return. Name the point of no return explicitly. After it, the next check
         costs a board spin.
       placeholder: |
         ERC and DRC clean, footprints confirmed against the BOM, then export
