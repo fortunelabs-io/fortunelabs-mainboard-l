@@ -3,3 +3,4 @@ sdkconfig.old
 .DS_Store
 .pio/
 .claude/
+CLAUDE.md
