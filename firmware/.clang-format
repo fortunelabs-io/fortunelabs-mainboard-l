@@ -5,6 +5,6 @@ BreakBeforeBraces: Attach
 AllowShortIfStatementsOnASingleLine: false
 IndentCaseLabels: true
 ColumnLimit: 100
-# Ini rahasia buat ngeratain kanan-kiri yang kamu mau:
+# Column alignment for consecutive assignments and declarations:
 AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: true

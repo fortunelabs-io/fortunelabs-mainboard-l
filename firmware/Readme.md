@@ -1,4 +1,4 @@
-# Fortune Labs Mainboard Firmware — Architecture
+# Fortune Labs Mainboard Firmware Architecture
 
 ESP-IDF and FreeRTOS firmware for the Fortune Labs Mainboard (ESP32-S3).
 
@@ -8,8 +8,8 @@ repository as a whole, see the [root README](../README.md).
 
 ## The core idea
 
-Business logic never names a chip. Every task depends on a **HAL contract** — a
-vtable struct in `main/hal/` — and never on the driver behind it. `main.c` is the
+Business logic never names a chip. Every task depends on a **HAL contract**, a
+vtable struct in `main/hal/`, and never on the driver behind it. `main.c` is the
 only file that knows which concrete driver is in play, and it wires them together
 at boot.
 
@@ -18,12 +18,12 @@ means changing one line in `main.c`. Nothing inside `task_actuator.c` changes.
 
 ```mermaid
 graph TD
-    M["main.c — orchestration<br/>picks drivers, owns bus + queues"]
-    T["tasks/ — task_sensor, task_actuator, task_display"]
-    H["hal/ — sensor_driver_t, output_driver_t,<br/>display_driver_t, transport_driver_t"]
-    D["drivers/ — sensor, output, ic, transport"]
-    B["bus/ — i2c_bus"]
-    S["system/ — config, log, supervisor, ota"]
+    M["main.c: orchestration<br/>picks drivers, owns bus + queues"]
+    T["tasks/: task_sensor, task_actuator, task_display"]
+    H["hal/: sensor_driver_t, output_driver_t,<br/>display_driver_t, transport_driver_t"]
+    D["drivers/: sensor, output, ic, transport"]
+    B["bus/: i2c_bus"]
+    S["system/: config, log, supervisor, ota"]
 
     M -->|injects driver ptr| T
     T -->|depends only on| H
@@ -55,8 +55,8 @@ satisfy them. No task ever includes a driver header.
 rather than plain public functions, so there are effectively two vtable levels:
 the HAL contract on the outside, the IC driver's own on the inside.
 
-This was challenged. The de-vtable refactor was fully implemented — flat public
-functions, tests calling them directly — and then **reverted**, because the flat
+This was challenged. The de-vtable refactor was fully implemented, with flat public
+functions and tests calling them directly, and then **reverted**, because the flat
 drivers proved harder to read day to day. The inner vtable is the house style by
 deliberate choice, not by accident.
 
@@ -86,8 +86,8 @@ called directly. Callers reach outbound comms only through the contract, so
 moving from WiFi/MQTT to cellular or LoRaWAN changes the driver instance wired in
 `main.c`, not the call sites.
 
-`transport_config_t` deliberately has a different shape from the other contracts
-— no `i2c_bus_t *`, since transport rides the radio rather than the I2C bus.
+`transport_config_t` deliberately has a different shape from the other contracts:
+no `i2c_bus_t *`, since transport rides the radio rather than the I2C bus.
 
 ### 4. Command interpretation belongs to orchestration
 
@@ -102,7 +102,7 @@ Each interface is deliberately generic where hardware would otherwise leak
 through:
 
 - `display_show_text()` uses **row addressing**, like a terminal, not pixel
-  coordinates — the same contract fits an OLED and a character LCD.
+  coordinates, so the same contract fits an OLED and a character LCD.
 - Output channels are **0-indexed logical numbers**. Mapping channel 0 to
   `MCP23017 GPA0 -> ULN2803A IN1 -> Relay 1` is internal to the driver.
 - `sensor_reading_t.value` is a bare `float`. Whether it means volts, °C, or ppm
@@ -121,7 +121,7 @@ boot if allocation fails.
 2. Implement it under the matching `drivers/` subdirectory, exposing a single
    `const <type>_driver_t <name>_driver` symbol.
 3. Add the `.c` file to `SRCS` in `main/CMakeLists.txt`.
-4. Wire it in `main.c` — init with a config struct, assign the pointer into the
+4. Wire it in `main.c`: init with a config struct, assign the pointer into the
    task context.
 5. Add a host-native test under `test/`, mocking the bus via `mock_i2c_bus.c`.
 
@@ -136,7 +136,7 @@ succeeded.
  1. NVS init (erase + retry on version mismatch)
  2. Logging
  3. Config load from NVS
- 4. OTA rollback check — mark running image valid
+ 4. OTA rollback check, mark running image valid
  5. I2C bus init + pre-flight scan
  6. Queue allocation
  7. Driver init, contract pointers wired into task contexts
@@ -177,7 +177,7 @@ Tracked here rather than in a separate file so it stays honest.
   ESP32-S3-WROOM-2** (U3 in the hardware BOM). CI builds `esp32` too. The
   `sdkconfig` is stale from the `hello_world` template this project was
   initialized from, and running `idf.py set-target esp32s3` rewrites it.
-- **`ota_test_task` in `main.c` is R&D scaffolding** — it fires an OTA at a
+- **`ota_test_task` in `main.c` is R&D scaffolding.** It fires an OTA at a
   hardcoded LAN address 10 seconds after boot, with `skip_cert_check` enabled.
   Remove before production.
 - **`main.c` injects fallback WiFi and broker credentials** when NVS is blank.

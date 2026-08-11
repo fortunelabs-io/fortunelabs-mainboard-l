@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 /**
  * @file main.c
- * @brief Fortune Labs Mainboard PoC — application entry point.
+ * @brief Fortune Labs Mainboard PoC application entry point.
  *
  * Sequence:
  *   1. NVS init
@@ -62,7 +62,7 @@ static const char *TEST_TAG = "ota_trigger";
 
 /* --- Global Resources ---
  * Queues are extern-accessible by tasks.
- * Bus and device instances are static — owned by main, passed by pointer.
+ * Bus and device instances are static: owned by main, passed by pointer.
  */
 QueueHandle_t    g_queue_display;
 QueueHandle_t    g_queue_actuator;
@@ -146,7 +146,7 @@ void app_main(void) {
     system_config_t sys_cfg;
     ESP_ERROR_CHECK(system_config_load(&sys_cfg)); // Load config from NVS to RAM
 
-    /* [DEV ONLY] WiFi credential fallback — inject hardcoded SSID if NVS blank.
+    /* [DEV ONLY] WiFi credential fallback: inject hardcoded SSID if NVS blank.
      * Remove or replace with provisioning flow before production.
      */
     if (strlen(sys_cfg.wifi_ssid) == 0) {
@@ -212,7 +212,7 @@ void app_main(void) {
     sensor_config_t sensor_cfg = {
         .bus      = &g_i2c_bus,
         .i2c_addr = ADS1115_ADDR_GND, // 0x48
-        .channel  = 0,                // baca AIN0
+        .channel  = 0,                // read AIN0
         .extra    = &ads_sensor_cfg,
     };
     ESP_ERROR_CHECK(sensor_ads1115_driver.init(&sensor_cfg));
@@ -259,9 +259,9 @@ void app_main(void) {
 
     /* [9] System Supervisor -------------------------------------------------- */
     system_supervisor_config_t supervisor_cfg = {
-        .wdt_timeout_ms      = 10000, // 10 detik timeout watchdog
+        .wdt_timeout_ms      = 10000, // 10 second watchdog timeout
         .trigger_panic       = true,
-        .heartbeat_period_ms = 5000,               // Publish heartbeat setiap 5 detik
+        .heartbeat_period_ms = 5000,               // Publish a heartbeat every 5 seconds
         .publish = network_manager_publish_health, // Placeholder for health publish function (MQTT
                                                    // publish in real)
         .device_id = sys_cfg.device_id             // Using device ID from system
