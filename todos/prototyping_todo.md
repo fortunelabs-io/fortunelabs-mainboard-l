@@ -4,7 +4,7 @@
 **Principle:** every phase has a testable deliverable. Do not move to the next
 phase before the current one has a known-good baseline.
 
-*Last updated: May 2026*
+*Last updated: August 2026*
 
 > **This file is the specification and stays that way.** Status is not repeated
 > here. A phase that is open, blocked, or closed is open, blocked, or closed in
@@ -31,12 +31,19 @@ phase before the current one has a known-good baseline.
 
 *Goal: get the firmware architecture right before touching any hardware.*
 
+> **"Bare ESP32" is a condition this phase must be testable under, not a
+> description of where the code started.** A driver init that aborts on a
+> missing I²C device makes every deliverable below unobservable: the image
+> never reaches WiFi. Driver init failure therefore degrades, logs, and skips
+> the dependent task. It does not stop the system.
+
 ### 1.1 FreeRTOS Task Architecture
 
 - [ ] Design the task structure on paper or a whiteboard first:
-  - `task_sensor_read`: periodic ADC read (dummy data for now)
-  - `task_comm`: WiFi connect + MQTT publish
-  - `task_output_ctrl`: relay/actuator control via a command queue
+  - `task_sensor`: periodic ADC read (dummy data for now)
+  - `task_network_telemetry`: WiFi connect + MQTT publish
+  - `task_actuator`: relay/actuator control via a command queue
+  - `task_display`: renders text lines from a queue through the display contract
   - `task_supervisor`: watchdog, health check, error handling
 - [ ] Implement every task as a skeleton with dummy data (`xTaskCreate`, `vTaskDelay`)
 - [ ] Set task priorities: supervisor > comm > sensor > output
@@ -73,16 +80,23 @@ FreeRTOS without crashing for 24 hours.
 - [ ] 2.2 kΩ I²C pull-up resistors to 3.3V on SDA and SCL
 - [ ] Connect the ADS1115 to the I²C bus (default address 0x48, ADDR→GND)
 - [ ] Connect the MCP23017 to the I²C bus (default address 0x20, A0/A1/A2→GND)
+- [ ] Connect the SSD1306 OLED to the I²C bus (default address 0x3C)
 - [ ] 0.1 µF decoupling cap at the VDD of every IC
 
 ### 2.2 Firmware
 
 - [ ] I²C master init: GPIO assignment, 400 kHz clock
 - [ ] I²C bus scan: detect every device, print the addresses found
-- [ ] Verify the ADS1115 appears at 0x48 and the MCP23017 at 0x20
+- [ ] Verify the ADS1115 appears at 0x48, the MCP23017 at 0x20, the SSD1306 at 0x3C
 
-**Deliverable:** the serial log shows both devices detected at the correct
-addresses. Screenshot or photo as documentation.
+> **The bus rate is set per device, not once for the bus.** ESP-IDF's I²C
+> master driver takes `scl_speed_hz` at device registration, so a single
+> bus-level figure does not describe what any transaction actually runs at.
+> Every device registration states its own rate, and the rate is recorded with
+> any measurement taken on this bus.
+
+**Deliverable:** the serial log shows every device detected at its correct
+address, at a stated bus rate. Screenshot or photo as documentation.
 
 ---
 
@@ -267,6 +281,7 @@ See [`docs/sop/git_sop.md`](../docs/sop/git_sop.md).*
 | May 2026 | ESP-IDF, not Arduino | Full FreeRTOS control, OTA, NVS. Production-grade. |
 | May 2026 | Firmware skeleton first | Avoid refactoring; task architecture determines the hardware interface |
 | TBD | ADS1115 data rate | Pick once the sampling requirement of the first use case is known |
+| TBD | Driver init: abort vs degrade | Aborting on a missing I²C device makes Phase 1 untestable bare. Degrading changes boot semantics and needs an ADR |
 | May 2026 | 12V→5V: MP2393 (3A) | MPS family, 3A headroom for relay + stage 2, PG output for power sequencing, COT control |
 | TBD | 2-layer vs 4-layer PCB | Evaluate after the breadboard. 2-layer is cheaper for early iterations |
 
@@ -284,6 +299,7 @@ and its failure signature, which is exactly what the `gate` template asks for.*
 | ULN2803A 3.3V drive sits at the lower bound of V_I(on) | Low | Open, verify Phase 5 | Bench measure. Fallback: TPIC6B595 shift register driver |
 | I²C bus capacitance >200pF | Low | Open, verify Phase 2 | Compute trace length. Fallback: drop to 100 kHz |
 | MP2393 3A enough for the 5V rail (relay + MP2388 input) | Low | Open, verify Phase 6 | Large 3A headroom against ~1.1A estimated load |
+| Boot aborts without the I²C peripherals fitted | High | Open, settles Phase 1 | `ESP_ERROR_CHECK` on ADS1115 and SSD1306 init panics and reboots on a bare board, so the Phase 1 gates cannot run. Fallback: degrade on init failure and skip the dependent task |
 | First hardware project, steep learning curve | High | Active | Fail cheap: breadboard first, PCB later |
 
 ---
