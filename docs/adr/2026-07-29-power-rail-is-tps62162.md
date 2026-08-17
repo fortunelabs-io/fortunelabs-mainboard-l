@@ -1,113 +1,99 @@
-# The 3.3 V rail is a single TPS62162, not the two-stage MPS pair
+# The 3.3 V rail is a single TPS62162, and the board has no 5 V rail
 
-**Date:** 2026-07-29 **Status:** Proposed
+**Date:** 2026-07-29 **Status:** Accepted
 **Supersedes:** the Decision Log row *"12V→5V: MP2393 (3A)"* in
 `todos/prototyping_todo.md`, and the Phase 7 schematic lines that name MP2393
 and MP2388 with their component values.
-
-> **This record is Proposed, not Accepted, and cannot be Accepted as written.**
-> The decision is reconstructed from the schematic and the BOM after the fact.
-> What was chosen is verifiable; *why* is not recorded anywhere in this
-> repository, and the Alternatives section below is therefore reasoning that
-> was reconstructed rather than reasoning that was used. Per
-> [`README.md`](./README.md), alternatives are the payload of a record, and a
-> reconstructed payload is not the payload. The person who took this decision
-> supplies the rationale, or this record stays Proposed.
 
 ## Context
 
 `todos/prototyping_todo.md` specifies a two-stage MPS rail, in the Decision Log
 (May 2026, decision *"12V→5V: MP2393 (3A)"*, reason *"MPS family, 3A headroom
-for relay + stage 2, PG output for power sequencing, COT control"*) and again
-in Phase 7, down to
-component values: MP2393 with R1=40.2 kΩ, R2=7.68 kΩ, RT=15 kΩ, L=4.9 µH,
-C_BST=1 µF / R_BST=20 Ω, C_SS=6.8 nF, EN=604 kΩ to VIN, PG→ESP32 GPIO; then
-MP2388 5V→3.3V with R1=75 kΩ, R2=24 kΩ, AAM R3=80.6 kΩ.
+for relay + stage 2, PG output for power sequencing, COT control"*) and again in
+Phase 7, down to component values: MP2393 with R1=40.2 kΩ, R2=7.68 kΩ,
+RT=15 kΩ, L=4.9 µH, C_BST=1 µF / R_BST=20 Ω, C_SS=6.8 nF, EN=604 kΩ to VIN,
+PG→ESP32 GPIO; then MP2388 5V→3.3V with R1=75 kΩ, R2=24 kΩ, AAM R3=80.6 kΩ.
 
-The schematic does not contain that design. Verified against the working tree at
-`hardware/fortunelabs_mainboard_v0/`:
+The schematic does not contain that design, and has not since
+`767e999 feat: adding power management module` (2026-07-29), which carried no
+reasoning in its message and left the specification behind.
+
+Verified against the working tree at `hardware/fortunelabs_mainboard_v0/`, from
+a `kicad-cli sch export netlist` rather than by reading the sheet:
 
 - **No MPS part appears anywhere in the schematic.** A search for `MP2393`,
   `MP2388` and `MP2315` returns zero hits.
 - **U5 is a TPS62162DSG** (TI, WSON-8), the only switching regulator on the
-  board.
-- **L1 is 2.2 µH**, not the 4.9 µH the MP2393 line specifies.
-- Three rails are named: `VIN_12V`, `VDD_5V`, `VDD_3V3`.
-- `ESP32_PG` survives as a net label, so the power-sequencing intent that
-  motivated the MPS choice outlived the part that provided it.
-
-The change landed in `767e999 feat: adding power management module`
-(2026-07-29), carrying no reasoning in its message, and the specification was
-never updated to follow. The result is that Phase 6's power budget and two Risk
-Tracker rows are currently written against parts that are not on the board.
+  board. `U5.2 (VIN)` and `U5.3 (EN)` sit on `+12V`; `U5.7 (SW)` drives L1;
+  `U5.6 (VOS)` sits on `+3V3`.
+- **`VOS` tied to the output is a fixed-output part sensing itself.** There is
+  no feedback divider, so the output voltage is not a value anyone set.
+- **`U5.8 (PG)` drives `ESP32_PG`.** The power-sequencing capability that
+  motivated the original MPS choice survived the part change.
+- `+3V3` carries 39 nodes and supplies every IC: U1 and U4 (ADS1115), U2
+  (MCP23017), U3.2 (ESP32-S3), U6 (DS3232M), U7 (TPL5010), J4 (SD card).
 
 ## Alternatives considered
 
-*Reconstructed. See the note above.*
-
 - **The two-stage MPS pair as specified (MP2393 → MP2388).** 12 V to 5 V at 3 A,
-  then 5 V to 3.3 V. Gives a genuine 5 V rail at current, which the relay coils
-  in Phase 5 are specified to draw from, and a PG output for sequencing. Two
-  switching regulators, two inductors, two feedback networks, and roughly twenty
-  passives to place and verify on a first-ever PCB layout. The Risk Tracker
-  already carried a row doubting whether the second stage's 1 A was enough.
-- **A single TPS62162, 12 V directly to 3.3 V.** One regulator, one inductor,
-  one feedback network. Removes the intermediate 5 V stage and with it the
-  MP2388 headroom risk entirely, rather than measuring it. The cost is that a
-  5 V rail, if still required, must come from somewhere else: the schematic's
-  `VDD_5V` net appears at only two points and this record does not establish
-  what sources it. **Open item, see below.**
-- **A single MPS part (MP2315 or similar) 12 V to 3.3 V.** Would have kept the
-  vendor family the original decision named, with the same single-stage
-  simplification. Whether this was considered is unknown.
+  then 5 V to 3.3 V, with a PG output for sequencing. **Rejected on stock.** The
+  parts could not be sourced. This is a sourcing fact and not a technical one:
+  no measurement or datasheet comparison found the MPS design wanting, and this
+  record does not claim one did.
+- **Another MPS part 12 V to 3.3 V (MP2315 or similar).** Would have kept the
+  vendor family the original decision named. Same sourcing problem.
+- **A single TPS62162, 12 V directly to 3.3 V.** Chosen. Available, and
+  collapsing two stages into one removes an inductor, a feedback network and
+  roughly twenty passives from a first-ever PCB layout. It also retires the
+  MP2388 headroom question by deleting the stage that raised it.
 
 ## Decision
 
-The 3.3 V rail is produced by a single TPS62162DSG (U5) from `VIN_12V`. The
-MP2393 and MP2388 are not fitted and the two-stage architecture is abandoned.
+The 3.3 V rail is produced by a single fixed-output TPS62162DSG (U5) from
+`+12V`. The MP2393 and MP2388 are not fitted and the two-stage architecture is
+abandoned. `PG` remains wired to the ESP32.
 
-**The reason is not on record.** This section states what the board does. It
-does not state why, because that is not recoverable from the artifacts.
+**The board has no 5 V rail, and nothing on it needs one.** Every IC runs from
+`+3V3`. The ULN2803A (U8) has no supply pin at all: it is an open-collector
+Darlington array with `U8.9` to GND and `U8.10 (COM)` brought out to J5, so the
+relay coil supply and its flyback clamp come from the relay board through J5,
+which carries `+12V`. USB-C VBUS (J3.A4/A9/B4/B9) is `no_connect`, so USB
+supplies no power either.
 
 ## What this decision does not claim
 
-It does not claim the TPS62162 was chosen on technical merit over the MPS pair,
-because no comparison is recorded. It does not claim the MPS design was found
-inadequate; the Risk Tracker's doubt about MP2388 headroom was never measured,
-so it was not resolved, it was made moot. It does not claim the part selection
-is final: two open items below have to close before this record can be
-Accepted, and either could change the part.
+It does not claim the TPS62162 is technically superior to the MPS pair. It was
+available and they were not. Recording it as a sourcing decision keeps it from
+being read later as a considered comparison that never happened.
 
-## Open items blocking Accepted status
-
-1. **The rationale.** Supplied by the person who took the decision. Without it
-   this record documents a change, not a decision.
-2. **The output variant and feedback network.** R22 is 14K3, while R21 and R23
-   carry the placeholder value `R` with no resistance assigned. A populated
-   feedback divider implies an adjustable part; a fixed-output TPS62162 would
-   not need one. Which variant U5 is, and what the divider is for, must be read
-   off the datasheet and the schematic rather than inferred here.
-3. **What sources `VDD_5V`.** No part in the BOM is identified as producing it.
-   If the answer is USB-C VBUS (J3), then the 5 V rail exists only while USB is
-   attached, and Phase 5's relay coils, specified to run from a separate 5 V
-   rail, have no supply in field deployment. This is the item most likely to
-   force a change.
+It does not claim the 1 A limit has been shown adequate. The retired Risk
+Tracker row *"MP2388 1A too little for peak WiFi Tx + peripherals"* asked a real
+question of a part that is not fitted. The single-stage design **relocated** that
+question to the TPS62162 rather than answering it, and it stays open against
+Phase 6.
 
 ## Consequences
 
-- **Phase 7's power lines and the Decision Log row are wrong as written** and
-  are corrected in the same commit as this record.
-- **Two Risk Tracker rows become unfalsifiable**: *"MP2388 1A too little for
-  peak WiFi Tx + peripherals"* and *"MP2393 3A enough for the 5V rail"*. Neither
-  part exists. They are replaced, not ticked. The underlying question, whether
-  the 3.3 V rail carries peak WiFi Tx plus peripherals, is still open, now
-  against a 1 A TPS62162.
-- **Phase 6's power budget changes shape.** It was specified as two
-  measurements, a 3.3 V rail and a 5 V rail, with headroom computed against 1 A
-  and 3 A. Against a single-stage rail it is one measurement against 1 A, plus
-  whatever open item 3 turns out to require.
-- **If open item 3 resolves to "USB VBUS only"**, Phase 5 cannot run as written
-  and the relay supply becomes a schematic change before the PCB, not after.
+- **`VDD_5V` is vestigial.** It survives only as a local label on two
+  daughterboard connector pins, left behind when the 5 V stage was removed. It
+  is deleted, not sourced.
+- **Phase 5 changes supply.** It is specified against a 5 V relay coil from a
+  separate 5 V rail. There is no such rail and there is no plan to add one:
+  relays run from `+12V` through J5.
+- **Three daughterboard power nets are electrically dead**, and this record is
+  how they were found. `/VDD_3V3` (J1.23, J2.25), `/VDD_5V` (J1.25, J2.27) and
+  `/VIN_12V` (J1.27, J2.29) each connect two connector pins to each other and to
+  nothing else. The local labels `VDD_*` were never tied to the `+3V3` and
+  `+12V` power symbols that carry the real rails. J1.21 is on real `+3V3` and
+  J5.13/14 on real `+12V`, so the connectors have one working power pin and
+  three dead ones. `VDD_5V` is deleted; the other two are wiring defects and are
+  owed an issue before layout.
+- **ERC cannot see any of this.** `kicad-cli sch erc` reports zero violations
+  today: two passive connector pins on a net is legal. Gate #26 is closeable now
+  and would prove nothing about these nets, which is worth stating in that issue
+  before it is run.
+- **Phase 6's power budget is one measurement, not two.** It was written as a
+  3.3 V rail against 1 A and a 5 V rail against 3 A.
 
 ## What would reopen this
 

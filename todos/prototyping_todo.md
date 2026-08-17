@@ -165,9 +165,11 @@ message. Interrupts work.
 ### 5.1 Hardware
 
 - [ ] Connect MCP23017 GPA outputs to the ULN2803A inputs
-- [ ] ULN2803A output to the relay coil (5V relay, common pin to 5V)
+- [ ] ULN2803A output to the relay coil (**12V relay**, COM to the 12V rail)
 - [ ] Clamp diodes are built into the ULN2803A: verify clean relay switching (no bounce issue)
-- [ ] Power the relay coil from a separate 5V rail, not from the ESP32 3.3V
+- [ ] Power the relay coil from 12V through J5, not from the ESP32 3.3V. **The
+      board has no 5V rail and nothing on it needs one**; U8 has no supply pin,
+      and J5 carries `+12V` plus `COM` for exactly this. See the ADR
 
 ### 5.2 Firmware
 
@@ -203,7 +205,7 @@ V_CE(sat), I_C documented.
 - [ ] Measure total current draw on the 3.3V rail: idle, WiFi Tx, relay active, everything active
 - [ ] Record the peak current during a WiFi Tx burst
 - [ ] Compute whether the TPS62162 (1A max) is enough for the 3.3V rail. Peak > 800 mA raises a risk flag
-- [ ] Measure the 5V rail draw (relay coil) **against whatever is established to source it**. Until `VDD_5V` has an identified source this measurement has no supply to be taken against
+- [ ] Measure the 12V rail draw (relay coils through J5, plus the TPS62162 input). There is no 5V rail to measure
 
 ### 6.3 Documentation
 
@@ -226,8 +228,9 @@ validated. Every measurement documented. Go/no-go decision for the PCB design.
 - [ ] Schematic: TPS62162DSG 12V→3.3V, single stage. Supersedes the two-stage
       MP2393→MP2388 rail and its component values, which are not on the board.
       See [`docs/adr/2026-07-29-power-rail-is-tps62162.md`](../docs/adr/2026-07-29-power-rail-is-tps62162.md)
-- [ ] Establish what sources `VDD_5V`. No BOM line produces it. If the answer is
-      USB-C VBUS, Phase 5's relay supply does not exist in field deployment
+- [ ] Delete the vestigial `VDD_5V` net, and tie `VDD_3V3` and `VIN_12V` on J1/J2
+      to the `+3V3` and `+12V` power symbols. All three are currently dead nets
+      joining two connector pins to each other, and ERC does not see it
 - [ ] Schematic: ESP32-S3, every power pin, strapping pins, crystal, RF matching network
 - [ ] Schematic: I²C bus, 2× ADS1115 + MCP23017 + 2.2 kΩ pull-ups
 - [ ] Schematic: ULN2803A output driver
@@ -286,9 +289,9 @@ See [`docs/sop/git_sop.md`](../docs/sop/git_sop.md).*
 | May 2026 | ESP-IDF, not Arduino | Full FreeRTOS control, OTA, NVS. Production-grade. |
 | May 2026 | Firmware skeleton first | Avoid refactoring; task architecture determines the hardware interface |
 | TBD | ADS1115 data rate | Pick once the sampling requirement of the first use case is known |
-| TBD | Driver init: abort vs degrade | Aborting on a missing I²C device makes Phase 1 untestable bare. Degrading changes boot semantics and needs an ADR |
+| Aug 2026 | Driver init degrades, it does not abort | A missing I²C device logs and skips the dependent task. Aborting made Phase 1 untestable bare, which is the condition the phase is specified against |
 | ~~May 2026~~ | ~~12V→5V: MP2393 (3A)~~ | Superseded 2026-07-29 by the single-stage TPS62162. Neither MPS part is on the board. See the ADR |
-| Jul 2026 | 12V→3.3V: TPS62162DSG, single stage | Reason not on record. Reconstructed in [`docs/adr/2026-07-29-power-rail-is-tps62162.md`](../docs/adr/2026-07-29-power-rail-is-tps62162.md), which stays **Proposed** until the rationale is supplied |
+| Jul 2026 | 12V→3.3V: TPS62162DSG, single stage. No 5V rail | MPS parts could not be sourced. A sourcing decision, not a technical one. Nothing on the board needs 5V: relays run from 12V through J5. [`docs/adr/2026-07-29-power-rail-is-tps62162.md`](../docs/adr/2026-07-29-power-rail-is-tps62162.md) |
 | TBD | 2-layer vs 4-layer PCB | Evaluate after the breadboard. 2-layer is cheaper for early iterations |
 
 ---
@@ -302,7 +305,8 @@ and its failure signature, which is exactly what the `gate` template asks for.*
 | Risk | Severity | Status | Mitigation |
 |---|---|---|---|
 | TPS62162 1A too little for peak WiFi Tx + peripherals | Medium | Open, verify Phase 6 | Power budget measurement against 1A on the single 3.3V rail. The retired MP2388 row asked this of a part that is not fitted; the single-stage design relocated the risk rather than removing it |
-| `VDD_5V` has no identified source | High | Open, settles Phase 7 | No BOM line produces it. If it is USB-C VBUS only, Phase 5's relay coils have no field supply and the schematic changes before the PCB |
+| Three daughterboard power nets are electrically dead | High | Open, settles Phase 7 | `/VDD_3V3`, `/VDD_5V` and `/VIN_12V` connect two connector pins to each other and nothing else: the `VDD_*` local labels were never tied to the `+3V3` and `+12V` power symbols. ERC reports zero violations and cannot see it. Delete `VDD_5V`, tie the other two to the real rails |
+| R21 and R23 have no resistance assigned | Low | Open, settles Phase 7 | Both sit `+3V3` to `ESP32_EN` as parallel pull-ups with the placeholder value `R`. A BOM hole, caught only by reading the netlist |
 | ULN2803A 3.3V drive sits at the lower bound of V_I(on) | Low | Open, verify Phase 5 | Bench measure. Fallback: TPIC6B595 shift register driver |
 | I²C bus capacitance >200pF | Low | Open, verify Phase 2 | Compute trace length. Fallback: drop to 100 kHz |
 | Board carries subsystems no phase plans and no firmware drives | Medium | Open, settles Phase 7 | DS3232M, TPL5010, SD card, USB-C and the second ADS1115 are on the schematic, absent from Phases 1-6, and have no driver. Either they enter the phase plan or they are not populated on the first spin |
