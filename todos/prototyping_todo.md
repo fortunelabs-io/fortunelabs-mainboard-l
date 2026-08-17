@@ -202,9 +202,8 @@ V_CE(sat), I_C documented.
 
 - [ ] Measure total current draw on the 3.3V rail: idle, WiFi Tx, relay active, everything active
 - [ ] Record the peak current during a WiFi Tx burst
-- [ ] Compute whether the MP2388 (1A max) is enough for the 3.3V rail. Peak > 800 mA raises a risk flag
-- [ ] Measure total current draw on the 5V rail (relay coil + MP2388 input)
-- [ ] Compute the MP2393 (3A max) headroom for the total 5V load. Should be fine, verify anyway
+- [ ] Compute whether the TPS62162 (1A max) is enough for the 3.3V rail. Peak > 800 mA raises a risk flag
+- [ ] Measure the 5V rail draw (relay coil) **against whatever is established to source it**. Until `VDD_5V` has an identified source this measurement has no supply to be taken against
 
 ### 6.3 Documentation
 
@@ -224,11 +223,17 @@ validated. Every measurement documented. Go/no-go decision for the PCB design.
 
 - [ ] Pick an EDA tool (KiCad 8 recommended: free, open source, 4-layer capable)
 - [ ] Schematic: input protection block (AO3401A + Zener + TVS + Polyfuse)
-- [ ] Schematic: MP2393 12V→5V/3A (R1=40.2kΩ, R2=7.68kΩ, RT=15kΩ, L=4.9µH, C_BST=1µF/R_BST=20Ω, C_SS=6.8nF, EN=604kΩ to VIN, PG→ESP32 GPIO for power sequencing)
-- [ ] Schematic: MP2388 #2 5V→3.3V (R1=75kΩ, R2=24kΩ, AAM R3=80.6kΩ, layout per the datasheet typical application)
+- [ ] Schematic: TPS62162DSG 12V→3.3V, single stage. Supersedes the two-stage
+      MP2393→MP2388 rail and its component values, which are not on the board.
+      See [`docs/adr/2026-07-29-power-rail-is-tps62162.md`](../docs/adr/2026-07-29-power-rail-is-tps62162.md)
+- [ ] Establish what sources `VDD_5V`. No BOM line produces it. If the answer is
+      USB-C VBUS, Phase 5's relay supply does not exist in field deployment
 - [ ] Schematic: ESP32-S3, every power pin, strapping pins, crystal, RF matching network
-- [ ] Schematic: I²C bus, ADS1115 + MCP23017 + 2.2 kΩ pull-ups
+- [ ] Schematic: I²C bus, 2× ADS1115 + MCP23017 + 2.2 kΩ pull-ups
 - [ ] Schematic: ULN2803A output driver
+- [ ] Schematic: DS3232M RTC + CR2032 backup cell
+- [ ] Schematic: TPL5010 watchdog timer (`ESP32_WDT_DONE`)
+- [ ] Schematic: USB-C receptacle, CC pull-downs, and the SD card interface
 - [ ] Schematic: daughter board connector (define the standard pinout)
 - [ ] Schematic: decoupling cap placement per IC
 - [ ] ERC (Electrical Rule Check): zero errors
@@ -282,7 +287,8 @@ See [`docs/sop/git_sop.md`](../docs/sop/git_sop.md).*
 | May 2026 | Firmware skeleton first | Avoid refactoring; task architecture determines the hardware interface |
 | TBD | ADS1115 data rate | Pick once the sampling requirement of the first use case is known |
 | TBD | Driver init: abort vs degrade | Aborting on a missing I²C device makes Phase 1 untestable bare. Degrading changes boot semantics and needs an ADR |
-| May 2026 | 12V→5V: MP2393 (3A) | MPS family, 3A headroom for relay + stage 2, PG output for power sequencing, COT control |
+| ~~May 2026~~ | ~~12V→5V: MP2393 (3A)~~ | Superseded 2026-07-29 by the single-stage TPS62162. Neither MPS part is on the board. See the ADR |
+| Jul 2026 | 12V→3.3V: TPS62162DSG, single stage | Reason not on record. Reconstructed in [`docs/adr/2026-07-29-power-rail-is-tps62162.md`](../docs/adr/2026-07-29-power-rail-is-tps62162.md), which stays **Proposed** until the rationale is supplied |
 | TBD | 2-layer vs 4-layer PCB | Evaluate after the breadboard. 2-layer is cheaper for early iterations |
 
 ---
@@ -295,10 +301,11 @@ and its failure signature, which is exactly what the `gate` template asks for.*
 
 | Risk | Severity | Status | Mitigation |
 |---|---|---|---|
-| MP2388 1A too little for peak WiFi Tx + peripherals | Medium | Open, verify Phase 6 | Power budget measurement. Fallback: MP2315 (3A) |
+| TPS62162 1A too little for peak WiFi Tx + peripherals | Medium | Open, verify Phase 6 | Power budget measurement against 1A on the single 3.3V rail. The retired MP2388 row asked this of a part that is not fitted; the single-stage design relocated the risk rather than removing it |
+| `VDD_5V` has no identified source | High | Open, settles Phase 7 | No BOM line produces it. If it is USB-C VBUS only, Phase 5's relay coils have no field supply and the schematic changes before the PCB |
 | ULN2803A 3.3V drive sits at the lower bound of V_I(on) | Low | Open, verify Phase 5 | Bench measure. Fallback: TPIC6B595 shift register driver |
 | I²C bus capacitance >200pF | Low | Open, verify Phase 2 | Compute trace length. Fallback: drop to 100 kHz |
-| MP2393 3A enough for the 5V rail (relay + MP2388 input) | Low | Open, verify Phase 6 | Large 3A headroom against ~1.1A estimated load |
+| Board carries subsystems no phase plans and no firmware drives | Medium | Open, settles Phase 7 | DS3232M, TPL5010, SD card, USB-C and the second ADS1115 are on the schematic, absent from Phases 1-6, and have no driver. Either they enter the phase plan or they are not populated on the first spin |
 | Boot aborts without the I²C peripherals fitted | High | Open, settles Phase 1 | `ESP_ERROR_CHECK` on ADS1115 and SSD1306 init panics and reboots on a bare board, so the Phase 1 gates cannot run. Fallback: degrade on init failure and skip the dependent task |
 | First hardware project, steep learning curve | High | Active | Fail cheap: breadboard first, PCB later |
 

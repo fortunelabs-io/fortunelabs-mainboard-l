@@ -36,6 +36,10 @@ new file naming what survives and what changes. See
 - [`2026-07-21-ic-driver-inner-vtable.md`](./2026-07-21-ic-driver-inner-vtable.md)
   keeps IC drivers on an internal vtable. Supersedes the removed
   `firmware/gold_standard.md` Decision #1, which mandated the opposite.
+- [`2026-07-29-power-rail-is-tps62162.md`](./2026-07-29-power-rail-is-tps62162.md)
+  records the single-stage TPS62162 3.3 V rail that replaced the two-stage
+  MP2393→MP2388 pair. **Proposed**, not Accepted: the decision is reconstructed
+  from the schematic and its rationale is not on record.
 
 ## Owed
 
