@@ -35,7 +35,11 @@ esp_err_t i2c_bus_init(i2c_bus_t *bus, const i2c_bus_config_t *cfg) {
         .scl_io_num                   = cfg->scl_pin,
         .sda_io_num                   = cfg->sda_pin,
         .glitch_ignore_cnt            = 7,
-        .flags.enable_internal_pullup = true, // ! True if doesnt have resistor
+        // False because the board fits 2.2 kOhm external pull-ups to 3.3 V.
+        // The ESP32 internals are roughly 45 kOhm and would sit in parallel,
+        // moving the rise time away from what the externals were sized for.
+        // Set this true only on a board with no pull-ups fitted.
+        .flags.enable_internal_pullup = false,
     };
 
     esp_err_t ret = i2c_new_master_bus(&bus_cfg, &bus->bus_handle);
@@ -182,7 +186,9 @@ static esp_err_t _i2c_bus_recover_locked(i2c_bus_t *bus) {
         .scl_io_num                   = bus->scl_pin,
         .sda_io_num                   = bus->sda_pin,
         .glitch_ignore_cnt            = 7,
-        .flags.enable_internal_pullup = true,
+        // Must match the value used in i2c_bus_init(); a recovered bus is the
+        // same bus. See the reasoning there.
+        .flags.enable_internal_pullup = false,
     };
 
     esp_err_t ret = i2c_new_master_bus(&bus_cfg, &bus->bus_handle);
