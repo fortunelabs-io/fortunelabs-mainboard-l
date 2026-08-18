@@ -4,3 +4,4 @@ sdkconfig.old
 .pio/
 .claude/
 CLAUDE.md
+mise.local.toml
