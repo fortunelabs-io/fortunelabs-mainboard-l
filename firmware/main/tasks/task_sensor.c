@@ -15,10 +15,7 @@
 #define SENSOR_PERIOD_MS 200
 #define VOLTAGE_THRESHOLD 2.5f
 
-static const char *TAG                       = "task_sensor";
-static float       s_latest_hardware_voltage = 0.0f;
-
-float task_sensor_get_latest_voltage(void) { return s_latest_hardware_voltage; }
+static const char *TAG = "task_sensor";
 
 void task_sensor(void *pvParameters) {
     ESP_LOGI(TAG, "Sensor task started.");
@@ -36,17 +33,21 @@ void task_sensor(void *pvParameters) {
     while (1) {
         // 1. Read data through the injected HAL contract, not a named driver
         if (drv->read(&reading) == ESP_OK) {
-            float current_volt        = reading.value;
-            s_latest_hardware_voltage = current_volt;
-            bool current_led_state    = (current_volt > VOLTAGE_THRESHOLD);
+            float current_volt      = reading.value;
+            bool  current_led_state = (current_volt > VOLTAGE_THRESHOLD);
 
-            // 2. Send voltage reading to display task via queue (row 0)
+            // 2. Publish the sample for consumers that want the current value
+            // (telemetry). Overwrite rather than send: the mailbox is depth 1
+            // and a reader wants the newest sample, not a queued older one.
+            xQueueOverwrite(g_queue_comm, &reading);
+
+            // 3. Send voltage reading to display task via queue (row 0)
             display_msg_t msg_volt;
             msg_volt.row = 0;
             snprintf(msg_volt.text, sizeof(msg_volt.text), "VOLT: %.2f V", current_volt);
             xQueueSend(g_queue_display, &msg_volt, 0);
 
-            // 3. Evaluate threshold & send status to actuator + display queue (row 1)
+            // 4. Evaluate threshold & send status to actuator + display queue (row 1)
             if (current_led_state != last_led_state) {
                 last_led_state = current_led_state;
 

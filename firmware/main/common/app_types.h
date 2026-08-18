@@ -30,6 +30,13 @@ typedef struct {
 extern QueueHandle_t g_queue_display;
 extern QueueHandle_t g_queue_actuator;
 
+/* Latest sensor sample, for consumers that want the current value rather
+ * than every value: depth 1, written with xQueueOverwrite by task_sensor and
+ * read with xQueuePeek by telemetry. A slow reader sees the newest sample
+ * instead of a backlog, and the sample stays readable after a peek.
+ */
+extern QueueHandle_t g_queue_comm;
+
 #ifdef __cplusplus
 }
 #endif

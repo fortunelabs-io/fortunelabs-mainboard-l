@@ -6,6 +6,7 @@
  */
 
 #include "network/network_manager.h"
+#include "common/app_types.h"
 #include "esp_event.h"
 #include "esp_log.h"
 #include "esp_netif.h"
@@ -18,9 +19,6 @@
 #include <string.h>
 
 static const char *TAG = "network_manager";
-
-// External dependency: live sensor value, owned by the sensor task.
-extern float task_sensor_get_latest_voltage(void);
 
 // Inbound-command callback, registered by the transport adapter. When set,
 // command payloads are forwarded here rather than interpreted locally.
@@ -139,9 +137,10 @@ static void mqtt_event_handler(void *arg, esp_event_base_t base, int32_t event_i
 /**
  * @brief Periodic telemetry publish task.
  *
- * Every 5 seconds, if MQTT is connected, reads the latest sensor voltage
- * and publishes it as a JSON payload to the telemetry topic. Skips the
- * publish (without error) when MQTT is not yet connected.
+ * Every 5 seconds, if MQTT is connected, peeks the newest sample from
+ * g_queue_comm and publishes it as a JSON payload to the telemetry topic.
+ * Skips the publish (without error) when MQTT is not yet connected, or
+ * when the sensor task has not produced a sample yet.
  *
  * @param pvParameters  Unused, required by the FreeRTOS task signature
  *
@@ -161,13 +160,21 @@ static void task_network_telemetry(void *pvParameters) {
         xSemaphoreGive(s_status_mutex);
 
         if (ready) {
-            // Read the current sensor voltage from the sensor task
-            float live_voltage = task_sensor_get_latest_voltage();
+            // Take the newest sensor sample from the mailbox. Peek, not
+            // receive: the sample is shared state that stays valid until the
+            // sensor task overwrites it, and consuming it would deny it to
+            // any future reader.
+            sensor_reading_t reading;
+            if (xQueuePeek(g_queue_comm, &reading, 0) != pdTRUE) {
+                ESP_LOGD(TAG, "No sensor sample available yet, skipping telemetry publish...");
+                vTaskDelay(pdMS_TO_TICKS(5000));
+                continue;
+            }
 
             // JSON payload shape: {"seq":"1","sensor_v":2.34,"status":"OK"}
             snprintf(payload, sizeof(payload),
                      "{\"seq\":\"%lu\",\"sensor_v\":%.2f,\"status\":\"OK\"}", tx_count++,
-                     live_voltage);
+                     reading.value);
 
             int msg_id =
                 esp_mqtt_client_publish(s_mqtt_client, s_topic_telemetry, payload, 0, 1, 0);

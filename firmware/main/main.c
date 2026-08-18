@@ -71,6 +71,7 @@ static const char *TEST_TAG = "ota_trigger";
  */
 QueueHandle_t    g_queue_display;
 QueueHandle_t    g_queue_actuator;
+QueueHandle_t    g_queue_comm;
 static i2c_bus_t g_i2c_bus;
 
 // Topic the remote log sink publishes to. Built once in app_main from the
@@ -239,7 +240,12 @@ void app_main(void) {
         xQueueCreate(10, sizeof(display_msg_t)); // using struct for display messages (row + text)
     g_queue_actuator = xQueueCreate(5, sizeof(bool)); // using bool for simple ON/OFF control
 
-    if (g_queue_display == NULL || g_queue_actuator == NULL) {
+    // Depth 1: this is a latest-value mailbox, not a stream. task_sensor
+    // overwrites it every sample and telemetry peeks it every 5 s, so a
+    // deeper queue would only let telemetry fall behind the board.
+    g_queue_comm = xQueueCreate(1, sizeof(sensor_reading_t));
+
+    if (g_queue_display == NULL || g_queue_actuator == NULL || g_queue_comm == NULL) {
         ESP_LOGE(TAG, "Queue creation failed!");
         esp_restart();
     }
