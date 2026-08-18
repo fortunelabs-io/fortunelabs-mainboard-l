@@ -53,6 +53,10 @@ static esp_err_t _ssd1306_send_cmd(uint8_t cmd) {
     return i2c_bus_write(s_i2c_bus, s_dev_handle, buf, sizeof(buf));
 }
 
+// Forward declaration: init clears the panel before returning, and the
+// implementation is defined below it. Documented at its definition.
+static esp_err_t ssd1306_clear_hw(void);
+
 static esp_err_t ssd1306_init_hw(const display_config_t *cfg) {
     if (cfg == NULL || cfg->bus == NULL) {
         return ESP_ERR_INVALID_ARG;
@@ -98,8 +102,9 @@ static esp_err_t ssd1306_init_hw(const display_config_t *cfg) {
     s_is_initialized = true;
     ESP_LOGI(TAG, "SSD1306 physical OLED initialized successfully");
 
-    // Clear screen
-    return ssd1306_driver.clear();
+    // Clear screen. Call the implementation directly: the inner vtable
+    // exists for callers, not for the driver to reach itself through.
+    return ssd1306_clear_hw();
 }
 
 static esp_err_t ssd1306_clear_hw(void) {
