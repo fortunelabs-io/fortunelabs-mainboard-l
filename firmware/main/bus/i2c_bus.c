@@ -267,7 +267,7 @@ esp_err_t i2c_bus_read(i2c_bus_t *bus, i2c_master_dev_handle_t dev, uint8_t *buf
         return ESP_ERR_TIMEOUT;
     }
 
-    esp_err_t ret = i2c_master_transmit(dev, buf, len, I2C_BUS_TIMEOUT_MS);
+    esp_err_t ret = i2c_master_receive(dev, buf, len, I2C_BUS_TIMEOUT_MS);
 
     if (ret == ESP_ERR_TIMEOUT) {
         bus->error_count++;
@@ -276,7 +276,7 @@ esp_err_t i2c_bus_read(i2c_bus_t *bus, i2c_master_dev_handle_t dev, uint8_t *buf
 
         if (_i2c_bus_recover_locked(bus) == ESP_OK) {
             for (int attempt = 0; attempt < I2C_BUS_RECOVERY_RETRY && ret != ESP_OK; attempt++) {
-                ret = i2c_master_transmit(dev, buf, len, I2C_BUS_TIMEOUT_MS);
+                ret = i2c_master_receive(dev, buf, len, I2C_BUS_TIMEOUT_MS);
             }
         }
     }
