@@ -22,6 +22,19 @@
 extern "C" {
 #endif
 
+/* --------------------------- CAPACITY ----------------------------*/
+/**
+ * @brief Maximum characters one row of text may carry through this contract,
+ *        excluding the null terminator.
+ *
+ * A capability of the interface, not a property of any panel. Callers may
+ * send up to this many characters; an implementation renders as many as its
+ * own geometry allows and truncates the rest. A concrete driver derives its
+ * real width from display_config_t::width, never from this value, so a
+ * narrower or wider display needs no change here.
+ */
+#define DISPLAY_TEXT_MAX_LEN 32
+
 /* --------------------------- CONFIG STRUCT ----------------------------*/
 /**
  * @brief Configuration structure for initializing a display driver instance.

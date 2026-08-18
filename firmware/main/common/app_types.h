@@ -13,6 +13,7 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
+#include "hal/display_driver.h"
 #include "hal/sensor_driver.h"
 
 #ifdef __cplusplus
@@ -20,7 +21,9 @@ extern "C" {
 #endif
 typedef struct {
     uint8_t row;
-    char    text[17]; // 16 characters + 1 null terminator for SSD1306
+    // Capacity comes from the display contract, not from a panel. See
+    // DISPLAY_TEXT_MAX_LEN in hal/display_driver.h.
+    char text[DISPLAY_TEXT_MAX_LEN + 1]; // + null terminator
 } display_msg_t;
 
 /* Queue handles, created in main.c */
