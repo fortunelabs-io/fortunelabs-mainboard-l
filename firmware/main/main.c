@@ -52,6 +52,11 @@
 
 // TODO: Comparison test between monolith OTA with stepped OTA
 
+// How long ota_test_task waits for the network before giving up, and how
+// often it re-checks while waiting.
+#define OTA_NETWORK_WAIT_MS 30000
+#define OTA_NETWORK_POLL_MS 500
+
 // I2c Bus Configuration
 #define MAIN_I2C_SDA_PIN 18
 #define MAIN_I2C_SCL_PIN 19
@@ -78,7 +83,16 @@ static task_display_ctx_t  g_task_display_ctx;
 // in tasks/ (task_sensor.h, task_actuator.h, task_display.h).
 
 /**
- * @brief Temporary R&D task: triggers OTA update 10s after boot.
+ * @brief Temporary R&D task: triggers an OTA update once the network is up.
+ *
+ * Settles for 10 s after boot, then waits up to OTA_NETWORK_WAIT_MS for the
+ * network manager to report a connection before attempting the update.
+ * Deletes itself either way.
+ *
+ * @param pvParameters  Unused, required by the FreeRTOS task signature
+ *
+ * @return void (deletes its own task; never returns to the caller)
+ *
  * @note Remove before production deployment.
  */
 void ota_test_task(void *pvParameters) {
@@ -86,6 +100,23 @@ void ota_test_task(void *pvParameters) {
     vTaskDelay(pdMS_TO_TICKS(10000)); // Delay to allow system to stabilize
 
     ESP_LOGI(TEST_TAG, "Waiting for network connection before starting OTA");
+
+    // Poll rather than assume. The wait is bounded so a network that never
+    // comes up ends as a logged failure rather than a task parked forever.
+    int waited_ms = 0;
+    while (!network_manager_is_connected() && waited_ms < OTA_NETWORK_WAIT_MS) {
+        vTaskDelay(pdMS_TO_TICKS(OTA_NETWORK_POLL_MS));
+        waited_ms += OTA_NETWORK_POLL_MS;
+    }
+
+    if (!network_manager_is_connected()) {
+        ESP_LOGE(TEST_TAG, "Network did not come up within %d ms. Skipping OTA.",
+                 OTA_NETWORK_WAIT_MS);
+        vTaskDelete(NULL);
+        return;
+    }
+
+    ESP_LOGI(TEST_TAG, "Network up after %d ms, starting OTA", waited_ms);
 
     system_ota_config_t ota_cfg = {
         .url               = "https://192.168.18.207:8443/firmware.bin",
