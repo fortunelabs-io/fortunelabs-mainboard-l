@@ -26,7 +26,6 @@ typedef struct {
 /* Queue handles, created in main.c */
 extern QueueHandle_t g_queue_display;
 extern QueueHandle_t g_queue_actuator;
-extern QueueHandle_t g_queue_comm;
 
 #ifdef __cplusplus
 }
