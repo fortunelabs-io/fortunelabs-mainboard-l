@@ -115,11 +115,11 @@ void ota_test_task(void *pvParameters) {
  */
 static void app_transport_command(const char *topic, const uint8_t *data, size_t data_len) {
     (void)topic;
-    if (strncmp((const char *)data, "ON", data_len) == 0) {
+    if (data_len == 2 && strncmp((const char *)data, "ON", 2) == 0) {
         bool state = true;
         xQueueSend(g_queue_actuator, &state, 0);
         ESP_LOGI(TAG, "Remote control action: turned actuator ON");
-    } else if (strncmp((const char *)data, "OFF", data_len) == 0) {
+    } else if (data_len == 3 && strncmp((const char *)data, "OFF", 3) == 0) {
         bool state = false;
         xQueueSend(g_queue_actuator, &state, 0);
         ESP_LOGI(TAG, "Remote control action: turned actuator OFF");
