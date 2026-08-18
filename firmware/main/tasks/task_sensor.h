@@ -31,12 +31,6 @@ typedef struct {
  */
 void task_sensor(void *pvParameters);
 
-/**
- * @brief Latest voltage sample observed by task_sensor, for other
- *        tasks or diagnostics that need a non-blocking read.
- */
-float task_sensor_get_latest_voltage(void);
-
 #ifdef __cplusplus
 }
 #endif
