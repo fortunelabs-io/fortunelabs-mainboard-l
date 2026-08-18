@@ -68,6 +68,10 @@ QueueHandle_t    g_queue_display;
 QueueHandle_t    g_queue_actuator;
 static i2c_bus_t g_i2c_bus;
 
+// Topic the remote log sink publishes to. Built once in app_main from the
+// device id, matching the topic shape network_manager uses for its own.
+static char s_topic_log[64];
+
 // Task context instances, passed via xTaskCreate's pvParameters. Static
 // because the task reads through this pointer for its entire lifetime.
 static task_sensor_ctx_t   g_task_sensor_ctx;
@@ -104,6 +108,27 @@ void ota_test_task(void *pvParameters) {
 
     // Cleanup and delete task after OTA attempt
     vTaskDelete(NULL);
+}
+
+/**
+ * @brief Remote log sink: forwards one formatted log line to the broker.
+ *
+ * Registered with system_log_register_sink() once the transport is up, and
+ * called from task_log_forwarder rather than from the logging task, so a
+ * slow or failed publish never stalls a caller of ESP_LOGx. Drops the line
+ * when the broker is not connected: serial output is unaffected either way,
+ * and a dropped remote line is preferable to blocking the forwarder.
+ *
+ * @param line  Formatted log line, not null-terminated by contract
+ * @param len   Length of line in bytes
+ *
+ * @return void
+ */
+static void app_log_sink(const char *line, size_t len) {
+    if (!network_manager_is_connected())
+        return;
+
+    (void)network_manager_publish(s_topic_log, line, len);
 }
 
 /**
@@ -256,6 +281,13 @@ void app_main(void) {
         .extra      = &transport_extra,
     };
     ESP_ERROR_CHECK(transport_mqtt_driver.init(&transport_cfg));
+
+    // Connect the remote half of the logging facade. Until this call the
+    // sink queue, the forwarder task and the vprintf hook all run with
+    // nowhere to deliver to, and every log line reaches serial only.
+    snprintf(s_topic_log, sizeof(s_topic_log), "fortunelabs/device/%s/log", sys_cfg.device_id);
+    ESP_ERROR_CHECK(system_log_register_sink(app_log_sink));
+    ESP_LOGI(TAG, "Remote log sink publishing to %s", s_topic_log);
 
     /* [9] System Supervisor -------------------------------------------------- */
     system_supervisor_config_t supervisor_cfg = {
