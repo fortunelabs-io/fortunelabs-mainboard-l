@@ -7869,7 +7869,7 @@
 		)
 		(uuid e9b8daaa-49ab-41c4-a55b-2c947cd86582)
 	)
-	(text "R33-R40\n470"
+	(text "R909-R916\n470"
 		(exclude_from_sim no)
 		(at 120.65 231.14 0)
 		(effects
@@ -7984,7 +7984,7 @@
 		)
 		(uuid "93df3a68-d53d-4f3e-bb9a-8ffb1b7e334f")
 	)
-	(text "R25-R32\nDNP"
+	(text "R901-R908\nDNP"
 		(exclude_from_sim no)
 		(at 37.084 232.156 0)
 		(effects
@@ -13476,7 +13476,7 @@
 		(uuid "ff5c2280-b7ca-4667-9a35-2f88e9167a79")
 	)
 	(image
-		(at 366.9122 262.0968)
+		(at 361.8322 260.8268)
 		(scale 0.237532)
 		(uuid "4485a055-0ec4-45de-9ab7-410fc788c8b3")
 		(data "iVBORw0KGgoAAAANSUhEUgAAA4MAAABjCAYAAAAhO9XlAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz"
@@ -15200,8 +15200,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0420219e-6845-4513-814d-1b2f5b397df3")
-		(property "Reference" "C17"
-			(at 89.662 175.514 90)
+		(property "Reference" "C501"
+			(at 90.424 175.514 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15252,7 +15252,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C17")
+					(reference "C501")
 					(unit 1)
 				)
 			)
@@ -15332,8 +15332,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "05245583-c118-4197-a18c-9b30bdb4964b")
-		(property "Reference" "C2"
-			(at 324.612 59.69 0)
+		(property "Reference" "C802"
+			(at 322.326 59.436 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15386,7 +15386,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C2")
+					(reference "C802")
 					(unit 1)
 				)
 			)
@@ -15536,8 +15536,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0b266fed-5180-4bb1-8538-1296c50d2c32")
-		(property "Reference" "C1"
-			(at 350.774 25.908 90)
+		(property "Reference" "C801"
+			(at 352.298 25.908 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15588,7 +15588,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C1")
+					(reference "C801")
 					(unit 1)
 				)
 			)
@@ -15603,8 +15603,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0e7ce089-6fca-46bc-8c52-63f9d13e99bf")
-		(property "Reference" "C4"
-			(at 338.328 59.69 0)
+		(property "Reference" "C804"
+			(at 336.55 59.69 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15657,7 +15657,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C4")
+					(reference "C804")
 					(unit 1)
 				)
 			)
@@ -15672,7 +15672,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "110800b4-ada3-4744-a8ab-2724b99b7460")
-		(property "Reference" "C21"
+		(property "Reference" "C601"
 			(at 334.01 198.12 90)
 			(effects
 				(font
@@ -15726,7 +15726,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C21")
+					(reference "C601")
 					(unit 1)
 				)
 			)
@@ -15914,7 +15914,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "163f42ac-8efa-4219-a1ce-be480ce254f6")
-		(property "Reference" "R34"
+		(property "Reference" "R910"
 			(at 112.522 218.694 0)
 			(effects
 				(font
@@ -15970,7 +15970,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R34")
+					(reference "R910")
 					(unit 1)
 				)
 			)
@@ -15985,7 +15985,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1785d2d5-1d18-4dac-b405-39de994201ca")
-		(property "Reference" "R33"
+		(property "Reference" "R909"
 			(at 107.188 218.694 0)
 			(effects
 				(font
@@ -16041,7 +16041,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R33")
+					(reference "R909")
 					(unit 1)
 				)
 			)
@@ -16189,7 +16189,7 @@
 		(on_board yes)
 		(dnp yes)
 		(uuid "19526e62-6ea9-405b-a0bf-866b2dde2ec2")
-		(property "Reference" "R32"
+		(property "Reference" "R908"
 			(at 63.5 269.24 90)
 			(effects
 				(font
@@ -16243,7 +16243,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R32")
+					(reference "R908")
 					(unit 1)
 				)
 			)
@@ -16389,7 +16389,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1c145e54-27b5-46e5-a428-8923b1761d68")
-		(property "Reference" "C9"
+		(property "Reference" "C808"
 			(at 336.55 110.49 0)
 			(effects
 				(font
@@ -16443,7 +16443,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C9")
+					(reference "C808")
 					(unit 1)
 				)
 			)
@@ -16538,7 +16538,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1f54e9d5-a0e7-4b26-bac0-cd84699cf9b1")
-		(property "Reference" "C8"
+		(property "Reference" "C807"
 			(at 330.2 110.49 0)
 			(effects
 				(font
@@ -16592,7 +16592,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C8")
+					(reference "C807")
 					(unit 1)
 				)
 			)
@@ -16677,7 +16677,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "270b78f3-63c7-499e-b690-cd6237d76f92")
-		(property "Reference" "C10"
+		(property "Reference" "C809"
 			(at 342.646 110.49 0)
 			(effects
 				(font
@@ -16731,7 +16731,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C10")
+					(reference "C809")
 					(unit 1)
 				)
 			)
@@ -16747,7 +16747,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2a35ae89-97c3-412e-965d-fcda6cba7d35")
-		(property "Reference" "C15"
+		(property "Reference" "C401"
 			(at 111.76 97.79 90)
 			(effects
 				(font
@@ -16799,7 +16799,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C15")
+					(reference "C401")
 					(unit 1)
 				)
 			)
@@ -16895,8 +16895,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2bede218-5909-43a9-9ffc-db8e562b3da5")
-		(property "Reference" "R23"
-			(at 72.136 109.474 0)
+		(property "Reference" "R401"
+			(at 70.358 108.204 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16950,7 +16950,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R23")
+					(reference "R401")
 					(unit 1)
 				)
 			)
@@ -16965,7 +16965,7 @@
 		(on_board yes)
 		(dnp yes)
 		(uuid "2c8321c5-8aa3-44d6-b334-937540999c5d")
-		(property "Reference" "R30"
+		(property "Reference" "R906"
 			(at 63.5 264.16 90)
 			(effects
 				(font
@@ -17019,7 +17019,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R30")
+					(reference "R906")
 					(unit 1)
 				)
 			)
@@ -17034,7 +17034,7 @@
 		(on_board yes)
 		(dnp yes)
 		(uuid "2df166ab-6a36-4335-a285-c3451964830e")
-		(property "Reference" "R28"
+		(property "Reference" "R904"
 			(at 63.5 259.08 90)
 			(effects
 				(font
@@ -17088,7 +17088,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R28")
+					(reference "R904")
 					(unit 1)
 				)
 			)
@@ -17171,7 +17171,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "329f81a3-45b4-4af7-8ea0-6f8c03ba49fc")
-		(property "Reference" "R35"
+		(property "Reference" "R911"
 			(at 117.856 218.694 0)
 			(effects
 				(font
@@ -17227,7 +17227,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R35")
+					(reference "R911")
 					(unit 1)
 				)
 			)
@@ -17242,7 +17242,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "32c93ec9-e715-4a27-9b6a-14eb1908d3ac")
-		(property "Reference" "R37"
+		(property "Reference" "R913"
 			(at 128.27 218.694 0)
 			(effects
 				(font
@@ -17298,7 +17298,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R37")
+					(reference "R913")
 					(unit 1)
 				)
 			)
@@ -17313,8 +17313,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "33195932-f095-4dce-beec-0653e13a8543")
-		(property "Reference" "R12"
-			(at 317.246 100.584 90)
+		(property "Reference" "R809"
+			(at 319.024 100.584 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17322,7 +17322,7 @@
 			)
 		)
 		(property "Value" "100"
-			(at 321.818 100.584 90)
+			(at 323.596 100.584 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17365,7 +17365,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R12")
+					(reference "R809")
 					(unit 1)
 				)
 			)
@@ -17912,7 +17912,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "37c2a3c9-ff17-4bb8-b71c-9f3646442834")
-		(property "Reference" "C12"
+		(property "Reference" "C101"
 			(at 68.58 44.8309 0)
 			(effects
 				(font
@@ -17966,7 +17966,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C12")
+					(reference "C101")
 					(unit 1)
 				)
 			)
@@ -17981,7 +17981,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "39799b0b-27c6-4d93-8ace-cf5c1c8515ef")
-		(property "Reference" "R9"
+		(property "Reference" "R702"
 			(at 183.896 26.416 0)
 			(effects
 				(font
@@ -18035,7 +18035,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R9")
+					(reference "R702")
 					(unit 1)
 				)
 			)
@@ -18050,8 +18050,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3bb3df38-c927-4d4f-8e42-48263feb1f7d")
-		(property "Reference" "R21"
-			(at 374.396 210.312 0)
+		(property "Reference" "R601"
+			(at 374.396 211.074 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18104,7 +18104,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R21")
+					(reference "R601")
 					(unit 1)
 				)
 			)
@@ -18119,8 +18119,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3f075566-aa27-40ec-a81a-8d5b116c8078")
-		(property "Reference" "R11"
-			(at 317.246 98.044 90)
+		(property "Reference" "R808"
+			(at 319.024 98.044 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18128,7 +18128,7 @@
 			)
 		)
 		(property "Value" "100"
-			(at 321.818 98.044 90)
+			(at 323.596 98.044 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18171,7 +18171,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R11")
+					(reference "R808")
 					(unit 1)
 				)
 			)
@@ -18254,7 +18254,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "43c98738-bccb-4dae-a2b1-247214dad921")
-		(property "Reference" "C18"
+		(property "Reference" "C201"
 			(at 195.58 147.3199 0)
 			(effects
 				(font
@@ -18308,7 +18308,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C18")
+					(reference "C201")
 					(unit 1)
 				)
 			)
@@ -18559,7 +18559,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "4fa1a133-0c46-49ef-9aec-f29aa4ae7f8f")
-		(property "Reference" "R20"
+		(property "Reference" "R501"
 			(at 100.33 192.024 90)
 			(effects
 				(font
@@ -18611,7 +18611,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R20")
+					(reference "R501")
 					(unit 1)
 				)
 			)
@@ -18626,8 +18626,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "50b66cdf-71d5-4e95-827c-738a15bef98b")
-		(property "Reference" "C3"
-			(at 331.978 59.69 0)
+		(property "Reference" "C803"
+			(at 330.2 59.69 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18680,7 +18680,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C3")
+					(reference "C803")
 					(unit 1)
 				)
 			)
@@ -18695,7 +18695,7 @@
 		(on_board yes)
 		(dnp yes)
 		(uuid "57d8705c-d606-4760-9fcc-93c287a546b0")
-		(property "Reference" "R31"
+		(property "Reference" "R907"
 			(at 63.5 266.7 90)
 			(effects
 				(font
@@ -18749,7 +18749,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R31")
+					(reference "R907")
 					(unit 1)
 				)
 			)
@@ -18764,7 +18764,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "59a609d8-5205-4a50-a442-68e89b06bfe0")
-		(property "Reference" "R24"
+		(property "Reference" "R201"
 			(at 242.316 134.874 90)
 			(effects
 				(font
@@ -18816,7 +18816,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R24")
+					(reference "R201")
 					(unit 1)
 				)
 			)
@@ -18831,8 +18831,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5b073047-3c37-4081-947a-4149c26d5262")
-		(property "Reference" "C7"
-			(at 324.612 110.49 0)
+		(property "Reference" "C806"
+			(at 322.58 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18885,7 +18885,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C7")
+					(reference "C806")
 					(unit 1)
 				)
 			)
@@ -18900,7 +18900,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5ee5856c-4f0c-435f-a632-a863234ff473")
-		(property "Reference" "R2"
+		(property "Reference" "R802"
 			(at 391.414 62.738 0)
 			(effects
 				(font
@@ -18910,7 +18910,7 @@
 			)
 		)
 		(property "Value" "2K2"
-			(at 394.462 62.738 0)
+			(at 397.002 62.738 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18954,7 +18954,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R2")
+					(reference "R802")
 					(unit 1)
 				)
 			)
@@ -18969,7 +18969,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5f60d08a-7d3b-43f8-9dbb-935ca023eaeb")
-		(property "Reference" "R36"
+		(property "Reference" "R912"
 			(at 123.19 218.694 0)
 			(effects
 				(font
@@ -19025,7 +19025,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R36")
+					(reference "R912")
 					(unit 1)
 				)
 			)
@@ -19266,7 +19266,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "662508d3-218c-4a53-a41d-e6e56e4eb42e")
-		(property "Reference" "R6"
+		(property "Reference" "R806"
 			(at 318.516 52.324 90)
 			(effects
 				(font
@@ -19275,7 +19275,7 @@
 			)
 		)
 		(property "Value" "100"
-			(at 322.326 52.324 90)
+			(at 324.104 52.324 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19318,7 +19318,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R6")
+					(reference "R806")
 					(unit 1)
 				)
 			)
@@ -19414,7 +19414,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6d17ec63-ac13-4ef9-8d7d-6bd1a700384e")
-		(property "Reference" "R4"
+		(property "Reference" "R804"
 			(at 318.516 47.244 90)
 			(effects
 				(font
@@ -19423,7 +19423,7 @@
 			)
 		)
 		(property "Value" "100"
-			(at 322.326 47.244 90)
+			(at 324.358 47.244 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19466,7 +19466,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R4")
+					(reference "R804")
 					(unit 1)
 				)
 			)
@@ -19575,7 +19575,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6ed86c6a-420a-46a9-8955-7fd2e48196da")
-		(property "Reference" "C13"
+		(property "Reference" "C102"
 			(at 81.28 68.5799 0)
 			(effects
 				(font
@@ -19629,7 +19629,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C13")
+					(reference "C102")
 					(unit 1)
 				)
 			)
@@ -19644,8 +19644,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "705ac6ba-a070-4365-90d7-5904ea64b6b9")
-		(property "Reference" "R42"
-			(at 72.136 113.03 0)
+		(property "Reference" "R403"
+			(at 70.358 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19699,7 +19699,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R42")
+					(reference "R403")
 					(unit 1)
 				)
 			)
@@ -19978,7 +19978,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "761e05aa-a4d8-4ff4-aa49-3849ed12c779")
-		(property "Reference" "R38"
+		(property "Reference" "R914"
 			(at 133.35 218.694 0)
 			(effects
 				(font
@@ -20034,7 +20034,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R38")
+					(reference "R914")
 					(unit 1)
 				)
 			)
@@ -20180,8 +20180,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "799a91e2-9497-45c6-96d4-38c12dab52ba")
-		(property "Reference" "C11"
-			(at 350.774 76.708 90)
+		(property "Reference" "C810"
+			(at 352.298 76.708 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20232,7 +20232,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C11")
+					(reference "C810")
 					(unit 1)
 				)
 			)
@@ -20638,7 +20638,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "85eb5ba3-4b6f-486a-8c9f-26bc27160166")
-		(property "Reference" "R18"
+		(property "Reference" "R301"
 			(at 43.434 137.922 0)
 			(effects
 				(font
@@ -20692,7 +20692,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R18")
+					(reference "R301")
 					(unit 1)
 				)
 			)
@@ -20840,7 +20840,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8d5f822c-1bab-42a2-b502-81b566cc06c1")
-		(property "Reference" "R16"
+		(property "Reference" "R101"
 			(at 45.72 49.5299 0)
 			(effects
 				(font
@@ -20894,7 +20894,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R16")
+					(reference "R101")
 					(unit 1)
 				)
 			)
@@ -20909,7 +20909,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8e7163f4-dd6e-4885-9dd6-0f8bbeb48953")
-		(property "Reference" "R19"
+		(property "Reference" "R302"
 			(at 51.816 137.922 0)
 			(effects
 				(font
@@ -20963,7 +20963,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R19")
+					(reference "R302")
 					(unit 1)
 				)
 			)
@@ -21519,8 +21519,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "96ba8f80-4c7d-4b24-aa2e-ab095dac9d96")
-		(property "Reference" "R41"
-			(at 72.136 111.252 0)
+		(property "Reference" "R402"
+			(at 70.358 109.982 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21574,7 +21574,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R41")
+					(reference "R402")
 					(unit 1)
 				)
 			)
@@ -21677,7 +21677,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "9aa9e16b-88ec-4a30-9bd1-ed9356783076")
-		(property "Reference" "R40"
+		(property "Reference" "R916"
 			(at 143.51 218.948 0)
 			(effects
 				(font
@@ -21733,7 +21733,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R40")
+					(reference "R916")
 					(unit 1)
 				)
 			)
@@ -21880,7 +21880,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a0aea9bd-da32-465b-9da1-a7eec04d70ff")
-		(property "Reference" "R5"
+		(property "Reference" "R805"
 			(at 318.516 49.784 90)
 			(effects
 				(font
@@ -21889,7 +21889,7 @@
 			)
 		)
 		(property "Value" "100"
-			(at 322.326 49.784 90)
+			(at 324.358 49.784 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21932,7 +21932,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R5")
+					(reference "R805")
 					(unit 1)
 				)
 			)
@@ -21947,7 +21947,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a0c40465-2f0a-479e-ac66-edbeda66ee14")
-		(property "Reference" "C16"
+		(property "Reference" "C402"
 			(at 103.378 111.252 90)
 			(effects
 				(font
@@ -21999,7 +21999,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C16")
+					(reference "C402")
 					(unit 1)
 				)
 			)
@@ -22014,8 +22014,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a9581d51-2cd1-475f-8b58-9869bdcf64c5")
-		(property "Reference" "C5"
-			(at 344.932 59.944 0)
+		(property "Reference" "C805"
+			(at 342.646 59.69 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22068,7 +22068,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C5")
+					(reference "C805")
 					(unit 1)
 				)
 			)
@@ -22295,7 +22295,7 @@
 		(on_board yes)
 		(dnp yes)
 		(uuid "babd7f61-d41d-4dc7-b32d-378b25cf9226")
-		(property "Reference" "R29"
+		(property "Reference" "R905"
 			(at 63.5 261.62 90)
 			(effects
 				(font
@@ -22349,7 +22349,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R29")
+					(reference "R905")
 					(unit 1)
 				)
 			)
@@ -22364,7 +22364,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "bba3d6cb-8b24-4860-8dcf-6b2c18700612")
-		(property "Reference" "R39"
+		(property "Reference" "R915"
 			(at 138.43 218.694 0)
 			(effects
 				(font
@@ -22420,7 +22420,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R39")
+					(reference "R915")
 					(unit 1)
 				)
 			)
@@ -22656,7 +22656,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "be7ef2e0-170a-4c48-a297-eab78e0f6831")
-		(property "Reference" "R10"
+		(property "Reference" "R703"
 			(at 191.77 26.67 0)
 			(effects
 				(font
@@ -22710,7 +22710,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R10")
+					(reference "R703")
 					(unit 1)
 				)
 			)
@@ -22725,8 +22725,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "bfdbe074-a24f-41d3-826c-4c0d341c314c")
-		(property "Reference" "R44"
-			(at 72.136 116.586 0)
+		(property "Reference" "R405"
+			(at 70.358 115.316 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22735,7 +22735,7 @@
 			)
 		)
 		(property "Value" "10K"
-			(at 72.136 118.364 0)
+			(at 70.358 117.094 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22779,7 +22779,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R44")
+					(reference "R405")
 					(unit 1)
 				)
 			)
@@ -22794,7 +22794,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c420c653-90d5-48f4-b091-5f5b5a05edf2")
-		(property "Reference" "R22"
+		(property "Reference" "R602"
 			(at 332.74 223.266 0)
 			(effects
 				(font
@@ -22848,7 +22848,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R22")
+					(reference "R602")
 					(unit 1)
 				)
 			)
@@ -23075,7 +23075,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d20684fa-3c4e-4732-a789-da0ed05a97c6")
-		(property "Reference" "C20"
+		(property "Reference" "C203"
 			(at 190.5 126.238 0)
 			(effects
 				(font
@@ -23129,7 +23129,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C20")
+					(reference "C203")
 					(unit 1)
 				)
 			)
@@ -23240,7 +23240,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d7cf4c02-e1dc-479b-b579-95631ffbabad")
-		(property "Reference" "C19"
+		(property "Reference" "C202"
 			(at 204.47 127 0)
 			(effects
 				(font
@@ -23294,7 +23294,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C19")
+					(reference "C202")
 					(unit 1)
 				)
 			)
@@ -23442,8 +23442,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e422063b-f076-49ee-85dc-b8b56d6d8357")
-		(property "Reference" "R13"
-			(at 317.246 103.124 90)
+		(property "Reference" "R810"
+			(at 319.024 103.124 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -23451,7 +23451,7 @@
 			)
 		)
 		(property "Value" "100"
-			(at 321.818 103.124 90)
+			(at 323.596 103.124 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -23494,7 +23494,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R13")
+					(reference "R810")
 					(unit 1)
 				)
 			)
@@ -23510,7 +23510,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e42fc6ca-5e3e-45c3-9229-6854d4ff66e1")
-		(property "Reference" "R17"
+		(property "Reference" "R102"
 			(at 123.19 69.8499 0)
 			(effects
 				(font
@@ -23564,7 +23564,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R17")
+					(reference "R102")
 					(unit 1)
 				)
 			)
@@ -23579,8 +23579,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e65e8924-c199-402b-a1f6-039c4eeeacd8")
-		(property "Reference" "R15"
-			(at 394.97 99.314 0)
+		(property "Reference" "R812"
+			(at 396.24 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -23633,7 +23633,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R15")
+					(reference "R812")
 					(unit 1)
 				)
 			)
@@ -23648,7 +23648,7 @@
 		(on_board yes)
 		(dnp yes)
 		(uuid "e68f5e60-3990-45ef-b965-f88750af0f51")
-		(property "Reference" "R26"
+		(property "Reference" "R902"
 			(at 63.5 254 90)
 			(effects
 				(font
@@ -23702,7 +23702,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R26")
+					(reference "R902")
 					(unit 1)
 				)
 			)
@@ -23717,7 +23717,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e901ede8-f56f-4268-a823-435b7beebda2")
-		(property "Reference" "C6"
+		(property "Reference" "C701"
 			(at 189.738 43.18 0)
 			(effects
 				(font
@@ -23771,7 +23771,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C6")
+					(reference "C701")
 					(unit 1)
 				)
 			)
@@ -23919,7 +23919,7 @@
 		(on_board yes)
 		(dnp yes)
 		(uuid "efd2598d-40b6-4b52-b39d-e6f9cec0cbc9")
-		(property "Reference" "R27"
+		(property "Reference" "R903"
 			(at 63.5 256.54 90)
 			(effects
 				(font
@@ -23973,7 +23973,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R27")
+					(reference "R903")
 					(unit 1)
 				)
 			)
@@ -24120,7 +24120,7 @@
 		(on_board yes)
 		(dnp yes)
 		(uuid "f29deae8-17a0-42a8-8817-e49485a21845")
-		(property "Reference" "R25"
+		(property "Reference" "R901"
 			(at 63.5 251.46 90)
 			(effects
 				(font
@@ -24174,7 +24174,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R25")
+					(reference "R901")
 					(unit 1)
 				)
 			)
@@ -24269,7 +24269,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f455962b-74e8-4474-9a5b-cd219cae0aaa")
-		(property "Reference" "R7"
+		(property "Reference" "R807"
 			(at 318.516 54.864 90)
 			(effects
 				(font
@@ -24278,7 +24278,7 @@
 			)
 		)
 		(property "Value" "100"
-			(at 322.326 54.864 90)
+			(at 324.104 54.864 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -24321,7 +24321,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R7")
+					(reference "R807")
 					(unit 1)
 				)
 			)
@@ -24336,8 +24336,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f54a048f-b954-4156-8be4-f97f2174164a")
-		(property "Reference" "R43"
-			(at 72.136 114.808 0)
+		(property "Reference" "R404"
+			(at 70.358 113.538 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -24391,7 +24391,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R43")
+					(reference "R404")
 					(unit 1)
 				)
 			)
@@ -24540,8 +24540,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f64fd348-8c38-4adb-a930-25824b0d612e")
-		(property "Reference" "R14"
-			(at 317.246 105.664 90)
+		(property "Reference" "R811"
+			(at 319.024 105.664 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -24549,7 +24549,7 @@
 			)
 		)
 		(property "Value" "100"
-			(at 321.818 105.664 90)
+			(at 323.596 105.664 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -24592,7 +24592,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R14")
+					(reference "R811")
 					(unit 1)
 				)
 			)
@@ -24607,8 +24607,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f7d9ad68-0eca-49a9-994e-552acc4d2f5f")
-		(property "Reference" "R8"
-			(at 180.594 43.18 0)
+		(property "Reference" "R701"
+			(at 180.848 39.624 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -24617,7 +24617,7 @@
 			)
 		)
 		(property "Value" "10K"
-			(at 180.594 45.466 0)
+			(at 180.848 41.656 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -24661,7 +24661,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R8")
+					(reference "R701")
 					(unit 1)
 				)
 			)
@@ -24676,7 +24676,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f8e7cc06-c723-4d7b-a29f-49e753cab3ca")
-		(property "Reference" "R1"
+		(property "Reference" "R801"
 			(at 391.414 60.96 0)
 			(effects
 				(font
@@ -24686,7 +24686,7 @@
 			)
 		)
 		(property "Value" "2K2"
-			(at 394.462 64.516 0)
+			(at 397.002 64.516 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -24730,7 +24730,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R1")
+					(reference "R801")
 					(unit 1)
 				)
 			)
@@ -24745,7 +24745,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f9acef68-17f7-4bea-8dd9-24a49f9aa08b")
-		(property "Reference" "R3"
+		(property "Reference" "R803"
 			(at 391.414 64.516 0)
 			(effects
 				(font
@@ -24755,7 +24755,7 @@
 			)
 		)
 		(property "Value" "2K2"
-			(at 394.462 60.96 0)
+			(at 397.002 60.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -24799,7 +24799,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "R3")
+					(reference "R803")
 					(unit 1)
 				)
 			)
@@ -24947,7 +24947,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ffcf003d-d221-4236-90f7-d500c6c1b1b1")
-		(property "Reference" "C14"
+		(property "Reference" "C103"
 			(at 134.62 69.8499 0)
 			(effects
 				(font
@@ -25001,7 +25001,7 @@
 		(instances
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
-					(reference "C14")
+					(reference "C103")
 					(unit 1)
 				)
 			)
