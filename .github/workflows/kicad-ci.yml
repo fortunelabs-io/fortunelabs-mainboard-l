@@ -20,6 +20,11 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: kicad/kicad:9.0
+      # The kicad/kicad images run as the non-root "kicad" user, while the
+      # runner creates /__w/_temp owned by root. actions/checkout writes its
+      # state files there, so without this the job dies with EACCES before any
+      # KiCad step runs.
+      options: --user root
     defaults:
       run:
         working-directory: hardware/fortunelabs_mainboard_v0
