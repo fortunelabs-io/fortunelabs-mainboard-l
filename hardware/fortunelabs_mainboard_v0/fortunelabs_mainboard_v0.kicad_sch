@@ -8248,6 +8248,12 @@
 		(uuid "579c9a69-8185-41e4-95a2-802a672071c2")
 	)
 	(junction
+		(at 353.06 204.47)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "583833cb-8a40-4f0b-ab14-a22140648aa9")
+	)
+	(junction
 		(at 64.77 36.83)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -8771,16 +8777,6 @@
 	)
 	(wire
 		(pts
-			(xy 353.06 203.2) (xy 353.06 207.01)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bc1d6da7-d34c-403e-9d92-bbf1d76c0bb8")
-	)
-	(wire
-		(pts
 			(xy 363.22 171.45) (xy 360.68 171.45)
 		)
 		(stroke
@@ -9078,6 +9074,16 @@
 			(type default)
 		)
 		(uuid "112b2f6e-6cd4-410f-9270-052c53f38c9a")
+	)
+	(wire
+		(pts
+			(xy 328.93 204.47) (xy 332.74 204.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1199c9c7-b907-4a07-9e19-bc4c68b0ecf4")
 	)
 	(wire
 		(pts
@@ -10801,6 +10807,16 @@
 	)
 	(wire
 		(pts
+			(xy 340.36 204.47) (xy 353.06 204.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "77098f08-9cc4-419d-bb70-f8f127dcaaa8")
+	)
+	(wire
+		(pts
 			(xy 250.19 44.45) (xy 264.16 44.45)
 		)
 		(stroke
@@ -11018,6 +11034,16 @@
 			(type default)
 		)
 		(uuid "82a5b525-7d03-4bcf-ae34-4ec94161478c")
+	)
+	(wire
+		(pts
+			(xy 328.93 208.28) (xy 328.93 204.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "82aca83d-7e5a-42f7-b4fe-73f6ea1d51e0")
 	)
 	(wire
 		(pts
@@ -11328,6 +11354,16 @@
 			(type default)
 		)
 		(uuid "904798e6-c462-4f8f-aed7-150923ee68ec")
+	)
+	(wire
+		(pts
+			(xy 353.06 204.47) (xy 353.06 207.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "90ddae2e-3edd-441a-98db-d8b3c57c0c3b")
 	)
 	(wire
 		(pts
@@ -12088,6 +12124,16 @@
 			(type default)
 		)
 		(uuid "bc165b33-9268-4a94-9154-854a798105b2")
+	)
+	(wire
+		(pts
+			(xy 353.06 203.2) (xy 353.06 204.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bc1d6da7-d34c-403e-9d92-bbf1d76c0bb8")
 	)
 	(wire
 		(pts
@@ -15612,6 +15658,75 @@
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
 					(reference "C4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 336.55 204.47 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "110800b4-ada3-4744-a8ab-2724b99b7460")
+		(property "Reference" "C21"
+			(at 334.01 198.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "100n"
+			(at 334.01 200.66 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 336.55 203.5048 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 336.55 204.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 336.55 204.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5d27ff15-e24a-4dfb-a727-cea7990f79ba")
+		)
+		(pin "2"
+			(uuid "6ffe56ed-7e08-485c-95e7-551882a96685")
+		)
+		(instances
+			(project "fortunelabs_mainboard_v0"
+				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
+					(reference "C21")
 					(unit 1)
 				)
 			)
@@ -24685,6 +24800,72 @@
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
 					(reference "R3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 328.93 208.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "fbbf04d7-d636-44ce-af8c-5ac1a5a00cff")
+		(property "Reference" "#PWR036"
+			(at 328.93 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 328.93 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 328.93 208.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 328.93 208.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 328.93 208.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fc422cf6-4f37-49c1-b55f-be411ee1db88")
+		)
+		(instances
+			(project "fortunelabs_mainboard_v0"
+				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
+					(reference "#PWR036")
 					(unit 1)
 				)
 			)
