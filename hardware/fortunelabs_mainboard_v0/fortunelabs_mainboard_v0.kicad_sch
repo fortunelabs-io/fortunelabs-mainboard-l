@@ -8050,6 +8050,12 @@
 		(uuid "0c4ed328-2ec8-4bea-9a29-22558098344c")
 	)
 	(junction
+		(at 201.93 123.19)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "118c83ec-d360-4d3e-b37d-5b500e0a3f9c")
+	)
+	(junction
 		(at 360.68 140.97)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -8278,6 +8284,12 @@
 		(uuid "680d01b0-75b7-47a8-a09c-13b2d9108393")
 	)
 	(junction
+		(at 201.93 133.35)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6a63af7d-a291-4c7a-851b-7e0f40192098")
+	)
+	(junction
 		(at 341.63 69.85)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -8462,6 +8474,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "ab7cd205-3dae-4ac6-988f-3a171f8f3969")
+	)
+	(junction
+		(at 223.52 123.19)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ad5c8c9f-d755-4b29-9bad-6b7bd945d200")
 	)
 	(junction
 		(at 191.77 138.43)
@@ -8750,6 +8768,16 @@
 	(no_connect
 		(at 236.22 143.51)
 		(uuid "ffbaf4b1-2f7d-4e3c-a11a-b38fabd93128")
+	)
+	(wire
+		(pts
+			(xy 353.06 203.2) (xy 353.06 207.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bc1d6da7-d34c-403e-9d92-bbf1d76c0bb8")
 	)
 	(wire
 		(pts
@@ -9313,6 +9341,16 @@
 	)
 	(wire
 		(pts
+			(xy 201.93 123.19) (xy 201.93 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "25cd5c27-6c0a-4859-9a84-2043e1f83e89")
+	)
+	(wire
+		(pts
 			(xy 113.03 78.74) (xy 97.79 78.74)
 		)
 		(stroke
@@ -9523,7 +9561,7 @@
 	)
 	(wire
 		(pts
-			(xy 223.52 123.19) (xy 223.52 125.73)
+			(xy 223.52 116.84) (xy 223.52 123.19)
 		)
 		(stroke
 			(width 0)
@@ -9670,6 +9708,16 @@
 			(type default)
 		)
 		(uuid "3bdf5ed3-d0c7-48b8-a0f9-f15e6090ad4e")
+	)
+	(wire
+		(pts
+			(xy 201.93 133.35) (xy 201.93 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3c4c5cda-f8d2-4d32-9c08-a4e494b0e2e8")
 	)
 	(wire
 		(pts
@@ -10233,6 +10281,16 @@
 	)
 	(wire
 		(pts
+			(xy 223.52 123.19) (xy 223.52 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5da95071-1135-4b41-95d0-a4314a566a20")
+	)
+	(wire
+		(pts
 			(xy 191.77 57.15) (xy 179.07 57.15)
 		)
 		(stroke
@@ -10543,6 +10601,16 @@
 	)
 	(wire
 		(pts
+			(xy 196.85 132.08) (xy 196.85 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6d083921-f6e1-4908-8747-24ed59b535d8")
+	)
+	(wire
+		(pts
 			(xy 76.2 179.07) (xy 58.42 179.07)
 		)
 		(stroke
@@ -10620,6 +10688,16 @@
 			(type default)
 		)
 		(uuid "6fa4e32a-c933-4e1e-b8ef-55a12de36dfe")
+	)
+	(wire
+		(pts
+			(xy 196.85 124.46) (xy 196.85 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "711e15ac-1d74-4699-afdf-308a04b8fb80")
 	)
 	(wire
 		(pts
@@ -11593,6 +11671,16 @@
 	)
 	(wire
 		(pts
+			(xy 196.85 133.35) (xy 201.93 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a816c204-d802-41bc-9015-9cca69745bc5")
+	)
+	(wire
+		(pts
 			(xy 110.49 233.68) (xy 110.49 234.95)
 		)
 		(stroke
@@ -11913,6 +12001,16 @@
 	)
 	(wire
 		(pts
+			(xy 201.93 132.08) (xy 201.93 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b65fdc0c-8153-4591-a8fc-f6f1fc5039c8")
+	)
+	(wire
+		(pts
 			(xy 95.25 223.52) (xy 95.25 226.06)
 		)
 		(stroke
@@ -11990,16 +12088,6 @@
 			(type default)
 		)
 		(uuid "bc165b33-9268-4a94-9154-854a798105b2")
-	)
-	(wire
-		(pts
-			(xy 353.06 203.2) (xy 353.06 207.01)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bc1d6da7-d34c-403e-9d92-bbf1d76c0bb8")
 	)
 	(wire
 		(pts
@@ -12950,6 +13038,26 @@
 			(type default)
 		)
 		(uuid "eb193593-002a-4acd-8190-8c681b06c8e9")
+	)
+	(wire
+		(pts
+			(xy 201.93 123.19) (xy 223.52 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ebaf8f5b-d716-41a4-92ca-668b6964b9f8")
+	)
+	(wire
+		(pts
+			(xy 196.85 123.19) (xy 201.93 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ebc92e3a-ca0b-43ab-ae46-52cf3b6c0d7d")
 	)
 	(wire
 		(pts
@@ -16021,6 +16129,71 @@
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
 					(reference "R32")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 201.93 134.62 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "195710ce-281a-4364-a25e-f7a596612cb1")
+		(property "Reference" "#PWR037"
+			(at 201.93 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 206.502 136.144 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 201.93 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 201.93 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 201.93 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "222578e9-e6de-4030-ac7b-8a9c0f1101e0")
+		)
+		(instances
+			(project "fortunelabs_mainboard_v0"
+				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
+					(reference "#PWR037")
 					(unit 1)
 				)
 			)
@@ -19617,7 +19790,7 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 223.52 123.19 0)
+		(at 223.52 116.84 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -19626,7 +19799,7 @@
 		(fields_autoplaced yes)
 		(uuid "75f10fa1-a3a9-4d5a-9a00-ba023202108c")
 		(property "Reference" "#PWR010"
-			(at 223.52 127 0)
+			(at 223.52 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19635,7 +19808,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 223.52 118.11 0)
+			(at 223.52 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19643,7 +19816,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 223.52 123.19 0)
+			(at 223.52 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19652,7 +19825,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 223.52 123.19 0)
+			(at 223.52 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19661,7 +19834,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 223.52 123.19 0)
+			(at 223.52 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22779,6 +22952,75 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C")
+		(at 196.85 128.27 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d20684fa-3c4e-4732-a789-da0ed05a97c6")
+		(property "Reference" "C20"
+			(at 190.5 126.238 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "22u"
+			(at 189.992 128.524 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+			(at 197.8152 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 196.85 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 196.85 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "60c46513-b309-4ffc-ad60-8c271406cad8")
+		)
+		(pin "2"
+			(uuid "acc4c36c-6a4a-45a2-9b26-9f89871cc2f5")
+		)
+		(instances
+			(project "fortunelabs_mainboard_v0"
+				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
+					(reference "C20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:Micro_SD_Card_Det_Hirose_DM3AT")
 		(at 121.92 134.62 0)
 		(unit 1)
@@ -22868,6 +23110,76 @@
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
 					(reference "J4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 201.93 128.27 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d7cf4c02-e1dc-479b-b579-95631ffbabad")
+		(property "Reference" "C19"
+			(at 204.47 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100n"
+			(at 204.47 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 202.8952 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 201.93 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 201.93 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d4258ebc-b37d-4daf-b2c6-07d6151f4911")
+		)
+		(pin "2"
+			(uuid "c276d645-ad67-42e0-aa90-8e7a52763943")
+		)
+		(instances
+			(project "fortunelabs_mainboard_v0"
+				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
+					(reference "C19")
 					(unit 1)
 				)
 			)
