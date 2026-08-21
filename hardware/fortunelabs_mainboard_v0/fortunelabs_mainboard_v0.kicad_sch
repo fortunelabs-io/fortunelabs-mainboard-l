@@ -18990,7 +18990,7 @@
 				)
 			)
 		)
-		(property "Value" "LED"
+		(property "Value" "LED_12V"
 			(at 125.984 23.876 0)
 			(effects
 				(font
@@ -26829,7 +26829,7 @@
 				)
 			)
 		)
-		(property "Value" "LED"
+		(property "Value" "LED_3V3"
 			(at 125.73 38.1 0)
 			(effects
 				(font
