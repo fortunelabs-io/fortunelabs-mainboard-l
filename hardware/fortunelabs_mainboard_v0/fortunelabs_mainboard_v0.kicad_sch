@@ -9089,10 +9089,6 @@
 		(uuid "a6f1b350-a0cd-42f3-9609-b4086173c5ed")
 	)
 	(no_connect
-		(at 236.22 219.71)
-		(uuid "bfbb6d3a-c9eb-4184-81b6-113d9dccbc8e")
-	)
-	(no_connect
 		(at 236.22 184.15)
 		(uuid "c7093999-ef6b-476f-b585-a7d68db24309")
 	)
@@ -9679,6 +9675,16 @@
 			(type default)
 		)
 		(uuid "221e97b3-eaf6-4cca-9e62-fe03be7665cf")
+	)
+	(wire
+		(pts
+			(xy 264.16 219.71) (xy 264.16 223.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2390a55c-845b-4480-9720-9880c3509e51")
 	)
 	(wire
 		(pts
@@ -13522,6 +13528,26 @@
 	)
 	(wire
 		(pts
+			(xy 259.08 219.71) (xy 264.16 219.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e6a66dd7-07c5-481d-a51e-db2f257e5802")
+	)
+	(wire
+		(pts
+			(xy 236.22 219.71) (xy 240.03 219.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e6c716de-fa2b-4935-a394-f72712043444")
+	)
+	(wire
+		(pts
 			(xy 99.06 85.09) (xy 101.6 85.09)
 		)
 		(stroke
@@ -13709,6 +13735,16 @@
 			(type default)
 		)
 		(uuid "ed736d85-de6d-44fb-9db9-e4787c9ab9ae")
+	)
+	(wire
+		(pts
+			(xy 247.65 219.71) (xy 251.46 219.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "edde75b9-db2e-4a13-8343-0491253c279a")
 	)
 	(wire
 		(pts
@@ -18954,7 +18990,7 @@
 				)
 			)
 		)
-		(property "Value" "LED"
+		(property "Value" "LED_12V"
 			(at 125.984 23.876 0)
 			(effects
 				(font
@@ -23175,6 +23211,73 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 243.84 219.71 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ae41ae05-818c-4cc7-9787-276dba8a4250")
+		(property "Reference" "R202"
+			(at 243.84 214.884 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "2K2"
+			(at 243.84 217.424 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 243.84 221.488 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 243.84 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 243.84 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3e82e426-2a11-41ba-ba43-593eae726ff0")
+		)
+		(pin "2"
+			(uuid "3b5d6b86-ee54-455b-b155-dc04ad6a0f2a")
+		)
+		(instances
+			(project "fortunelabs_mainboard_v0"
+				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
+					(reference "R202")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:LED")
 		(at 114.3 238.76 90)
 		(unit 1)
@@ -23255,6 +23358,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 264.16 223.52 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b1e3b07a-ce1e-4e4e-a39d-8e554a0e9928")
+		(property "Reference" "#PWR031"
+			(at 264.16 229.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 264.16 228.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 264.16 223.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 264.16 223.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 264.16 223.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "21dab538-661a-44a1-a571-a3205af7fce9")
+		)
+		(instances
+			(project "fortunelabs_mainboard_v0"
+				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
+					(reference "#PWR031")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:PWR_FLAG")
 		(at 139.7 67.31 0)
 		(unit 1)
@@ -23314,6 +23483,82 @@
 			(project "fortunelabs_mainboard_v0"
 				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
 					(reference "#FLG02")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:LED")
+		(at 255.27 219.71 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b9f349a9-0307-41e8-92d7-d9f754249543")
+		(property "Reference" "D201"
+			(at 257.048 213.614 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LED_HEART"
+			(at 257.048 216.154 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
+			(at 255.27 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 255.27 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Light emitting diode"
+			(at 255.27 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" "1=K 2=A"
+			(at 255.27 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "00e84b37-6a56-42df-87f5-e4d31ef3b307")
+		)
+		(pin "2"
+			(uuid "bf8c6f6f-e270-4175-b972-25eaebbb75d7")
+		)
+		(instances
+			(project "fortunelabs_mainboard_v0"
+				(path "/1727eecb-65c8-4b57-aa8a-814f366e0831"
+					(reference "D201")
 					(unit 1)
 				)
 			)
@@ -26584,7 +26829,7 @@
 				)
 			)
 		)
-		(property "Value" "LED"
+		(property "Value" "LED_3V3"
 			(at 125.73 38.1 0)
 			(effects
 				(font
