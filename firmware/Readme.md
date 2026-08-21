@@ -145,7 +145,11 @@ succeeded.
 10. Task spawn
 ```
 
-Priorities: supervisor 6, sensor 5, actuator 5, display 4.
+Priorities: supervisor 6, sensor 5, actuator 5, display 4, status 2.
+
+`task_status` is spawned last and runs lowest: its heartbeat only means "the
+flash succeeded" if every task above it was created first, and an indicator
+must never take the CPU from the work it indicates.
 
 ## Configuration
 
