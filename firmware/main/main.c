@@ -293,9 +293,10 @@ void app_main(void) {
     // task_actuator.c.
     g_task_actuator_ctx.driver = &actuator_dummy_driver;
 
-    // Init MCU Status LED (D201). Native GPIO on purpose: this is the one
-    // indicator that still works when the I2C bus, the network, or the broker
-    // is the thing that failed.
+    // Init MCU Status LED. Native GPIO on purpose: this is the one indicator
+    // that still works when the I2C bus, the network, or the broker is the
+    // thing that failed. Currently an external LED on the devkit; on the v0
+    // mainboard it becomes the dedicated status LED, and only this line moves.
     static status_led_config_t status_led_extra = {
         .gpio       = STATUS_LED_DEFAULT_GPIO,
         .active_low = false,

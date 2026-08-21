@@ -3,7 +3,7 @@
 /**
  * @file status_led.c
  * @brief Native GPIO implementation of the output HAL contract for the
- *        MCU status LED (D201).
+ *        MCU status LED.
  */
 
 #include "drivers/output/status_led.h"
@@ -180,7 +180,7 @@ static void status_led_deinit(void) {
 }
 
 /* --- Vtable Registration --- */
-const output_driver_t status_led_driver = {.name         = "LED_STATUS_D201",
+const output_driver_t status_led_driver = {.name         = "LED_STATUS",
                                            .num_channels = STATUS_LED_NUM_CHANNELS,
                                            .init         = status_led_init,
                                            .set          = status_led_set,

@@ -4,9 +4,10 @@
  * @file status_led.h
  * @brief Native GPIO status LED implementing the output HAL contract.
  *
- * Drives the board's MCU status LED (D201), the only indicator reachable
- * without the I2C bus. D901-D908 hang off the ULN2803A behind the MCP23017,
- * so they cannot report a fault in the I2C path itself; this one can.
+ * Drives the MCU status LED, the only indicator reachable without the I2C
+ * bus. On the v0 mainboard the D901-D908 bank hangs off the ULN2803A behind
+ * the MCP23017, so it cannot report a fault in the I2C path itself; this one
+ * can. Today that LED is an external one on the development board.
  *
  * Single channel: channel 0 maps to the configured GPIO. The pin is supplied
  * through output_config_t::extra rather than fixed here, so a board revision
@@ -25,11 +26,20 @@ extern "C" {
 /**
  * @brief Pin used when no status_led_config_t is supplied.
  *
- * IO48 carries no strapping function on the ESP32-S3 and is Espressif's own
- * convention for the module status LED, so a probe on this pin means the same
- * thing here as it does on a devkit.
+ * GPIO 4 targets the ESP32 devkit this firmware is currently developed on,
+ * with an external LED and series resistor. It is not a strapping pin (0, 2,
+ * 5, 12, 15 are) and does not emit a PWM burst during boot, so the LED is
+ * dark until this driver drives it - which is what makes the heartbeat
+ * starting mean something.
+ *
+ * GPIO 2 is deliberately not used: actuator_dummy already owns it as the
+ * devkit's onboard LED, and two drivers configuring one pad would fight.
+ *
+ * On the v0 mainboard this moves to whichever pad D201 lands on. That is a
+ * one-line change in main.c, which is why the pin arrives through
+ * output_config_t::extra instead of being fixed here.
  */
-#define STATUS_LED_DEFAULT_GPIO GPIO_NUM_48
+#define STATUS_LED_DEFAULT_GPIO GPIO_NUM_4
 
 /**
  * @brief Driver-specific configuration, passed via output_config_t::extra.
