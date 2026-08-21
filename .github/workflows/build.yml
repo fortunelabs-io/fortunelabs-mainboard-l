@@ -21,9 +21,9 @@ jobs:
           # build was verified locally on v5.5.4; pick whichever your team
           # standardizes on and keep it here.
           esp_idf_version: v5.3.2
-          # Actual target in sdkconfig is esp32 (not esp32-s3 as the board
-          # actually is; that discrepancy is documented in firmware/Readme.md).
-          target: esp32
+          # Matches CONFIG_IDF_TARGET in firmware/sdkconfig and U201 on the
+          # board, an ESP32-S3-WROOM-2.
+          target: esp32s3
           path: firmware
           command: idf.py build
 

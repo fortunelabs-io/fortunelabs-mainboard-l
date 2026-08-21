@@ -173,10 +173,10 @@ pio test -e native
 
 Tracked here rather than in a separate file so it stays honest.
 
-- **The committed `sdkconfig` targets `esp32`, but the board is an
-  ESP32-S3-WROOM-2** (U3 in the hardware BOM). CI builds `esp32` too. The
-  `sdkconfig` is stale from the `hello_world` template this project was
-  initialized from, and running `idf.py set-target esp32s3` rewrites it.
+- **The partition table is `SINGLE_APP` on 2 MB of flash, but the firmware
+  performs OTA** (`esp_https_ota`, `app_update`). There is no second app slot
+  to write into. Both values are ESP-IDF defaults that were never revisited;
+  the S3 module carries far more flash than the 2 MB configured here.
 - **`ota_test_task` in `main.c` is R&D scaffolding.** It fires an OTA at a
   hardcoded LAN address 10 seconds after boot, with `skip_cert_check` enabled.
   Remove before production.
