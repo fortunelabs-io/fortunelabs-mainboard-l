@@ -159,10 +159,13 @@ persisted in NVS, with Kconfig as fallback.
 ## Building and testing
 
 ```bash
-idf.py set-target esp32s3
 idf.py build
 idf.py -p /dev/ttyACM0 flash monitor      # Ctrl+] to exit
 ```
+
+Do **not** run `idf.py set-target`. The committed `sdkconfig` already selects
+the right chip for the hardware on the bench, and retargeting rewrites it. See
+Known deviations below for why that chip is not the one in the schematic.
 
 Port naming depends on the USB-serial chip: CH343/CH9102 enumerates as
 `/dev/ttyACM0`, CH340/CP210x as `/dev/ttyUSB0`.
@@ -177,10 +180,24 @@ pio test -e native
 
 Tracked here rather than in a separate file so it stays honest.
 
-- **The committed `sdkconfig` targets `esp32`, but the board is an
-  ESP32-S3-WROOM-2** (U3 in the hardware BOM). CI builds `esp32` too. The
-  `sdkconfig` is stale from the `hello_world` template this project was
-  initialized from, and running `idf.py set-target esp32s3` rewrites it.
+- **The committed `sdkconfig` targets `esp32` while the schematic's U201 is an
+  ESP32-S3-WROOM-2. This is deliberate, not stale.** No S3 hardware exists
+  yet: development runs on an ESP32 devkit, and `esp32` is the only target
+  that produces a flashable image. CI matches it on purpose.
+
+  Do not "fix" this by retargeting. Until an S3 board is in hand, firmware
+  must compile for `esp32`, where GPIO numbers stop at 39 and 34-39 are
+  input-only — so S3-only pins such as `GPIO_NUM_48` will not build. Pin
+  choices that look wrong against the schematic are usually right for the
+  devkit: `actuator_dummy` on GPIO 2 is its onboard LED, and
+  `MAIN_I2C_SDA_PIN` 18 / `SCL` 19 are valid devkit pins even though the
+  mainboard wires I2C to IO15/IO16.
+
+  The retarget is prepared on the `fix/esp32s3-target` branch, to be merged
+  when the board arrives. To check S3 compatibility meanwhile, build out of
+  tree with `-B` and `SDKCONFIG` pointed at a scratch directory, then
+  `git checkout firmware/dependencies.lock`, which `set-target` rewrites
+  regardless of those flags.
 - **`ota_test_task` in `main.c` is R&D scaffolding.** It fires an OTA at a
   hardcoded LAN address 10 seconds after boot, with `skip_cert_check` enabled.
   Remove before production.
