@@ -13,10 +13,12 @@ idf_component_register(
         "tasks/task_sensor.c"
         "tasks/task_actuator.c"
         "tasks/task_display.c"
-        
+        "tasks/task_status.c"
+
         # --- Hardware Drivers (HAL Implementations) ---
         "drivers/sensor/sensor_dummy.c"
         "drivers/output/actuator_dummy.c"
+        "drivers/output/status_led.c"
         "drivers/ic/ssd1306.c"
         "drivers/ic/ads1115.c"
         "drivers/ic/mcp23017.c"

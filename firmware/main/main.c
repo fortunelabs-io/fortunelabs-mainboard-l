@@ -33,11 +33,13 @@
 #include "tasks/task_actuator.h"
 #include "tasks/task_display.h"
 #include "tasks/task_sensor.h"
+#include "tasks/task_status.h"
 
 /* --- Concrete Drivers --- */
 #include "drivers/ic/ads1115.h"
 #include "drivers/ic/ssd1306.h"
 #include "drivers/output/actuator_dummy.h"
+#include "drivers/output/status_led.h"
 #include "drivers/sensor/sensor_ads1115.h"
 #include "drivers/transport/transport_mqtt.h"
 
@@ -83,9 +85,10 @@ static char s_topic_log[64];
 static task_sensor_ctx_t   g_task_sensor_ctx;
 static task_actuator_ctx_t g_task_actuator_ctx;
 static task_display_ctx_t  g_task_display_ctx;
+static task_status_ctx_t   g_task_status_ctx;
 
 // Task entry points and context structs come from their respective headers
-// in tasks/ (task_sensor.h, task_actuator.h, task_display.h).
+// in tasks/ (task_sensor.h, task_actuator.h, task_display.h, task_status.h).
 
 /**
  * @brief Temporary R&D task: triggers an OTA update once the network is up.
@@ -290,6 +293,22 @@ void app_main(void) {
     // task_actuator.c.
     g_task_actuator_ctx.driver = &actuator_dummy_driver;
 
+    // Init MCU Status LED. Native GPIO on purpose: this is the one indicator
+    // that still works when the I2C bus, the network, or the broker is the
+    // thing that failed. Currently an external LED on the devkit; on the v0
+    // mainboard it becomes the dedicated status LED, and only this line moves.
+    static status_led_config_t status_led_extra = {
+        .gpio       = STATUS_LED_DEFAULT_GPIO,
+        .active_low = false,
+    };
+    output_config_t status_led_cfg = {
+        .bus          = NULL,
+        .num_channels = 1,
+        .extra        = &status_led_extra,
+    };
+    ESP_ERROR_CHECK(status_led_driver.init(&status_led_cfg));
+    g_task_status_ctx.driver = &status_led_driver;
+
     // Init Physical SSD1306 OLED via I2C Bus
     display_config_t display_cfg = {.bus      = &g_i2c_bus,
                                     .i2c_addr = 0x3C, // Alamat I2C standard SSD1306
@@ -346,6 +365,10 @@ void app_main(void) {
                 NULL); // Sensor task has higher priority for responsive readings
     xTaskCreate(task_actuator, "task_actuator", 2048, &g_task_actuator_ctx, 5, NULL);
     xTaskCreate(task_display, "task_display", 3072, &g_task_display_ctx, 4, NULL);
+    // Spawned last, at the lowest priority: the heartbeat only means "the
+    // flash succeeded" if everything above it was created first, and an
+    // indicator must never take the CPU from the work it is indicating.
+    xTaskCreate(task_status, "task_status", 2048, &g_task_status_ctx, 2, NULL);
 
     ESP_LOGI(TAG, "All tasks spawned successfully. System is running.");
 }
